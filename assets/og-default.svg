@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="LINDO Co., Ltd.">
+  <defs>
+    <radialGradient id="g1" cx="18%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#e79cb0" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#3c3a20" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="92%" cy="100%" r="55%">
+      <stop offset="0%" stop-color="#b9a86b" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#3c3a20" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#3c3a20"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <text x="600" y="300" text-anchor="middle"
+        font-family="Cormorant Garamond, Georgia, serif" font-style="italic"
+        font-size="180" font-weight="600" fill="#e79cb0" letter-spacing="6">LINDO</text>
+  <text x="600" y="380" text-anchor="middle"
+        font-family="Zen Kaku Gothic New, sans-serif"
+        font-size="30" fill="#ece8da" letter-spacing="10">Creative ｜ Branding ｜ Design ｜ Styling</text>
+  <rect x="500" y="430" width="200" height="2" fill="#b9a86b"/>
+</svg>

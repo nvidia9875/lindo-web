@@ -1,0 +1,77 @@
+/* =========================================================
+   LINDO — 正準ブランドトークン
+   キーカラー：カーキ（ダークオリーブ）× ピンク（ダスティローズ）
+   現行サイト styledbylindo.com の地色・アクセントを基準に整備。
+
+   使い方：
+   - 各ホーム案ページは「方向性ごとに固有パレット」を持つため、
+     各ページ側の :root で変数を再定義してよい（このファイルは正準値の基準）。
+   - WORKS など共通UIはこのファイルを参照する。
+   ========================================================= */
+
+:root {
+  /* ---- カーキ / オリーブ（ダーク側）---- */
+  --olive-950: #1f1e11;
+  --olive-900: #2b2a18;
+  --olive-800: #3c3a20; /* 現行サイトの地色に近い基準色 */
+  --olive-700: #4a4828;
+  --olive-600: #5d5a35;
+  --olive-500: #74714a;
+
+  /* ---- 砂・アイボリー（ライト側）---- */
+  --ivory: #f6f3ea;
+  --sand: #e9e3d4;
+  --sand-2: #ded6c2;
+  --sand-line: #d8d0bd;
+
+  /* ---- ピンク（ダスティローズ）---- */
+  --pink: #e79cb0;       /* 現行ロゴのピンクに近い基準色 */
+  --pink-soft: #f0c4cf;
+  --pink-tint: #f7e3e9;
+  --pink-deep: #cf7d93;
+
+  /* ---- ニュートラル / テキスト ---- */
+  --ink: #23220f;        /* ライト地の上の本文 */
+  --on-dark: #ece8da;    /* ダーク地の上の本文（AA確保用） */
+  --muted: #8c8a76;
+  --muted-dark: #b3ad97;
+
+  /* ---- 補助アクセント（極控えめなゴールド系ライン）---- */
+  --line-gold: #b9a86b;
+
+  /* ---- タイポ（最大2family＋欧文アクセント。display:swap）---- */
+  --font-serif-jp: "Shippori Mincho", "Hiragino Mincho ProN", serif;
+  --font-sans-jp: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+  --font-serif-en: "Cormorant Garamond", "Times New Roman", serif;
+
+  /* ---- 流体タイポスケール ---- */
+  --text-xs: 0.75rem;
+  --text-sm: 0.85rem;
+  --text-base: clamp(0.95rem, 0.9rem + 0.25vw, 1.05rem);
+  --text-lg: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
+  --text-xl: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+  --text-2xl: clamp(1.9rem, 1.4rem + 2.4vw, 3.2rem);
+  --text-3xl: clamp(2.6rem, 1.6rem + 4vw, 5rem);
+  --text-hero: clamp(3rem, 1.2rem + 7vw, 8rem);
+
+  /* ---- 余白・形状 ---- */
+  --space-section: clamp(4rem, 3rem + 6vw, 9rem);
+  --radius-sm: 6px;
+  --radius: 14px;
+  --radius-lg: 26px;
+  --radius-pill: 999px;
+  --maxw: 1200px;
+  --gutter: clamp(1.2rem, 0.6rem + 3vw, 2.6rem);
+
+  /* ---- 影 ---- */
+  --shadow-sm: 0 4px 14px rgba(31, 30, 17, 0.10);
+  --shadow: 0 16px 38px rgba(31, 30, 17, 0.16);
+  --shadow-lg: 0 30px 70px rgba(15, 14, 8, 0.40);
+
+  /* ---- イージング / 時間 ---- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 160ms;
+  --dur: 320ms;
+  --dur-slow: 720ms;
+}

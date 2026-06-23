@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>07 Kinetic ｜ LINDO デザイン案</title>
+<meta name="description" content="LINDO サイト刷新デザイン案 07：キネティック。GSAP＋Lenis のスムーズスクロールと three.js のWebGL背景で、動きで魅せるエンタメ全振り案。" />
+<meta name="theme-color" content="#18170c" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:title" content="07 Kinetic ｜ LINDO" />
+<meta property="og:description" content="アニメーション全振り案（GSAP / Lenis / WebGL）" />
+<meta property="og:image" content="/assets/og-default.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#18170c; --bg-2:#22210f; --panel:#2b2a18; --line:rgba(240,236,221,.13);
+  --text:#f0ecdd; --muted:#9c977d; --pink:#e79cb0; --pink-deep:#cf7d93; --gold:#c2b06f;
+  --serif:"Shippori Mincho",serif; --latin:"Cormorant Garamond",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1); --maxw:1300px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{font-family:var(--sans);font-weight:300;background:var(--bg);color:var(--text);line-height:1.85;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(100% - 3rem,var(--maxw));margin-inline:auto}
+.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;z-index:300;background:var(--pink);color:var(--bg);padding:.7em 1.2em;border-radius:8px}
+.latin{font-family:var(--latin)} em{font-style:italic}
+
+/* ===== Preloader ===== */
+.pre{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:2rem clamp(1.5rem,5vw,5rem)}
+.pre-mark{font-family:var(--latin);font-style:italic;font-weight:600;font-size:clamp(2rem,6vw,4rem);color:var(--pink)}
+.pre-num{font-family:var(--latin);font-size:clamp(2rem,6vw,4rem);color:var(--muted)}
+.no-motion .pre{display:none}
+
+/* ===== Custom cursor (fine pointer only) ===== */
+.cursor{position:fixed;top:0;left:0;width:36px;height:36px;border:1px solid var(--pink);border-radius:50%;pointer-events:none;z-index:150;opacity:0;
+  transition:opacity .3s,width .35s var(--ease),height .35s var(--ease),background .35s var(--ease)}
+.has-cursor .cursor{opacity:1}
+.cursor.is-hover{width:60px;height:60px;background:rgba(231,156,176,.14)}
+
+/* ===== Header ===== */
+.hd{position:fixed;inset:0 0 auto 0;z-index:90;background:linear-gradient(rgba(24,23,12,.6),transparent);backdrop-filter:blur(2px)}
+.hd-in{display:flex;align-items:center;justify-content:space-between;height:74px}
+.logo{font-family:var(--latin);font-style:italic;font-weight:600;font-size:1.7rem;letter-spacing:.05em}
+.logo b{font-style:normal;color:var(--pink)}
+.nav{display:flex;gap:2rem}
+.nav a{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.nav a:hover{color:var(--text)}
+.nav a:focus-visible,.logo:focus-visible{outline:2px solid var(--pink);outline-offset:5px}
+.nav-toggle{display:none}
+@media(max-width:860px){
+  .nav{position:fixed;inset:74px 0 auto 0;flex-direction:column;gap:0;background:rgba(24,23,12,.97);backdrop-filter:blur(14px);padding:.8rem 1.5rem 1.6rem;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.35s var(--ease);border-bottom:1px solid var(--line)}
+  .nav.open{opacity:1;transform:none;pointer-events:auto}
+  .nav a{padding:1em 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .nav-toggle{display:inline-grid;place-items:center;gap:5px;width:46px;height:46px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .nav-toggle span{display:block;width:20px;height:1.5px;background:var(--text)}
+}
+
+/* ===== Hero ===== */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero-canvas-wrap{position:absolute;inset:0;z-index:0}
+/* CSSグラデのフォールバック（WebGL無し時はこれが残る） */
+.hero-canvas-wrap::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(70% 60% at 72% 28%,rgba(231,156,176,.20),transparent 60%),
+  radial-gradient(60% 70% at 10% 90%,rgba(194,176,111,.12),transparent 60%),
+  linear-gradient(180deg,var(--bg-2),var(--bg))}
+.hero-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity 1.2s var(--ease)}
+.hero-canvas.is-on{opacity:1}
+.hero-in{position:relative;z-index:2;padding:7rem 0 5rem;width:100%}
+.hero-eyebrow{font-family:var(--latin);font-style:italic;font-size:clamp(1.1rem,.9rem + 1vw,1.6rem);color:var(--pink);margin-bottom:1.2rem}
+.hero h1{font-family:var(--sans);font-weight:500;font-size:clamp(3rem,1rem + 13vw,11rem);line-height:.92;letter-spacing:-.01em;text-transform:uppercase;overflow-wrap:anywhere}
+.hero h1 em{font-family:var(--latin);font-weight:600;text-transform:none;color:var(--pink)}
+.hero h1 .ln{overflow:hidden;display:block}
+.hero-sub{margin-top:1.8rem;max-width:42ch;color:var(--muted);font-size:clamp(1rem,.95rem + .3vw,1.15rem)}
+.hero-cue{position:absolute;left:0;bottom:1.6rem;z-index:2;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.7rem}
+.hero-cue::after{content:"";width:46px;height:1px;background:var(--pink)}
+
+/* ===== Kinetic ticker ===== */
+.ticker{border-block:1px solid var(--line);background:var(--bg-2);padding:1.3rem 0;overflow:hidden}
+.ticker-track{display:flex;gap:2.6rem;width:max-content;animation:slide 30s linear infinite;font-family:var(--latin);font-size:clamp(1.6rem,1rem + 3vw,3rem);letter-spacing:.02em;color:var(--text)}
+.ticker-track .dot{color:var(--pink)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ===== Section base ===== */
+.sec{padding:clamp(4rem,3rem + 6vw,9rem) 0;position:relative}
+.kick{font-size:.7rem;letter-spacing:.4em;text-transform:uppercase;color:var(--pink);margin-bottom:1.6rem;display:flex;align-items:center;gap:1rem}
+.kick::before{content:"";width:34px;height:1px;background:var(--pink)}
+.big{font-family:var(--serif);font-weight:700;font-size:clamp(1.9rem,1.2rem + 3.4vw,3.6rem);line-height:1.35}
+.big em{color:var(--pink)}
+.lead{color:var(--muted);max-width:54ch;margin-top:1.2rem}
+
+/* ===== Services (sticky desktop / stack mobile — CSS only) ===== */
+.svc-grid{display:grid;grid-template-columns:1fr;gap:2rem}
+.svc-label{align-self:start}
+.svc-list{border-top:1px solid var(--line)}
+.svc-item{display:grid;grid-template-columns:4rem 1fr;gap:1.2rem;padding:1.8rem 0;border-bottom:1px solid var(--line);align-items:baseline}
+.svc-item .n{font-family:var(--latin);font-style:italic;font-size:1.6rem;color:var(--pink)}
+.svc-item h3{font-family:var(--serif);font-size:clamp(1.2rem,1rem + 1vw,1.7rem)}
+.svc-item .en{font-family:var(--latin);font-size:1rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.2rem}
+.svc-item p{color:var(--muted);font-size:.92rem;margin-top:.5rem;max-width:52ch}
+@media(min-width:900px){
+  .svc-grid{grid-template-columns:.7fr 1.3fr;gap:3rem}
+  .svc-label{position:sticky;top:120px}
+}
+
+/* ===== Works ===== */
+.works{position:relative}
+.works-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;padding-bottom:1rem}
+.btn-line{font-family:var(--latin);font-size:1.15rem;letter-spacing:.06em;border-bottom:1px solid var(--pink);padding-bottom:.2em;transition:.35s var(--ease)}
+.btn-line:hover{color:var(--pink);letter-spacing:.12em}
+.btn-line:focus-visible{outline:2px solid var(--pink);outline-offset:5px}
+.works-inner{display:flex;align-items:center;overflow:hidden}
+.works-track{display:flex;gap:2rem;padding:1rem clamp(1.5rem,6vw,6rem);will-change:transform}
+.intro-panel{flex:0 0 min(78vw,420px);align-self:center}
+.intro-panel h2{font-family:var(--serif);font-weight:700;font-size:clamp(1.8rem,1.2rem + 3vw,3.2rem);line-height:1.3}
+.intro-panel p{color:var(--muted);margin-top:1rem;max-width:34ch}
+.work-card{flex:0 0 min(80vw,440px);position:relative}
+.work-fig{position:relative;overflow:hidden;border-radius:3px;aspect-ratio:4/5;background:var(--panel)}
+.work-fig img{width:100%;height:100%;object-fit:cover;filter:saturate(.85);transition:transform .9s var(--ease),filter .9s}
+.work-card:hover .work-fig img{transform:scale(1.05);filter:saturate(1)}
+.work-meta{display:flex;align-items:baseline;gap:1rem;margin-top:1rem}
+.work-meta .wn{font-family:var(--latin);font-style:italic;color:var(--pink);font-size:1.2rem}
+.work-cat{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.work-card h3{font-family:var(--serif);font-weight:600;font-size:clamp(1.2rem,1rem + 1vw,1.6rem);margin-top:.1rem}
+.work-card:focus-visible{outline:2px solid var(--pink);outline-offset:4px}
+.end-panel{flex:0 0 min(70vw,320px);display:flex;align-items:center}
+@media(min-width:1024px){
+  .works-inner{height:100svh}
+  .works-track{padding-inline:8vw}
+}
+@media(max-width:1023px){
+  .works-inner{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .works-inner::-webkit-scrollbar{display:none}
+  .work-card,.intro-panel,.end-panel{scroll-snap-align:start}
+}
+
+/* ===== Clients (two marquees) ===== */
+.clients{border-block:1px solid var(--line);background:var(--bg-2);padding:clamp(2.5rem,2rem + 3vw,4rem) 0;overflow:hidden}
+.cl-row{display:flex;gap:2.4rem;width:max-content;font-family:var(--latin);font-size:clamp(1.2rem,1rem + 1vw,1.8rem);color:var(--muted)}
+.cl-row.a{animation:slide 38s linear infinite}
+.cl-row.b{animation:slideR 44s linear infinite;margin-top:1rem;color:var(--gold)}
+@keyframes slideR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+
+/* ===== CTA ===== */
+.cta{text-align:center;padding:clamp(5rem,4rem + 6vw,10rem) 0}
+.cta h2{font-family:var(--serif);font-weight:700;font-size:clamp(2.4rem,1.4rem + 5vw,6rem);line-height:1.04}
+.cta h2 em{color:var(--pink)}
+.cta p{color:var(--muted);max-width:44ch;margin:1.6rem auto 2.6rem}
+.magnetic{display:inline-block;will-change:transform}
+.btn-fill{display:inline-block;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bg);background:var(--pink);padding:1.2em 2.8em;border-radius:999px;min-height:44px;transition:background .4s var(--ease)}
+.btn-fill:hover{background:var(--pink-deep)}
+.magnetic:focus-visible{outline:2px solid var(--pink);outline-offset:6px;border-radius:999px}
+
+/* ===== Footer ===== */
+.ft{border-top:1px solid var(--line);padding:3rem 0 2.4rem;color:var(--muted);overflow:hidden}
+.ft-word{font-family:var(--latin);font-style:italic;font-weight:600;font-size:clamp(4rem,18vw,16rem);line-height:.9;color:var(--pink);opacity:.16;text-align:center;letter-spacing:.02em;user-select:none}
+.ft-in{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;margin-top:1rem}
+.ft h4{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.ft a{display:block;padding:.25em 0;font-size:.9rem;transition:color .3s}.ft a:hover{color:var(--text)}
+.ft p{font-size:.9rem;max-width:32ch}
+.copy{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);font-family:var(--latin);font-size:.85rem;letter-spacing:.05em}
+@media(max-width:760px){.ft-in{grid-template-columns:1fr;gap:1.6rem}}
+
+/* ===== reduced-motion / no-js : すべて静的 ===== */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ticker-track,.cl-row.a,.cl-row.b{animation:none}
+  .work-card:hover .work-fig img{transform:none}
+}
+.no-motion .ticker-track,.no-motion .cl-row.a,.no-motion .cl-row.b{animation:none}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+<div class="cursor" data-cursor aria-hidden="true"></div>
+
+<div class="pre" data-preloader aria-hidden="true">
+  <span class="pre-mark">LINDO</span><span class="pre-num" data-pre-num>000</span>
+</div>
+
+<header class="hd" data-header>
+  <div class="wrap hd-in">
+    <a class="logo" href="/" aria-label="LINDO">LIND<b>O</b></a>
+    <nav class="nav" data-nav aria-label="メインナビゲーション">
+      <a href="#about">About</a><a href="#service">Service</a><a href="#works">Works</a><a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-canvas-wrap" aria-hidden="true"><canvas class="hero-canvas" data-hero-canvas></canvas></div>
+    <div class="wrap hero-in">
+      <p class="hero-eyebrow" data-hero-eyebrow>Entertainment Visual Creative — Lindo</p>
+      <h1 data-hero-head>Move the <em>Image.</em></h1>
+      <p class="hero-sub" data-hero-sub>アーティストの世界観を、動きのあるビジュアルへ。コンセプト設計からスタイリング、デザインまでを一貫して。</p>
+    </div>
+    <span class="hero-cue" data-hero-cue aria-hidden="true">Scroll</span>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker" data-ticker-skew aria-hidden="true">
+    <div class="ticker-track">
+      <span>Creative</span><span class="dot">✦</span><span>Branding</span><span class="dot">✦</span><span>Design</span><span class="dot">✦</span><span>Styling</span><span class="dot">✦</span>
+      <span>Creative</span><span class="dot">✦</span><span>Branding</span><span class="dot">✦</span><span>Design</span><span class="dot">✦</span><span>Styling</span><span class="dot">✦</span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="sec" id="about">
+    <div class="wrap">
+      <p class="kick" data-fade>About</p>
+      <h2 class="big" data-split>ビジュアルのコンセプトを最重要視し、<br><em>アーティストのストーリー</em>を描く。</h2>
+      <p class="lead" data-fade>K-POPで培ったブランディングの知見を生かし、イメージ作りからアルバム・広告のビジュアルコンセプト企画／制作まで。写真・映像・衣装・スタイリングを含むビジュアルクリエイティブを、トータルでお手伝いします。</p>
+    </div>
+  </section>
+
+  <!-- SERVICE -->
+  <section class="sec" id="service">
+    <div class="wrap svc-grid">
+      <div class="svc-label">
+        <p class="kick" data-fade>What We Do</p>
+        <h2 class="big" data-split>4つの<em>領域</em>で、<br>世界観を立ち上げる。</h2>
+      </div>
+      <div class="svc-list">
+        <div class="svc-item" data-fade><span class="n">01</span><div><span class="en">Visual Creative</span><h3>アーティストビジュアルの企画／制作</h3><p>アーティスト・アルバムコンセプト・プロジェクト・出演番組に合わせ、ビジュアルを企画・制作します。</p></div></div>
+        <div class="svc-item" data-fade><span class="n">02</span><div><span class="en">Branding</span><h3>戦略的なイメージ設計</h3><p>グループ／アーティストのイメージを戦略的に企画し、ストーリーから世界観を強固にします。</p></div></div>
+        <div class="svc-item" data-fade><span class="n">03</span><div><span class="en">Styling</span><h3>トータルスタイリング</h3><p>衣装・ヘアメイクを含むスタイリング。外注プロダクション、スタイリスト、デザイナーのアサイン／協業も。</p></div></div>
+        <div class="svc-item" data-fade><span class="n">04</span><div><span class="en">Design Direction</span><h3>B.I ロゴ・デザイン設計</h3><p>ロゴ（B.I）をはじめ、ビジュアルを支えるデザインの方向性を設計します。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS (horizontal pin desktop / native scroll mobile) -->
+  <section class="works" id="works" data-works aria-label="Selected Works">
+    <div class="works-inner">
+      <div class="works-track" data-works-track>
+        <div class="intro-panel">
+          <p class="kick">Selected Works</p>
+          <h2>手がけた、<br><em>いくつかの仕事</em>。</h2>
+          <p>右へスクロール。各作品の詳細ページへ移動できます。</p>
+        </div>
+        <a class="work-card" href="/works/aurora-debut-visual/">
+          <div class="work-fig"><img src="https://picsum.photos/seed/lindo-aurora-cover/900/1120" alt="AURORA Debut Visual" width="900" height="1120" loading="lazy" /></div>
+          <div class="work-meta"><span class="wn">01</span><span class="work-cat">Visual Creative / Styling</span></div>
+          <h3>AURORA — Debut Visual</h3>
+        </a>
+        <a class="work-card" href="/works/nova-stage-styling/">
+          <div class="work-fig"><img src="https://picsum.photos/seed/lindo-nova-cover/900/1120" alt="NOVA Stage Styling" width="900" height="1120" loading="lazy" /></div>
+          <div class="work-meta"><span class="wn">02</span><span class="work-cat">Styling</span></div>
+          <h3>NOVA — Stage &amp; Tour Styling</h3>
+        </a>
+        <a class="work-card" href="/works/lumen-brand-identity/">
+          <div class="work-fig"><img src="https://picsum.photos/seed/lindo-lumen-cover/900/1120" alt="LUMEN Brand Identity" width="900" height="1120" loading="lazy" /></div>
+          <div class="work-meta"><span class="wn">03</span><span class="work-cat">Design Direction</span></div>
+          <h3>LUMEN — Brand Identity</h3>
+        </a>
+        <div class="end-panel"><a class="btn-line" href="/works/">View All Works →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLIENTS -->
+  <section class="clients" aria-label="主要取引先">
+    <div class="cl-row a" aria-hidden="true"><span>avex</span><span>universal music</span><span>sony music</span><span>HYBE JAPAN</span><span>LDH JAPAN</span><span>BMSG</span><span>吉本興業</span><span>TWIN PLANET</span><span>ホリプロ</span><span>VANTAN</span><span>avex</span><span>universal music</span><span>sony music</span><span>HYBE JAPAN</span><span>LDH JAPAN</span><span>BMSG</span><span>吉本興業</span><span>TWIN PLANET</span><span>ホリプロ</span><span>VANTAN</span></div>
+    <div class="cl-row b" aria-hidden="true"><span>Visual Creative</span><span>Branding</span><span>Styling</span><span>Design Direction</span><span>B.I Logo</span><span>Art Direction</span><span>Visual Creative</span><span>Branding</span><span>Styling</span><span>Design Direction</span><span>B.I Logo</span><span>Art Direction</span></div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="wrap">
+      <p class="kick" style="justify-content:center" data-fade>Contact</p>
+      <h2 data-split>ビジュアルの相談を、<br><em>はじめましょう。</em></h2>
+      <p data-fade>アーティストのブランディング、ビジュアル企画、スタイリングのご相談を承ります。</p>
+      <span class="magnetic" data-magnetic><a class="btn-fill" href="mailto:contact@styledbylindo.com">お問い合わせ</a></span>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="ft-word" aria-hidden="true">LINDO</div>
+  <div class="wrap ft-in">
+    <div><p>株式会社LINDO（LINDO Co.,Ltd.）<br>ビジュアルコンセプト、写真、映像、衣装、スタイリングを含むビジュアルクリエイティブの企画／制作。</p></div>
+    <div><h4>Company</h4><p>〒151-0066<br>東京都渋谷区西原2-34-9<br>tel. 03-5308-5822 / fax. 03-5302-2808</p></div>
+    <div><h4>Menu</h4><a href="#about">About</a><a href="#service">Service</a><a href="/works/">Works</a><a href="mailto:contact@styledbylindo.com">Contact</a></div>
+  </div>
+  <div class="wrap"><p class="copy">© 2026 株式会社LINDO ・ 07 Kinetic（デザイン案 / GSAP・Lenis・WebGL）</p></div>
+</footer>
+
+<!-- 共通ナビ開閉（既存サイト挙動と統一） -->
+<script src="/assets/reveal.js" defer></script>
+<!-- モーション（self-host・CSP適合）。classic defer で global を用意 → module が利用 -->
+<script src="/assets/vendor/gsap.min.js" defer></script>
+<script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="/assets/vendor/SplitText.min.js" defer></script>
+<script src="/assets/vendor/lenis.min.js" defer></script>
+<script type="module" src="/assets/js/07-kinetic.js"></script>
+</body>
+</html>

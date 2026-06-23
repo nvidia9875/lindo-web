@@ -1,0 +1,66 @@
+{
+  "_note": "デモ用サンプル。機密の実案件は使用せず、クライアント名は架空、画像はプレースホルダ（picsum.photos）です。本番では works/images/ の実画像と実データに差し替えてください。",
+  "works": [
+    {
+      "slug": "aurora-debut-visual",
+      "title": "AURORA — Debut Visual Concept",
+      "client": "Sample Label A",
+      "categories": ["Visual Creative", "Styling"],
+      "year": "2025",
+      "role": "Visual Direction / Concept / Styling",
+      "cover": "https://picsum.photos/seed/lindo-aurora-cover/1600/1000",
+      "gallery": [
+        "https://picsum.photos/seed/lindo-aurora-1/1600/1100",
+        "https://picsum.photos/seed/lindo-aurora-2/1200/1500",
+        "https://picsum.photos/seed/lindo-aurora-3/1600/1100"
+      ],
+      "credits": [
+        { "role": "Creative Direction", "name": "LINDO" },
+        { "role": "Styling", "name": "LINDO" },
+        { "role": "Photography", "name": "—" },
+        { "role": "Hair & Make", "name": "—" }
+      ],
+      "description": "新人グループのデビューに向けたビジュアルコンセプトの企画・制作。世界観の設計からスタイリング、撮影ディレクションまでを一貫して担当。",
+      "body": "アーティストのストーリーを起点に、デビューの第一印象を決定づけるビジュアルの方向性を設計しました。\nムードボードからカラーパレット、衣装スタイリング、撮影現場のディレクションまでを横断的に管理し、各メディアで一貫したイメージを担保。\nアルバム、広告、SNSへ展開できるビジュアルシステムとして納品しています。"
+    },
+    {
+      "slug": "nova-stage-styling",
+      "title": "NOVA — Stage & Tour Styling",
+      "client": "Sample Label B",
+      "categories": ["Styling"],
+      "year": "2024",
+      "role": "Styling Direction",
+      "cover": "https://picsum.photos/seed/lindo-nova-cover/1600/1000",
+      "gallery": [
+        "https://picsum.photos/seed/lindo-nova-1/1600/1100",
+        "https://picsum.photos/seed/lindo-nova-2/1600/1100"
+      ],
+      "credits": [
+        { "role": "Styling Direction", "name": "LINDO" },
+        { "role": "Assist", "name": "—" }
+      ],
+      "description": "ツアー公演のためのステージスタイリング。楽曲世界とステージ演出に合わせ、衣装計画とルック構成を設計。",
+      "body": "セットリストと演出プランに合わせ、楽曲ごとのルックと早替えの動線まで含めてスタイリングを設計しました。\n照明・映像との相性を踏まえた素材・シルエット選定により、ステージ上での視認性と世界観を両立しています。"
+    },
+    {
+      "slug": "lumen-brand-identity",
+      "title": "LUMEN — Brand Identity & Logo",
+      "client": "Sample Label C",
+      "categories": ["Design Direction", "Branding"],
+      "year": "2024",
+      "role": "Design Direction / B.I Logo Design",
+      "cover": "https://picsum.photos/seed/lindo-lumen-cover/1600/1000",
+      "gallery": [
+        "https://picsum.photos/seed/lindo-lumen-1/1600/1100",
+        "https://picsum.photos/seed/lindo-lumen-2/1600/1100",
+        "https://picsum.photos/seed/lindo-lumen-3/1200/1500"
+      ],
+      "credits": [
+        { "role": "Design Direction", "name": "LINDO" },
+        { "role": "Logo Design", "name": "LINDO" }
+      ],
+      "description": "アーティストのブランドアイデンティティとロゴ（B.I）の設計。一貫したビジュアル言語をガイドラインとして整備。",
+      "body": "アーティストの核となるコンセプトを抽出し、ロゴ（B.I）、タイポグラフィ、カラー、適用ルールをひとつのデザインシステムとして構築しました。\nグッズ、ジャケット、SNS、ライブ演出まで、あらゆる接点でブランドが一貫して立ち上がるよう設計しています。"
+    }
+  ]
+}

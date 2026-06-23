@@ -1,0 +1,42 @@
+# =========================================================
+# LINDO — ロリポップ（Apache）用 セキュリティヘッダー サンプル
+#
+# 置き場所: WordPress を入れた「ルートの .htaccess」
+#   （wp-config.php と同じ階層。WordPress 既定の
+#    「# BEGIN WordPress ... # END WordPress」ブロックの“外”に追記）
+#
+# 注意:
+#  - CSP は WordPress 管理画面/プラグインがインライン JS/CSS を出すため、
+#    まずはフロント表示を壊さない控えめな構成にしている。
+#    厳格化（nonce 化）は別途プラグイン等が必要。まずは下記で十分実用的。
+#  - https 必須。ロリポップの「独自SSL（無料）」を有効化してから設定すること。
+# =========================================================
+
+<IfModule mod_headers.c>
+  # 1年 HSTS（SSL を有効化し、常時 https 化が済んでから付けること）
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # Cross-Origin 系（必要に応じて調整）
+  Header always set X-XSS-Protection "0"
+</IfModule>
+
+# --- 画像/フォント/CSS/JS のキャッシュ（任意・体感速度向上） ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# --- 不要ファイルへのアクセス遮断 ---
+<FilesMatch "^(wp-config\.php|readme\.html|license\.txt|xmlrpc\.php)$">
+  Require all denied
+</FilesMatch>

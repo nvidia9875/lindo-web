@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>LINDO ｜ サイト刷新 デザイン案ギャラリー（8案）</title>
+<meta name="description" content="株式会社LINDO サイト刷新のデザイン案ギャラリー。8つのホームページ案を実画像・実コンテンツ入りのライブプレビューで見比べられます。" />
+<meta name="theme-color" content="#22210f" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#22210f; --panel:#2b2a18; --panel-2:#32311c; --line:rgba(231,156,176,.16);
+  --text:#ece8da; --muted:#a7a288; --pink:#e79cb0; --pink-deep:#cf7d93; --gold:#b9a86b;
+  --serif:"Cormorant Garamond",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.8;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(110% 70% at 85% -5%,rgba(231,156,176,.10),transparent 50%),radial-gradient(70% 50% at 0% 100%,rgba(185,168,107,.07),transparent 55%)}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(100% - 2.5rem,1360px);margin-inline:auto}
+
+header.top{padding:64px 0 28px;text-align:center}
+.eyebrow{font-family:var(--serif);font-style:italic;font-size:1.4rem;color:var(--pink);margin-bottom:.6rem}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,1.2rem + 3vw,3.4rem);line-height:1.2;letter-spacing:.02em}
+h1 b{color:var(--pink)}
+.sub{color:var(--muted);max-width:62ch;margin:1rem auto 0;font-size:.98rem}
+.legend{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:1.6rem}
+.legend span{font-size:.74rem;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:.4em 1em;border-radius:50px}
+
+.tip{max-width:760px;margin:1.6rem auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:1rem 1.4rem;font-size:.9rem;color:var(--muted)}
+.tip b{color:var(--text)}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;padding:2.4rem 0 2rem}
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.grid{grid-template-columns:1fr}}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s}
+.card:hover{transform:translateY(-6px);border-color:var(--pink);box-shadow:0 30px 60px -34px rgba(0,0,0,.85)}
+.frame{position:relative;height:300px;overflow:hidden;background:#000;border-bottom:1px solid var(--line)}
+.frame iframe{position:absolute;top:0;left:0;width:1440px;height:980px;border:0;transform:scale(.314);transform-origin:top left;pointer-events:none}
+.frame .poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.frame .no{position:absolute;top:12px;left:12px;z-index:3;font-family:var(--serif);font-weight:600;font-size:1rem;background:rgba(20,19,8,.82);color:var(--pink);padding:.2em .8em;border-radius:50px;backdrop-filter:blur(4px)}
+.frame .open{position:absolute;inset:0;z-index:2;display:flex;align-items:flex-end;justify-content:flex-end;padding:14px;opacity:0;transition:opacity .3s;background:linear-gradient(transparent 62%,rgba(15,14,6,.6))}
+.card:hover .frame .open{opacity:1}
+.frame .open span{font-size:.78rem;letter-spacing:.04em;background:var(--pink);color:#22210f;padding:.5em 1em;border-radius:8px;font-weight:700}
+.meta{padding:1.3rem 1.4rem 1.5rem;flex:1;display:flex;flex-direction:column}
+.tier{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.meta h2{font-family:var(--serif);font-weight:600;font-size:1.4rem;display:flex;align-items:baseline;gap:.6rem}
+.meta h2 small{font-size:.8rem;color:var(--muted);font-style:italic}
+.meta p{color:var(--muted);font-size:.86rem;margin-top:.5rem;flex:1}
+.sw{display:flex;gap:.4rem;margin-top:1rem}
+.sw i{width:20px;height:20px;border-radius:5px;border:1px solid rgba(255,255,255,.12)}
+.card a.full:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+
+/* WORKS feature banner */
+.works-banner{display:grid;grid-template-columns:1.2fr 1fr;gap:0;background:var(--panel-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:2.4rem}
+.works-banner .txt{padding:clamp(1.8rem,1.4rem + 2vw,2.8rem)}
+.works-banner .k{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--pink);margin-bottom:.8rem}
+.works-banner h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,1.2rem + 2vw,2.4rem);line-height:1.3}
+.works-banner p{color:var(--muted);font-size:.9rem;margin:.8rem 0 1.4rem;max-width:46ch}
+.works-banner .btns{display:flex;gap:.8rem;flex-wrap:wrap}
+.works-banner a.b{font-size:.78rem;letter-spacing:.1em;padding:.85em 1.6em;border-radius:999px;transition:.35s var(--ease)}
+.b-fill{background:var(--pink);color:#22210f;font-weight:700}.b-fill:hover{background:var(--pink-deep);transform:translateY(-2px)}
+.b-ghost{border:1px solid var(--line);color:var(--text)}.b-ghost:hover{border-color:var(--pink)}
+.works-banner a:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.works-banner .frame{height:auto;min-height:240px;border-bottom:0;border-left:1px solid var(--line)}
+.works-banner .frame iframe{transform:scale(.4)}
+@media(max-width:760px){.works-banner{grid-template-columns:1fr}.works-banner .frame{display:none}}
+
+footer{text-align:center;padding:2rem 0 4rem;color:var(--muted);font-size:.84rem;font-family:var(--serif);letter-spacing:.04em}
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <p class="eyebrow">LINDO ・ Website Redesign</p>
+  <h1>サイト刷新 <b>デザイン案 8</b></h1>
+  <p class="sub">考えうる方向性を、実画像・実コンテンツ入りの実装済みホームとして8案ご用意しました。各カードはライブ縮小プレビューです。クリックで全画面表示。キーカラー（カーキ×ピンク）を軸に、ダーク高級〜ライト洗練、アニメーション全振り、固定ステージのスクロールテリングまで幅広く。</p>
+  <div class="legend"><span>🖼 ライブプレビュー</span><span>📱 モバイル対応</span><span>✨ スクロール演出</span><span>♿ reduced-motion 尊重</span><span>🔎 SEO実装</span><span>⚡ GSAP / WebGL（07・08）</span></div>
+  <div class="tip">💡 <b>見方：</b>サムネをクリックで実寸の全画面に。気に入った番号（例：02・05…）を教えてください → その方向で全体を仕上げ／2〜3案を掛け合わせます。<b>WORKS（作品一覧→詳細）</b>は下のバナーから実際の動作をご確認いただけます。</div>
+</header>
+
+<main class="wrap">
+
+  <!-- WORKS feature -->
+  <section class="works-banner" aria-label="WORKS デモ">
+    <div class="txt">
+      <p class="k">必須機能 ・ Works</p>
+      <h2>作品一覧 → 作品詳細ページ</h2>
+      <p>カテゴリで絞り込める一覧から、各作品の詳細ページへ。御社で <b>JSONに追記＋画像を置くだけ</b> で追加でき、各詳細ページは固有のメタ情報・OGP・構造化データを持つSEO対応の静的ページとして生成されます。</p>
+      <div class="btns">
+        <a class="b b-fill" href="/works/" target="_blank" rel="noopener">WORKS一覧を開く →</a>
+        <a class="b b-ghost" href="/works/aurora-debut-visual/" target="_blank" rel="noopener">作品詳細の例 →</a>
+      </div>
+    </div>
+    <div class="frame"><iframe src="/works/" loading="lazy" tabindex="-1" scrolling="no" title="WORKS 一覧プレビュー"></iframe></div>
+  </section>
+
+  <!-- concept gallery -->
+  <section class="grid" aria-label="デザイン案一覧">
+
+    <a class="card full" href="/concepts/01-dark-atelier.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">01</span><iframe src="/concepts/01-dark-atelier.html" loading="lazy" tabindex="-1" scrolling="no" title="01 Dark Atelier プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">ダーク高級 ・ 現行進化</div><h2>墨明 <small>Dark Atelier</small></h2><p>カーキの闇にダスティローズ。上品なセリフとフルブリードの写真で魅せる、現行ブランドの正統進化。</p>
+      <div class="sw"><i style="background:#22210f"></i><i style="background:#e79cb0"></i><i style="background:#b9a86b"></i><i style="background:#ece8da"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/02-light-editorial.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">02</span><iframe src="/concepts/02-light-editorial.html" loading="lazy" tabindex="-1" scrolling="no" title="02 Light Editorial プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">ライト洗練 ・ 余白</div><h2>誌面 <small>Light Editorial</small></h2><p>たっぷりの余白と特大タイポ、ナンバリング。明るく洗練された雑誌のような誌面（参考①の雰囲気）。</p>
+      <div class="sw"><i style="background:#f6f3ea"></i><i style="background:#3c3a20"></i><i style="background:#d98da3"></i><i style="background:#a99a5e"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/03-cinematic.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">03</span><iframe src="/concepts/03-cinematic.html" loading="lazy" tabindex="-1" scrolling="no" title="03 Cinematic プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">映像的 ・ 動きで魅せる</div><h2>映像 <small>Cinematic</small></h2><p>全画面ヒーローと横スクロールの作品リール、流れるロゴ。エンタメ業態に映える、動きのある構成。</p>
+      <div class="sw"><i style="background:#191808"></i><i style="background:#e79cb0"></i><i style="background:#c2b06f"></i><i style="background:#f0ecdd"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/04-swiss-minimal.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">04</span><iframe src="/concepts/04-swiss-minimal.html" loading="lazy" tabindex="-1" scrolling="no" title="04 Swiss Minimal プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">グリッド ・ 知的</div><h2>格子 <small>Swiss Minimal</small></h2><p>硬質なグリッドと特大グロテスク、ピンク1色のアクセント。極めてモダンで信頼感のある情報設計。</p>
+      <div class="sw"><i style="background:#eae5d7"></i><i style="background:#26240f"></i><i style="background:#d2607c"></i><i style="background:#f3efe4"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/05-bento.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">05</span><iframe src="/concepts/05-bento.html" loading="lazy" tabindex="-1" scrolling="no" title="05 Bento プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">モジュラー ・ 一望</div><h2>弁当 <small>Bento</small></h2><p>ダーク／ライトのタイルを組み合わせ、サービス・作品・取引先を1画面で一望。今っぽくモジュラー。</p>
+      <div class="sw"><i style="background:#32311b"></i><i style="background:#f3efe4"></i><i style="background:#e79cb0"></i><i style="background:#b9a86b"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/06-gallery.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">06</span><iframe src="/concepts/06-gallery.html" loading="lazy" tabindex="-1" scrolling="no" title="06 Gallery プレビュー"></iframe><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">写真主役 ・ ルックブック</div><h2>図録 <small>Gallery</small></h2><p>全画面の写真と編集的な不揃いグリッド。装飾を抑え、アーティストビジュアルそのもので魅せる。</p>
+      <div class="sw"><i style="background:#ede7da"></i><i style="background:#2a2814"></i><i style="background:#d98da3"></i><i style="background:#a99a5e"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/07-kinetic.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">07</span><img class="poster" src="/assets/poster-07.jpg" alt="07 Kinetic プレビュー" width="1440" height="980" loading="lazy" /><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">アニメーション全振り ・ GSAP / WebGL</div><h2>躍動 <small>Kinetic</small></h2><p>Lenisの滑らかスクロールとthree.jsのWebGL背景、文字のリビールや横スクロールで“動き”を主役に。エンタメの高揚感を最大化（参考：dashcreativeの雰囲気）。</p>
+      <div class="sw"><i style="background:#18170c"></i><i style="background:#e79cb0"></i><i style="background:#c2b06f"></i><i style="background:#f0ecdd"></i></div></div>
+    </a>
+
+    <a class="card full" href="/concepts/08-process.html" target="_blank" rel="noopener">
+      <div class="frame"><span class="no">08</span><img class="poster" src="/assets/poster-08.jpg" alt="08 Process プレビュー" width="1440" height="980" loading="lazy" /><div class="open"><span>全画面で開く →</span></div></div>
+      <div class="meta"><div class="tier">固定ステージ ・ スクロールテリング</div><h2>叙事 <small>Process</small></h2><p>画面固定のまま、スクロールで“物語が進む”。Concept→Branding→Styling→Visual→Design の制作プロセスを体験（参考②elvalabsの雰囲気）。</p>
+      <div class="sw"><i style="background:#1c1b0e"></i><i style="background:#e79cb0"></i><i style="background:#c2b06f"></i><i style="background:#f0ecdd"></i></div></div>
+    </a>
+
+  </section>
+</main>
+
+<footer>© 2026 株式会社LINDO ・ サイト刷新 デザイン案ギャラリー（8案）</footer>
+</body>
+</html>

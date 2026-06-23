@@ -1,0 +1,16 @@
+/*
+Theme Name: LINDO
+Theme URI: https://styledbylindo.com/
+Description: 株式会社LINDO（ビジュアルクリエイティブ）コーポレートテーマ。Swiss Minimal 意匠 ― 硬質グリッド × 特大タイポ × ピンク1色アクセント。アーティスト紹介（モーダル＋Instagram風グリッド）と Contact Form 7 連携の問い合わせを備える。
+Author: LINDO
+Version: 1.0.0
+Requires at least: 6.4
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: lindo
+Tags: portfolio, custom-colors, custom-menu, featured-images, full-width-template
+
+実体スタイルは assets/css/lindo.css に分離（functions.php で enqueue）。
+このファイルはWordPressテーマ識別用ヘッダのみを担う。
+*/

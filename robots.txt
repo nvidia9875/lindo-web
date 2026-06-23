@@ -1,0 +1,9 @@
+# LINDO — robots.txt
+# レビュー段階：デザイン案ギャラリーと各案ページはインデックスさせない。
+# 公開時：採用案を本番 index.html に据え、この Disallow を見直す。
+
+User-agent: *
+Disallow: /concepts/
+Allow: /
+
+Sitemap: https://styledbylindo.com/sitemap.xml

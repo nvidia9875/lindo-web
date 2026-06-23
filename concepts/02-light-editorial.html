@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>02 Light Editorial ｜ LINDO デザイン案</title>
+<meta name="description" content="LINDO サイト刷新デザイン案 02：ライト・エディトリアル。たっぷりの余白と特大タイポ、ナンバリングで魅せる洗練された明るい誌面。" />
+<meta name="theme-color" content="#f6f3ea" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:title" content="02 Light Editorial ｜ LINDO" />
+<meta property="og:description" content="ライト・エディトリアル案" />
+<meta property="og:image" content="/assets/og-default.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Shippori+Mincho:wght@500;600&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#f6f3ea; --bg-2:#efeadd; --ink:#262411; --olive:#3c3a20; --muted:#8c8a73;
+  --pink:#d98da3; --pink-deep:#c2647e; --line:#ddd6c4; --gold:#a99a5e;
+  --serif:"Shippori Mincho",serif; --latin:"Cormorant Garamond",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1); --maxw:1280px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.9;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
+.wrap{width:min(100% - 3rem,var(--maxw));margin-inline:auto}
+.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;z-index:200;background:var(--olive);color:var(--bg);padding:.7em 1.2em;border-radius:8px}
+.latin{font-family:var(--latin)}
+
+/* header */
+.hd{position:fixed;inset:0 0 auto 0;z-index:90;mix-blend-mode:normal;transition:background .4s var(--ease),border-color .4s;border-bottom:1px solid transparent}
+.hd.scrolled{background:rgba(246,243,234,.82);backdrop-filter:blur(12px);border-color:var(--line)}
+.hd-in{display:flex;align-items:center;justify-content:space-between;height:80px}
+.logo{font-family:var(--latin);font-style:italic;font-weight:600;font-size:1.7rem;letter-spacing:.05em;color:var(--olive)}
+.logo b{font-style:normal;color:var(--pink-deep)}
+.nav{display:flex;gap:2rem}
+.nav a{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--olive);display:flex;gap:.5em;align-items:baseline;transition:color .3s}
+.nav a i{font-family:var(--latin);font-style:italic;font-size:.9rem;color:var(--pink-deep)}
+.nav a:hover{color:var(--pink-deep)}
+.nav a:focus-visible,.logo:focus-visible{outline:2px solid var(--pink-deep);outline-offset:5px}
+.nav-toggle{display:none}
+@media(max-width:860px){
+  .nav{position:fixed;inset:80px 0 auto 0;flex-direction:column;gap:0;background:var(--bg);padding:.8rem 1.5rem 1.6rem;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.4s var(--ease);border-bottom:1px solid var(--line)}
+  .nav.open{opacity:1;transform:none;pointer-events:auto}
+  .nav a{padding:1em 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .nav-toggle{display:inline-grid;place-items:center;gap:5px;width:46px;height:46px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .nav-toggle span{display:block;width:20px;height:1.5px;background:var(--olive)}
+}
+
+/* hero */
+.hero{padding:190px 0 clamp(4rem,3rem + 6vw,9rem);position:relative}
+.hero .idx{position:absolute;top:140px;right:0;font-family:var(--latin);font-style:italic;font-size:clamp(6rem,18vw,18rem);color:var(--pink);opacity:.16;line-height:.8;user-select:none}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.8rem,1.2rem + 7vw,8rem);line-height:1.02;letter-spacing:-.01em;max-width:14ch;position:relative;z-index:2}
+.hero h1 .en{font-family:var(--latin);font-style:italic;font-weight:500;color:var(--pink-deep)}
+.hero-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-top:clamp(2.5rem,2rem + 3vw,4.5rem);border-top:1px solid var(--line);padding-top:1.8rem}
+.hero-foot p{max-width:38ch;color:var(--muted)}
+.hero-foot .tag{font-family:var(--latin);font-size:1.2rem;letter-spacing:.04em;color:var(--olive);white-space:nowrap}
+.hero-foot .tag b{color:var(--pink-deep);font-weight:500}
+
+/* big photo band */
+.band{height:clamp(40vh,52vh,640px);overflow:hidden;position:relative}
+.band img{width:100%;height:100%;object-fit:cover;filter:grayscale(.1) contrast(1.02)}
+
+/* section base */
+.sec{padding:clamp(4rem,3rem + 6vw,9rem) 0}
+.lead-row{display:grid;grid-template-columns:auto 1fr;gap:clamp(1.5rem,1rem + 3vw,4rem);align-items:start}
+.num{font-family:var(--latin);font-style:italic;font-size:1.4rem;color:var(--pink-deep);border-top:2px solid var(--olive);padding-top:.6rem;white-space:nowrap}
+.sec-h{font-family:var(--serif);font-weight:600;font-size:clamp(1.8rem,1.2rem + 3vw,3.4rem);line-height:1.3;letter-spacing:.01em}
+.sec-h + .sec-sub{margin-top:1.4rem;color:var(--muted);max-width:54ch}
+
+/* services list */
+.serv-list{margin-top:clamp(2.5rem,2rem + 3vw,4.5rem);border-top:1px solid var(--line)}
+.serv{display:grid;grid-template-columns:5rem 1fr;gap:clamp(1rem,.5rem + 2vw,2.5rem);padding:2.2rem 0;border-bottom:1px solid var(--line);align-items:baseline;transition:padding-left .4s var(--ease)}
+.serv:hover{padding-left:1rem}
+.serv .sn{font-family:var(--latin);font-style:italic;font-size:1.3rem;color:var(--pink-deep)}
+.serv h3{font-family:var(--serif);font-size:clamp(1.3rem,1rem + 1.4vw,2rem)}
+.serv .desc{color:var(--muted);font-size:.95rem;margin-top:.6rem;max-width:52ch}
+.serv .en{font-family:var(--latin);font-size:1rem;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.3rem}
+
+/* works editorial */
+.works{background:var(--bg-2)}
+.work-row{display:grid;grid-template-columns:1.1fr 1.4fr 1fr auto;gap:1.5rem;align-items:center;padding:1.8rem 0;border-top:1px solid var(--line);transition:.4s var(--ease)}
+.work-row:last-of-type{border-bottom:1px solid var(--line)}
+.work-row:hover{background:rgba(217,141,163,.06);padding-inline:1rem}
+.work-row .wt{font-family:var(--serif);font-size:clamp(1.2rem,1rem + 1vw,1.7rem)}
+.work-row .wc{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-deep)}
+.work-row .wy{font-family:var(--latin);font-size:1.1rem;color:var(--muted)}
+.work-row .arr{font-family:var(--latin);font-size:1.4rem;color:var(--olive);transition:transform .4s var(--ease)}
+.work-row:hover .arr{transform:translateX(8px);color:var(--pink-deep)}
+.work-row:focus-visible{outline:2px solid var(--pink-deep);outline-offset:3px}
+@media(max-width:760px){.work-row{grid-template-columns:1fr auto;gap:.4rem}.work-row .wy{display:none}.work-row .wc{grid-column:1}}
+.all-works{margin-top:2.4rem;font-family:var(--latin);font-size:1.2rem;letter-spacing:.06em;border-bottom:1px solid var(--pink-deep);padding-bottom:.2em;transition:.35s var(--ease)}
+.all-works:hover{letter-spacing:.12em}
+
+/* clients */
+.client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:clamp(2rem,1rem + 3vw,3.5rem)}
+.client-grid span{background:var(--bg);padding:1.6rem 1.2rem;font-family:var(--latin);font-size:1.15rem;color:var(--olive);transition:.35s var(--ease)}
+.client-grid span:hover{background:var(--olive);color:var(--bg)}
+
+/* cta */
+.cta{text-align:center;border-top:1px solid var(--line)}
+.cta h2{font-family:var(--serif);font-weight:600;font-size:clamp(2.2rem,1.4rem + 4vw,4.6rem);line-height:1.1}
+.cta .latin{font-style:italic;color:var(--pink-deep)}
+.cta p{color:var(--muted);max-width:44ch;margin:1.6rem auto 2.6rem}
+.btn{display:inline-block;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bg);background:var(--olive);padding:1.1em 2.6em;border-radius:999px;transition:.4s var(--ease)}
+.btn:hover{background:var(--pink-deep);transform:translateY(-3px)}
+.btn:focus-visible{outline:2px solid var(--pink-deep);outline-offset:4px}
+
+/* footer */
+.ft{background:var(--olive);color:#d7d2bf;padding:4rem 0 2.4rem}
+.ft-in{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2.5rem}
+.ft .brand{font-family:var(--latin);font-style:italic;font-size:2rem;color:var(--pink)}
+.ft p{font-size:.9rem;margin-top:1rem;max-width:34ch}
+.ft h4{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+.ft a{display:block;padding:.25em 0;font-size:.9rem;transition:color .3s}.ft a:hover{color:#fff}
+.copy{margin-top:3rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.14);font-family:var(--latin);font-size:.85rem;letter-spacing:.05em}
+@media(max-width:760px){.ft-in{grid-template-columns:1fr;gap:2rem}.lead-row{grid-template-columns:1fr}}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+<header class="hd" data-header>
+  <div class="wrap hd-in">
+    <a class="logo" href="/" aria-label="LINDO">LIND<b>O</b></a>
+    <nav class="nav" data-nav aria-label="メインナビゲーション">
+      <a href="#about"><i>01</i>About</a><a href="#service"><i>02</i>Service</a><a href="/works/"><i>03</i>Works</a><a href="#contact"><i>04</i>Contact</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <span class="idx" aria-hidden="true">—</span>
+      <h1 class="rv">Visual Creative<br>for <span class="en">Artists.</span></h1>
+      <div class="hero-foot">
+        <p class="rv d1">アーティストの世界観を、ひとつのビジュアルへ。コンセプト設計からスタイリング、デザインまで一貫して手がけます。</p>
+        <p class="tag rv d2"><b>Creative</b> ｜ Branding ｜ Design ｜ Styling</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="band rv"><img src="https://picsum.photos/seed/lindo-band-light/2000/900" alt="クリエイティブのイメージ" width="2000" height="900" /></div>
+
+  <section class="sec" id="about">
+    <div class="wrap lead-row">
+      <span class="num rv">01 — About</span>
+      <div>
+        <h2 class="sec-h rv">ビジュアルのコンセプトを<br>最重要視する。</h2>
+        <p class="sec-sub rv d1">K-POPのブランディング実績を生かし、アーティストのイメージ作り、ストーリー設計、アルバムや広告のビジュアルコンセプト企画／制作を行います。写真・映像・衣装・スタイリングを含むビジュアルクリエイティブを、トータルで。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="service" style="padding-top:0">
+    <div class="wrap lead-row">
+      <span class="num rv">02 — Service</span>
+      <div>
+        <h2 class="sec-h rv">What We Do</h2>
+        <div class="serv-list">
+          <div class="serv rv"><span class="sn">01</span><div><span class="en">Visual Creative</span><h3>アーティストビジュアルの企画／制作</h3><p class="desc">アーティスト・アルバムコンセプト・プロジェクト・出演番組に合わせ、ビジュアルを企画・制作します。</p></div></div>
+          <div class="serv rv"><span class="sn">02</span><div><span class="en">Branding</span><h3>戦略的なイメージ設計</h3><p class="desc">グループ／アーティストのイメージを戦略的に企画し、ストーリーから世界観を強固にします。</p></div></div>
+          <div class="serv rv"><span class="sn">03</span><div><span class="en">Styling</span><h3>トータルスタイリング</h3><p class="desc">衣装・ヘアメイクを含むスタイリング。外注プロダクション、スタイリスト、デザイナーのアサイン／協業も。</p></div></div>
+          <div class="serv rv"><span class="sn">04</span><div><span class="en">Design Direction</span><h3>B.I ロゴ・デザイン設計</h3><p class="desc">ロゴ（B.I）をはじめ、ビジュアルを支えるデザインの方向性を設計します。</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec works" id="works">
+    <div class="wrap lead-row">
+      <span class="num rv">03 — Works</span>
+      <div>
+        <h2 class="sec-h rv">Selected Works</h2>
+        <div style="margin-top:2rem">
+          <a class="work-row rv" href="/works/aurora-debut-visual/"><span class="wt">AURORA — Debut Visual</span><span class="wc">Visual Creative / Styling</span><span class="wy">2025</span><span class="arr">→</span></a>
+          <a class="work-row rv" href="/works/nova-stage-styling/"><span class="wt">NOVA — Stage &amp; Tour Styling</span><span class="wc">Styling</span><span class="wy">2024</span><span class="arr">→</span></a>
+          <a class="work-row rv" href="/works/lumen-brand-identity/"><span class="wt">LUMEN — Brand Identity</span><span class="wc">Design Direction</span><span class="wy">2024</span><span class="arr">→</span></a>
+        </div>
+        <a class="all-works rv d1" href="/works/">View All Works →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap lead-row">
+      <span class="num rv">— Partner</span>
+      <div>
+        <h2 class="sec-h rv">主要取引先</h2>
+        <div class="client-grid rv d1">
+          <span>avex</span><span>universal music</span><span>sony music</span><span>HYBE JAPAN</span><span>LDH JAPAN</span><span>BMSG</span><span>吉本興業</span><span>TWIN PLANET</span><span>ホリプロ</span><span>VANTAN</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec cta" id="contact">
+    <div class="wrap">
+      <h2 class="rv">Let's create<br><span class="latin">something.</span></h2>
+      <p class="rv d1">アーティストのブランディング、ビジュアル企画、スタイリングのご相談を承ります。</p>
+      <a class="btn rv d1" href="mailto:contact@styledbylindo.com">お問い合わせ</a>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div><p class="brand">LINDO</p><p>株式会社LINDO（LINDO Co.,Ltd.）<br>ビジュアルクリエイティブの企画／制作。</p></div>
+    <div><h4>Company</h4><p style="margin:0">〒151-0066<br>東京都渋谷区西原2-34-9<br>tel. 03-5308-5822 / fax. 03-5302-2808</p></div>
+    <div><h4>Menu</h4><a href="#about">About</a><a href="#service">Service</a><a href="/works/">Works</a><a href="mailto:contact@styledbylindo.com">Contact</a></div>
+  </div>
+  <div class="wrap"><p class="copy">© 2026 株式会社LINDO ・ 02 Light Editorial（デザイン案）</p></div>
+</footer>
+
+<script src="/assets/reveal.js" defer></script>
+</body>
+</html>

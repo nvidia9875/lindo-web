@@ -1,0 +1,9 @@
+# Dev artifacts / screenshots (not part of the site)
+.playwright-mcp/
+shot-*.jpeg
+shot-*.jpg
+aperture-*.png
+
+# OS / editor
+.DS_Store
+*.log

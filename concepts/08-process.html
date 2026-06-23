@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>08 Process ｜ LINDO デザイン案</title>
+<meta name="description" content="LINDO サイト刷新デザイン案 08：プロセス。画面固定のままスクロールで物語が進む。コンセプトから作品が立ち上がるまでを、固定ステージのスクロールテリングで。" />
+<meta name="theme-color" content="#1c1b0e" />
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="LINDO" />
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:title" content="08 Process ｜ LINDO" />
+<meta property="og:description" content="画面固定で物語が進む、制作プロセスのスクロールテリング案" />
+<meta property="og:image" content="/assets/og-default.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preload" as="image" href="/assets/process/00.jpg" fetchpriority="high" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"株式会社LINDO","alternateName":"LINDO Co., Ltd.","url":"https://styledbylindo.com/","logo":"https://styledbylindo.com/assets/favicon.svg","email":"contact@styledbylindo.com","telephone":"+81-3-5308-5822","address":{"@type":"PostalAddress","postalCode":"151-0066","addressRegion":"東京都","addressLocality":"渋谷区","streetAddress":"西原2-34-9","addressCountry":"JP"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"LINDO","url":"https://styledbylindo.com/"}</script>
+<style>
+:root{
+  --bg:#1c1b0e; --panel:#2b2a18; --line:rgba(240,236,221,.13);
+  --text:#f0ecdd; --muted:#9c977d; --pink:#e79cb0; --pink-deep:#cf7d93; --gold:#c2b06f;
+  --serif:"Shippori Mincho",serif; --latin:"Cormorant Garamond",serif; --sans:"Zen Kaku Gothic New",sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1); --maxw:1320px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:hidden}
+body{font-family:var(--sans);font-weight:300;background:var(--bg);color:var(--text);line-height:1.85;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(100% - 3rem,var(--maxw));margin-inline:auto}
+.skip{position:absolute;left:-999px}.skip:focus{left:1rem;top:1rem;z-index:300;background:var(--pink);color:var(--bg);padding:.7em 1.2em;border-radius:8px}
+em{font-style:italic;color:var(--pink)}
+
+/* header */
+.hd{position:fixed;inset:0 0 auto 0;z-index:90;background:linear-gradient(rgba(28,27,14,.7),transparent)}
+.hd-in{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{font-family:var(--latin);font-style:italic;font-weight:600;font-size:1.7rem;letter-spacing:.05em}
+.logo b{font-style:normal;color:var(--pink)}
+.nav{display:flex;gap:2rem}
+.nav a{font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+.nav a:hover{color:var(--text)}
+.nav a:focus-visible,.logo:focus-visible{outline:2px solid var(--pink);outline-offset:5px}
+.nav-toggle{display:none}
+@media(max-width:860px){
+  .nav{position:fixed;inset:72px 0 auto 0;flex-direction:column;gap:0;background:rgba(28,27,14,.97);backdrop-filter:blur(14px);padding:.8rem 1.5rem 1.6rem;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.35s var(--ease);border-bottom:1px solid var(--line)}
+  .nav.open{opacity:1;transform:none;pointer-events:auto}
+  .nav a{padding:1em 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  .nav-toggle{display:inline-grid;place-items:center;gap:5px;width:46px;height:46px;background:none;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+  .nav-toggle span{display:block;width:20px;height:1.5px;background:var(--text)}
+}
+
+/* ===== STAGE — 既定（モバイル/縮小モーション/no-JS）= 縦積み ===== */
+.stage{position:relative;background:var(--bg)}
+.frame,.rail{display:none}                 /* 共有フレーム・レールは .fx（デスクトップ）でのみ表示 */
+.chapter{min-height:100svh;display:flex;flex-direction:column;justify-content:center;gap:1.6rem;padding:6rem 0}
+.ch-eyebrow{font-family:var(--latin);font-style:italic;font-size:clamp(1.1rem,.9rem + 1vw,1.5rem);color:var(--pink);letter-spacing:.02em}
+.chapter h1,.chapter h2{font-family:var(--serif);font-weight:700;line-height:1.3;letter-spacing:.01em;font-size:clamp(1.9rem,1.2rem + 3.6vw,3.6rem)}
+.ch-copy{color:var(--muted);max-width:46ch;font-size:clamp(1rem,.95rem + .3vw,1.15rem)}
+.ch-media{margin-top:.5rem}
+.ch-media img{width:100%;max-width:520px;aspect-ratio:3/4;object-fit:cover;border-radius:3px;margin:0 auto;box-shadow:0 30px 70px -30px rgba(0,0,0,.8)}
+.scroll-cue{margin-top:1rem;font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.7rem}
+.scroll-cue::after{content:"";width:46px;height:1px;background:var(--pink)}
+
+/* ===== .fx（デスクトップ ≥1024）= 固定ステージ・オーバーレイ ===== */
+.fx .stage{height:100svh;overflow:hidden}
+.fx .chapters{position:absolute;inset:0;z-index:3}
+.fx .chapter{position:absolute;inset:0;min-height:0;padding:0;display:flex;align-items:center}
+.fx .chapter .wrap{width:min(100% - 6vw,var(--maxw));display:block}
+.fx .ch-text{width:min(46%,38rem)}
+.fx .ch-media{display:none}                /* デスクトップはフレームが画像を担当 */
+.fx .scroll-cue{position:absolute;left:0;bottom:-32svh}
+
+/* 中央フレーム（デスクトップのみ） */
+.fx .frame{display:block;position:absolute;top:50%;right:8vw;transform:translateY(-50%);
+  width:min(34vw,30rem);aspect-ratio:3/4;z-index:2;border-radius:3px;overflow:hidden;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.85);border:1px solid var(--line)}
+.fx .frame-fallback,.fx .frame-fallback img,.fx [data-frame-canvas]{position:absolute;inset:0;width:100%;height:100%}
+.fx .frame-fallback img{object-fit:cover;opacity:0;transition:opacity .2s linear}
+.fx .frame-fallback img[data-fimg="0"]{opacity:1}
+.fx [data-frame-canvas]{opacity:0;transition:opacity .8s var(--ease);z-index:2}
+.fx [data-frame-canvas].is-on{opacity:1}
+
+/* 進捗レール（デスクトップのみ） */
+.fx .rail{display:flex;flex-direction:column;gap:.9rem;position:absolute;top:50%;right:2.4vw;transform:translateY(-50%);z-index:4;list-style:none}
+.fx .rail li{font-family:var(--latin);font-size:.9rem;color:var(--muted);opacity:.5;transition:opacity .3s,color .3s;letter-spacing:.05em}
+.fx .rail li.on{opacity:1;color:var(--pink)}
+
+/* ===== Finale ===== */
+.finale{position:relative;z-index:5;background:var(--bg);padding:clamp(4rem,3rem + 6vw,9rem) 0;text-align:center;border-top:1px solid var(--line)}
+.finale .k{font-family:var(--latin);font-style:italic;font-size:1.4rem;color:var(--pink);margin-bottom:1rem}
+.finale h2{font-family:var(--serif);font-weight:700;font-size:clamp(2.2rem,1.4rem + 4vw,4.6rem);line-height:1.1}
+.finale p{color:var(--muted);max-width:46ch;margin:1.4rem auto 0}
+.clients{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem 2rem;font-family:var(--latin);font-size:clamp(1.1rem,.9rem + .8vw,1.5rem);color:var(--muted);margin:clamp(2.5rem,2rem + 3vw,4rem) auto 0;max-width:60rem}
+.clients span:hover{color:var(--pink)}
+.cta-actions{margin-top:2.6rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-block;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;padding:1.1em 2.4em;border-radius:999px;min-height:44px;transition:.4s var(--ease)}
+.btn-fill{background:var(--pink);color:var(--bg)}.btn-fill:hover{background:var(--pink-deep);transform:translateY(-3px)}
+.btn-ghost{border:1px solid var(--line);color:var(--text)}.btn-ghost:hover{border-color:var(--pink)}
+.btn:focus-visible{outline:2px solid var(--pink);outline-offset:4px}
+
+/* footer */
+.ft{border-top:1px solid var(--line);padding:3rem 0 2.4rem;color:var(--muted)}
+.ft-in{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem}
+.ft .brand{font-family:var(--latin);font-style:italic;font-size:2rem;color:var(--pink)}
+.ft h4{font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.ft a{display:block;padding:.25em 0;font-size:.9rem}.ft a:hover{color:var(--text)}
+.ft p{font-size:.9rem;max-width:32ch}
+.copy{margin-top:2.4rem;padding-top:1.4rem;border-top:1px solid var(--line);font-family:var(--latin);font-size:.85rem}
+@media(max-width:760px){.ft-in{grid-template-columns:1fr;gap:1.6rem}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+
+<header class="hd" data-header>
+  <div class="wrap hd-in">
+    <a class="logo" href="/" aria-label="LINDO">LIND<b>O</b></a>
+    <nav class="nav" data-nav aria-label="メインナビゲーション">
+      <a href="/works/">Works</a><a href="#contact">Contact</a>
+    </nav>
+    <button class="nav-toggle" data-nav-toggle aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="stage" data-stage aria-label="LINDO の制作プロセス">
+
+    <!-- 中央フレーム（デスクトップのみ・装飾） -->
+    <div class="frame" data-frame aria-hidden="true">
+      <div class="frame-fallback">
+        <img data-fimg="0" src="/assets/process/00.jpg" alt="" />
+        <img data-fimg="1" src="/assets/process/01.jpg" alt="" />
+        <img data-fimg="2" src="/assets/process/02.jpg" alt="" />
+        <img data-fimg="3" src="/assets/process/03.jpg" alt="" />
+        <img data-fimg="4" src="/assets/process/04.jpg" alt="" />
+        <img data-fimg="5" src="/assets/process/05.jpg" alt="" />
+      </div>
+      <canvas data-frame-canvas></canvas>
+    </div>
+
+    <!-- 進捗レール（デスクトップのみ） -->
+    <ol class="rail" data-rail aria-hidden="true">
+      <li class="on">00</li><li>01</li><li>02</li><li>03</li><li>04</li><li>05</li>
+    </ol>
+
+    <div class="chapters">
+      <article class="chapter" data-ch="0">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>Our Process — Lindo</p>
+          <h1 data-rev>アーティストの世界観が、<br><em>立ち上がる</em>。</h1>
+          <p class="ch-copy" data-rev>一つのコンセプトが、作品になるまで。スクロールでご覧ください。</p>
+          <p class="scroll-cue" data-rev>Scroll</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/00.jpg" alt="制作プロセスのイメージ：はじまり" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+
+      <article class="chapter" data-ch="1">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>01 — Concept</p>
+          <h2 data-rev>すべては、<br>一つの<em>コンセプト</em>から。</h2>
+          <p class="ch-copy" data-rev>アーティストとアルバムの核を見つけ、ビジュアルの方向性を定める。物語の起点をつくります。</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/01.jpg" alt="Concept — コンセプト設計のイメージ" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+
+      <article class="chapter" data-ch="2">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>02 — Branding</p>
+          <h2 data-rev>物語を、<em>戦略</em>に。</h2>
+          <p class="ch-copy" data-rev>イメージを戦略的に設計し、世界観をより強固なものへ。アーティストのストーリーを描きます。</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/02.jpg" alt="Branding — ブランディングのイメージ" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+
+      <article class="chapter" data-ch="3">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>03 — Styling</p>
+          <h2 data-rev>世界観を、<em>まとう</em>。</h2>
+          <p class="ch-copy" data-rev>衣装・ヘアメイクを含むスタイリングで、コンセプトを体現する。細部までディレクションします。</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/03.jpg" alt="Styling — スタイリングのイメージ" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+
+      <article class="chapter" data-ch="4">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>04 — Visual Creative</p>
+          <h2 data-rev>一瞬を、<em>作品</em>に。</h2>
+          <p class="ch-copy" data-rev>写真・映像のディレクションで、世界観を焼き付ける。最も伝わる一瞬を作品へ。</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/04.jpg" alt="Visual Creative — 撮影・映像のイメージ" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+
+      <article class="chapter" data-ch="5">
+        <div class="wrap"><div class="ch-text">
+          <p class="ch-eyebrow" data-rev>05 — Design Direction</p>
+          <h2 data-rev>形に、<em>署名</em>を。</h2>
+          <p class="ch-copy" data-rev>B.I（ロゴ）とデザインで、ブランドを完成させる。すべての接点に一貫性を。</p>
+        </div></div>
+        <div class="ch-media" data-rev><img src="/assets/process/05.jpg" alt="Design Direction — デザイン・ロゴのイメージ" width="1000" height="1333" loading="lazy" /></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- フィナーレ：Launch -->
+  <section class="finale" id="contact">
+    <div class="wrap">
+      <p class="k" data-rev>Launch</p>
+      <h2 data-rev>そして、<em>世界へ</em>。</h2>
+      <p data-rev>立ち上げた世界観を、アルバム・広告・ライブへ。あなたのビジュアルを、はじめましょう。</p>
+      <div class="clients" data-rev>
+        <span>avex</span><span>universal music</span><span>sony music</span><span>HYBE JAPAN</span><span>LDH JAPAN</span><span>BMSG</span><span>吉本興業</span><span>TWIN PLANET</span><span>ホリプロ</span><span>VANTAN</span>
+      </div>
+      <div class="cta-actions" data-rev>
+        <a class="btn btn-fill" href="/works/">WORKSを見る</a>
+        <a class="btn btn-ghost" href="mailto:contact@styledbylindo.com">お問い合わせ</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <div class="wrap ft-in">
+    <div><p class="brand">LINDO</p><p>株式会社LINDO（LINDO Co.,Ltd.）<br>ビジュアルクリエイティブの企画／制作。</p></div>
+    <div><h4>Company</h4><p>〒151-0066<br>東京都渋谷区西原2-34-9<br>tel. 03-5308-5822 / fax. 03-5302-2808</p></div>
+    <div><h4>Menu</h4><a href="/works/">Works</a><a href="mailto:contact@styledbylindo.com">Contact</a></div>
+  </div>
+  <div class="wrap"><p class="copy">© 2026 株式会社LINDO ・ 08 Process（デザイン案 / 固定ステージ・スクロールテリング）</p></div>
+</footer>
+
+<script src="/assets/reveal.js" defer></script>
+<script src="/assets/vendor/gsap.min.js" defer></script>
+<script src="/assets/vendor/ScrollTrigger.min.js" defer></script>
+<script type="module" src="/assets/js/08-process.js"></script>
+</body>
+</html>
