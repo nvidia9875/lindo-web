@@ -7,3 +7,7 @@ aperture-*.png
 # OS / editor
 .DS_Store
 *.log
+
+# Real artist source — large + private client images. Do NOT commit/publish.
+ホームページ用*.zip
+wp-theme/preview/artist-src/

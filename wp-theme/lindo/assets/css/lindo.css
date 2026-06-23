@@ -1332,6 +1332,14 @@ h2,
 .work-modal .modal-info {
   border-bottom: 1px solid var(--line);
 }
+.work-modal .work-role {
+  font-family: var(--grot);
+  font-weight: 600;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 @media (max-width: 720px) {
   .wf-head {
     grid-template-columns: 2rem 1fr;

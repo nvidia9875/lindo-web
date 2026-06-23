@@ -17,7 +17,7 @@ define( 'LINDO_VERSION', 'preview' );
 require __DIR__ . '/wp-shim.php';
 require LINDO_DIR . '/inc/template.php';
 
-$artists = require __DIR__ . '/sample-data.php';
+$artists = require __DIR__ . '/real-data.php';
 
 // フォールバックフォームを部品から取得（本番と同じマークアップ）。
 ob_start();
@@ -49,11 +49,12 @@ lindo_part(
 	array(
 		'artists'           => $artists,
 		'representative'    => array(
-			'name'    => '田中 凛',
-			'title'   => '代表取締役',
+			'name'    => 'MAI ITO',
+			'title'   => '代表取締役 / CEO',
 			'profile' => array(
-				'K-POPのブランディング・スタイリングを起点に、アーティストのビジュアルコンセプトを国内外で手がける。',
-				'「世界観をひとつのビジュアルへ」を理念に、企画から制作・スタイリングまでを一貫してディレクションしている。',
+				'文化女子大学卒業後、株式会社LDH apparelにて衣装デザイナー兼ディレクターを担当。2019年にフリーランスへ転向。',
+				'韓国事務所主催のオーディションプログラムにてスタイルディレクターとして1年間渡韓。帰国後、韓国・日本のアーティストのスタイルディレクション及びビジュアルプロデュースを手がける。',
+				'2024年、アーティストのビジュアル作りに特化した撮影の企画／制作をトータルプロデュースする株式会社LINDOを設立。',
 			),
 		),
 		'contact_form_html' => $contact_form_html,

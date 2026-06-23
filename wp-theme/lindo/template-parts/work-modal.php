@@ -32,6 +32,9 @@ $title_id    = $work['slug'] . '-title';
 				<p class="eyebrow"><?php echo esc_html( $artist_name ); ?></p>
 			<?php endif; ?>
 			<h3 id="<?php echo esc_attr( $title_id ); ?>"><?php echo esc_html( $work['title'] ); ?></h3>
+			<?php if ( ! empty( $work['role'] ) ) : ?>
+				<p class="work-role"><?php echo esc_html( $work['role'] ); ?></p>
+			<?php endif; ?>
 		</div>
 
 		<?php if ( ! empty( $gallery ) ) : ?>
