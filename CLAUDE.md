@@ -28,6 +28,9 @@ cd wp-theme
 php preview/render.php > preview/index.html
 php -S 127.0.0.1:8745 -t .          # http://127.0.0.1:8745/preview/index.html
 
+# Track 3 — rebuild real-artist preview images after editing content-manifest.php or swapping artist-src/
+php wp-theme/preview/build-works-img.php   # artist-src/ → works-img/ (WebP, longest-edge 1280px, q70). Needs cwebp (`brew install webp`)
+
 # Lint any PHP file (do this after editing theme PHP)
 php -l wp-theme/lindo/<file>.php
 ```
@@ -40,7 +43,8 @@ There is no test suite, linter config, or package.json. Verification is manual: 
 
 - `inc/` (containers): `artist-cpt.php` (Artist CPT), `artist-meta.php` (meta + wp.media gallery picker), `artist-data.php` (shapes WP posts → plain arrays like `{name, tags[], profile[], portrait{url,w,h,alt}, gallery[], links[]}`), `company.php` (representative via Customizer), `contact.php` (CF7 + fallback), `enqueue.php`, `setup.php`, `template.php`.
 - `template-parts/` (presentational): never call WP data functions directly; they read variables passed in. Rendered via `lindo_part($slug, $vars)` (in `inc/template.php`) which `extract()`s `$vars` and includes the file. Parts guard with `if (!defined('LINDO_PART')) exit;`.
-- `front-page.php` (WP) and `preview/render.php` (standalone) both call the **same** `front-sections` part with the same shape — the section order (Hero/About/Service/Artists/Partner/Contact) lives in `template-parts/front-sections.php` so it stays DRY. `preview/wp-shim.php` stubs the minimal WP functions; `preview/sample-data.php` supplies sample artists using real photos in `preview/sample-images/`.
+- `front-page.php` (WP) and `preview/render.php` (standalone) both call the **same** `front-sections` part with the same shape — the section order (Hero/About/Service/Artists/Partner/Contact) lives in `template-parts/front-sections.php` so it stays DRY. `preview/wp-shim.php` stubs the minimal WP functions.
+- **Preview real-artist data is manifest-driven.** `preview/content-manifest.php` is the single source of truth (order, display names, work groupings = multiple source folders merged into one gallery, titles, roles, links, `cap`). `preview/build-works-img.php` reads it and optimizes `preview/artist-src/` → `preview/works-img/` (sips auto-orients + resizes longest-edge 1280, then `cwebp` → WebP q70; capped at `cap` images/work, evenly sampled). `preview/real-data.php` then scans `works-img/` + the manifest to build the artist array `render.php` passes in. `artist-src/` is gitignored (large/private); only `works-img/` (WebP) is committed. Client-facing content decisions/typo corrections are logged in `preview/HANDOFF-content.md`. (`preview/sample-data.php` is the older sample set; `real-data.php` supersedes it.)
 - **Artist CPT is `publicly_queryable=false`** — artists have no individual URLs. The UX is list → `<dialog>` modal (native focus trap / ESC). Content is real DOM (SEO-safe, works with JS off).
 - Production plugin dependencies are only **Contact Form 7 + Flamingo**. `preview/` is dev-only and is NOT shipped to WordPress — only `lindo/` is zipped and uploaded.
 
@@ -55,4 +59,4 @@ There is no test suite, linter config, or package.json. Verification is manual: 
 
 - `scripts/build-works.mjs`: `SITE_URL` (default `https://styledbylindo.com`), `ORG` block (address/tel/email), and `ORG.sameAs` (SNS URLs).
 - Brand tokens: dark olive/khaki `#3c3a20` × dusty rose `#e79cb0`; WP theme is sand-ground (`#eae5d7`) + Archivo (欧文) / Zen Kaku Gothic New (和文) as **placeholders** — per the client, the real logo SVG (when supplied) drives a font/typography re-selection across the whole site.
-- `works/works.json` and `preview/sample-data.php` use placeholder/sample data, not real client work.
+- `works/works.json` and `preview/sample-data.php` use placeholder/sample data. The **real** client work now lives in `preview/content-manifest.php` → `preview/works-img/` (9 artists: SEVENTEEN, LE SSERAFIM, TOMORROW X TOGETHER, NMB48, BMSG, 高嶺のなでしこ, OCTPATH, SugarNote, No No Girls). Open content items (No No Girls has no supplied copy; SugarNote MV is a link-only work) are tracked in `preview/HANDOFF-content.md`.
