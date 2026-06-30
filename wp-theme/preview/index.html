@@ -41,7 +41,7 @@
 			<p class="lbl">LINDO Co., Ltd. — <b>Visual Creative</b></p>
 			<p class="meta">Tokyo, JP<br>Creative Studio</p>
 		</div>
-		<h1 class="hero-title" data-shatter="scatter">
+		<h1 class="hero-title" data-hero-fx="scatter">
 			<span class="ln"><span class="ln-text" data-line>VISUAL</span></span>
 			<span class="ln"><span class="ln-text" data-line>CREATIVE<span class="pk">.</span></span></span>
 		</h1>
@@ -4256,9 +4256,15 @@
 	</div>
 </footer>
 <script src="../lindo/assets/js/loader.js" defer></script>
-<script src="../lindo/assets/js/hero-shatter.js" defer></script>
+<script src="../lindo/assets/js/hero-fx.js" defer></script>
 <script src="../lindo/assets/js/main.js" defer></script>
 <script src="../lindo/assets/js/artist-modal.js" defer></script>
+<script>
+	(function () {
+		var ht = document.querySelector("[data-hero-fx]");
+		if (ht) ht.setAttribute("data-fs-images", "works-img/SEVENTEEN/1-shohikigen/01.webp,works-img/LESSERAFIM/1-black-insanity/01.webp,works-img/TOMORROW%20X%20TOGETHER/1-sweet/01.webp,works-img/NMB48/1-korega-ai/01.webp,works-img/BMSG/1-new-year-photo/01.webp,works-img/%E9%AB%98%E5%B6%BA%E3%81%AE%E3%81%AA%E3%81%A7%E3%81%97%E3%81%93/1-idol-isho-mv/01.webp");
+	})();
+</script>
 
 <!-- ▼▼ プレビュー専用：レイアウト/演出の比較スイッチャー（本番テーマ lindo/ には含めない） ▼▼ -->
 <div class="pv-switch">
@@ -4270,8 +4276,10 @@
 	</div>
 	<div class="pv-row"><span>Hero FX</span>
 		<button type="button" data-fx="scatter" class="is-active">Scatter</button>
-		<button type="button" data-fx="fall">Fall</button>
-		<button type="button" data-fx="repel">Repel</button>
+		<button type="button" data-fx="spotlight">Spotlight</button>
+			<button type="button" data-fx="imprint">Imprint</button>
+			<button type="button" data-fx="filmstrip">Filmstrip</button>
+			<button type="button" data-fx="stream">Stream</button>
 	</div>
 	<p class="pv-note">preview only — 本番では1つに確定</p>
 </div>
@@ -4342,7 +4350,7 @@
 				applyWorks(b.getAttribute("data-works"));
 				activate(b);
 			} else if (b.hasAttribute("data-fx")) {
-				if (window.LindoShatter) window.LindoShatter.setMode(b.getAttribute("data-fx"));
+				if (window.LindoHeroFX) window.LindoHeroFX.setMode(b.getAttribute("data-fx"));
 				activate(b);
 			}
 		});

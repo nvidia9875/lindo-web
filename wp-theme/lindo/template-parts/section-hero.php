@@ -15,7 +15,7 @@ if ( ! defined( 'LINDO_PART' ) ) {
 			<p class="lbl">LINDO Co., Ltd. — <b>Visual Creative</b></p>
 			<p class="meta">Tokyo, JP<br>Creative Studio</p>
 		</div>
-		<h1 class="hero-title" data-shatter="scatter">
+		<h1 class="hero-title" data-hero-fx="scatter">
 			<span class="ln"><span class="ln-text" data-line>VISUAL</span></span>
 			<span class="ln"><span class="ln-text" data-line>CREATIVE<span class="pk">.</span></span></span>
 		</h1>

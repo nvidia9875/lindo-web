@@ -52,8 +52,8 @@ function lindo_enqueue_assets() {
 			true
 		);
 		wp_enqueue_script(
-			'lindo-hero-shatter',
-			LINDO_URI . '/assets/js/hero-shatter.js',
+			'lindo-hero-fx',
+			LINDO_URI . '/assets/js/hero-fx.js',
 			array(),
 			LINDO_VERSION,
 			true

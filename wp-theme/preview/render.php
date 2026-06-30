@@ -71,9 +71,27 @@ echo '</div>';
 </main>
 <?php lindo_part( 'site-footer', array( 'lindo_year' => gmdate( 'Y' ) ) ); ?>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/loader.js' ); ?>" defer></script>
-<script src="<?php echo esc_url( LINDO_URI . '/assets/js/hero-shatter.js' ); ?>" defer></script>
+<script src="<?php echo esc_url( LINDO_URI . '/assets/js/hero-fx.js' ); ?>" defer></script>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/main.js' ); ?>" defer></script>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/artist-modal.js' ); ?>" defer></script>
+<?php
+// プレビュー専用：Hero FX「filmstrip」が文字の中に流す実アーティスト写真（各アーティストのカバー数枚）。
+$fs_images = array();
+foreach ( $artists as $a ) {
+	if ( ! empty( $a['works'][0]['cover']['url'] ) ) {
+		$fs_images[] = $a['works'][0]['cover']['url'];
+	}
+	if ( count( $fs_images ) >= 6 ) {
+		break;
+	}
+}
+?>
+<script>
+	(function () {
+		var ht = document.querySelector("[data-hero-fx]");
+		if (ht) ht.setAttribute("data-fs-images", <?php echo json_encode( implode( ',', $fs_images ), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>);
+	})();
+</script>
 
 <!-- ▼▼ プレビュー専用：レイアウト/演出の比較スイッチャー（本番テーマ lindo/ には含めない） ▼▼ -->
 <div class="pv-switch">
@@ -85,8 +103,10 @@ echo '</div>';
 	</div>
 	<div class="pv-row"><span>Hero FX</span>
 		<button type="button" data-fx="scatter" class="is-active">Scatter</button>
-		<button type="button" data-fx="fall">Fall</button>
-		<button type="button" data-fx="repel">Repel</button>
+		<button type="button" data-fx="spotlight">Spotlight</button>
+			<button type="button" data-fx="imprint">Imprint</button>
+			<button type="button" data-fx="filmstrip">Filmstrip</button>
+			<button type="button" data-fx="stream">Stream</button>
 	</div>
 	<p class="pv-note">preview only — 本番では1つに確定</p>
 </div>
@@ -157,7 +177,7 @@ echo '</div>';
 				applyWorks(b.getAttribute("data-works"));
 				activate(b);
 			} else if (b.hasAttribute("data-fx")) {
-				if (window.LindoShatter) window.LindoShatter.setMode(b.getAttribute("data-fx"));
+				if (window.LindoHeroFX) window.LindoHeroFX.setMode(b.getAttribute("data-fx"));
 				activate(b);
 			}
 		});
