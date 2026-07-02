@@ -1,16 +1,14 @@
 /* =========================================================
-   LINDO — ヒーロー見出しの演出（Hero FX）。5モードを切替可能。
-   各モードは「別パラダイム」の独立演出。共通の見出し DOM を使い回す。
-
+   LINDO — ヒーロー見出しの演出（Hero FX）。
    モード（h1 の data-hero-fx 属性。既定 "scatter"）:
-     - scatter  : カーソル近傍のタイルがランダムに飛び散る（＝オリジナルのシャッター）
-     - spotlight: カーソル＝柔らかい光。通過部分だけ鮮やかな版が浮かぶ（無操作時は自動往復）
-     - imprint  : ロード時の一回演出。ローズの帯が走査し文字を刷り込み、最後に「.」が落ちる
-     - stream   : ワードマークの大きな帯が背後を常時横に流れる（マーキー）
-     - filmstrip: 文字の中を実写真がゆっくり流れる（background-clip:text）
+     - scatter : カーソル近傍のタイルがランダムに飛び散る（＝オリジナルのシャッター）
+     - off     : 演出なし（通常表示）
 
-   - 実テキストは常に DOM 維持（SEO/A11y）。動きは transform/opacity/clip-path/mask のみ。
-   - prefers-reduced-motion / タッチ環境では各モードが静的フォールバック。
+   各行を小さな正方形のタイルで敷き詰め（普段は隙間なく＝通常の文字）。カーソル半径内の
+   タイルだけが transform で飛び散る。範囲外はそのまま。
+
+   - デスクトップ＋マウス時のみ（hover/pointer 判定）。reduced-motion / 非対応 / off は通常表示。
+   - 実テキストは維持（タイルは aria-hidden の装飾）。動き＝transform のみ（合成可能）。
    - window.LindoHeroFX.setMode(mode) でライブ切替（プレビュー比較UI用・本番でも無害）。
    ========================================================= */
 (function () {
@@ -22,36 +20,29 @@
 
   var title = null;
   var mode = "scatter";
-  var active = null; // { teardown } 現在のモード
+  var active = null; // { teardown }
 
   function rand(min, max) {
     return Math.random() * (max - min) + min;
-  }
-  function lerp(a, b, t) {
-    return a + (b - a) * t;
   }
   function lines() {
     return title ? Array.prototype.slice.call(title.querySelectorAll("[data-line]")) : [];
   }
 
-  /* 共通：見出しを素の状態へ戻す（モード切替時に呼ぶ）。 */
+  /* 見出しを素の状態へ戻す（モード切替時に呼ぶ）。 */
   function resetTitle() {
     if (!title) return;
-    title.classList.remove("shatter-ready", "is-imprint", "is-filmstrip", "is-spotlight");
-    title.querySelectorAll(".shatter, .hero-fx-reveal").forEach(function (n) {
+    title.classList.remove("shatter-ready");
+    title.querySelectorAll(".shatter").forEach(function (n) {
       n.parentNode && n.parentNode.removeChild(n);
     });
-    var hero = title.closest(".hero");
-    var stream = hero && hero.querySelector(".hero-stream");
-    if (stream) stream.parentNode.removeChild(stream);
     lines().forEach(function (t) {
       t.style.opacity = "";
-      t.style.backgroundImage = "";
     });
   }
 
   /* =======================================================
-     MODE: scatter （オリジナルのタイル飛散。scatter のみ）
+     MODE: scatter （カーソル近傍のタイルがランダムに飛び散る）
      ======================================================= */
   function modeScatter() {
     if (prefersReduced || !canHover) {
@@ -159,188 +150,14 @@
     };
   }
 
-  /* =======================================================
-     MODE: spotlight （カーソル＝光。通過部分が鮮やかに。無操作で自動往復）
-     ======================================================= */
-  function modeSpotlight() {
-    title.classList.add("is-spotlight");
-
-    // 鮮やか版のレイヤを複製してマスク（base はCSSで淡く）。
-    var reveal = document.createElement("span");
-    reveal.className = "hero-fx-reveal";
-    reveal.setAttribute("aria-hidden", "true");
-    title.querySelectorAll(".ln").forEach(function (ln) {
-      reveal.appendChild(ln.cloneNode(true));
-    });
-    title.appendChild(reveal);
-
-    if (prefersReduced) {
-      // 静的：全面を鮮やかに（マスクなし）。
-      reveal.style.webkitMaskImage = "none";
-      reveal.style.maskImage = "none";
-      return { teardown: function () {} };
-    }
-
-    var box = { w: 1, h: 1 };
-    function measure() {
-      var r = title.getBoundingClientRect();
-      box.w = r.width;
-      box.h = r.height;
-    }
-    measure();
-
-    // 目標位置（cursor）と現在位置を lerp で滑らかに追従。無操作時は sine で往復。
-    var tx = box.w * 0.5;
-    var ty = box.h * 0.42;
-    var cx = tx;
-    var cy = ty;
-    var pointerActive = false;
-    var idleT = 0;
-    var raf = 0;
-
-    function onMove(e) {
-      var r = title.getBoundingClientRect();
-      tx = e.clientX - r.left;
-      ty = e.clientY - r.top;
-      pointerActive = true;
-    }
-    function onLeave() {
-      pointerActive = false;
-    }
-    function tick() {
-      if (!pointerActive) {
-        idleT += 0.0065;
-        tx = box.w * (0.5 + 0.42 * Math.sin(idleT));
-        ty = box.h * (0.46 + 0.12 * Math.sin(idleT * 0.6));
-      }
-      cx = lerp(cx, tx, 0.12);
-      cy = lerp(cy, ty, 0.12);
-      reveal.style.setProperty("--mx", cx.toFixed(1) + "px");
-      reveal.style.setProperty("--my", cy.toFixed(1) + "px");
-      raf = requestAnimationFrame(tick);
-    }
-
-    function onResize() {
-      measure();
-    }
-    title.addEventListener("pointermove", onMove);
-    title.addEventListener("pointerleave", onLeave);
-    window.addEventListener("resize", onResize);
-    raf = requestAnimationFrame(tick);
-
-    return {
-      teardown: function () {
-        cancelAnimationFrame(raf);
-        title.removeEventListener("pointermove", onMove);
-        title.removeEventListener("pointerleave", onLeave);
-        window.removeEventListener("resize", onResize);
-      },
-    };
-  }
-
-  /* =======================================================
-     MODE: imprint （ロード時の一回演出。CSS主体。切替時は再生し直す）
-     ======================================================= */
-  function modeImprint() {
-    if (prefersReduced) {
-      return { teardown: function () {} };
-    }
-    // クラス再付与でアニメーションを頭から再生。
-    title.classList.remove("is-imprint");
-    // 強制リフロー
-    void title.offsetWidth;
-    title.classList.add("is-imprint");
-    return {
-      teardown: function () {
-        title.classList.remove("is-imprint");
-      },
-    };
-  }
-
-  /* =======================================================
-     MODE: stream （ワードマークの帯が背後を横に流れる）
-     ======================================================= */
-  function modeStream() {
-    var host = title.closest(".hero"); // ヒーロー全幅で背後に流す
-    if (!host) return { teardown: function () {} };
-
-    var band = document.createElement("div");
-    band.className = "hero-stream";
-    band.setAttribute("aria-hidden", "true");
-    var track = document.createElement("div");
-    track.className = "hero-stream-track";
-    var phrase = "VISUAL CREATIVE — STYLE DIRECTION — ";
-    // 2グループで -50% シームレスループ。各グループ十分な幅になるよう繰り返す。
-    var groupHTML = "";
-    for (var k = 0; k < 6; k++) groupHTML += "<span>" + phrase + "</span>";
-    track.innerHTML = groupHTML + groupHTML;
-    if (prefersReduced) track.style.animation = "none";
-    band.appendChild(track);
-    host.insertBefore(band, host.firstChild);
-
-    return {
-      teardown: function () {
-        band.parentNode && band.parentNode.removeChild(band);
-      },
-    };
-  }
-
-  /* =======================================================
-     MODE: filmstrip （文字の中を写真がゆっくり流れる／切替）
-     画像は data-fs-images（カンマ区切りURL）。無ければ抽象グラデにフォールバック。
-     ======================================================= */
-  function modeFilmstrip() {
-    title.classList.add("is-filmstrip");
-    var raw = (title.getAttribute("data-fs-images") || "").trim();
-    var imgs = raw ? raw.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : [];
-    var ln = lines();
-
-    function setImg(url) {
-      var css = url ? 'url("' + url + '")' : "";
-      ln.forEach(function (t) {
-        t.style.backgroundImage = css;
-      });
-    }
-
-    if (!imgs.length) {
-      // 写真未指定：ローズ→オリーブの抽象フィル（CSSの既定で表現）。
-      return {
-        teardown: function () {},
-      };
-    }
-
-    setImg(imgs[0]);
-    if (prefersReduced || imgs.length < 2) {
-      return { teardown: function () {} };
-    }
-
-    // ゆっくり画像を巡回（フェードで差替え）。
-    var idx = 0;
-    var inner = 0;
-    var timer = window.setInterval(function () {
-      idx = (idx + 1) % imgs.length;
-      title.classList.add("fs-fading");
-      inner = window.setTimeout(function () {
-        setImg(imgs[idx]);
-        title.classList.remove("fs-fading");
-      }, 360);
-    }, 3600);
-
-    return {
-      teardown: function () {
-        window.clearInterval(timer);
-        window.clearTimeout(inner); // 切替後に背景を再設定してしまう内側タイマーも止める
-        title.classList.remove("fs-fading");
-      },
-    };
+  /* MODE: off （演出なし） */
+  function modeOff() {
+    return { teardown: function () {} };
   }
 
   var MODES = {
     scatter: modeScatter,
-    spotlight: modeSpotlight,
-    imprint: modeImprint,
-    stream: modeStream,
-    filmstrip: modeFilmstrip,
+    off: modeOff,
   };
 
   function apply(next) {
@@ -367,7 +184,7 @@
     var start = function () {
       apply(mode);
     };
-    // Webフォント確定後に計測（タイル整列等のため）。
+    // Webフォント確定後に計測（タイル整列のため）。
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(start);
     } else {
