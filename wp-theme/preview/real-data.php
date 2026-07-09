@@ -3,8 +3,9 @@
  * 実アーティストデータ（描画用）。
  *
  * content-manifest.php（単一情報源）＋ build-works-img.php が生成した works-img/ から、
- * section-artists / section-works-feature / artist-card / work-modal が期待する
- * artist 配列を構築する。
+ * section-artists / artist-card / artist-modal が期待する artist 配列を構築する。
+ * artist['works'][] は作品ごとに { slug,title,role,url,cover,gallery } を保持し、
+ * artist-modal が「作品ごとのグループ表示」に使う（url 有り = MV等の外部リンクタイル）。
  *
  * 公開するのは works-img/（1280px/q66 の軽量版）のみ。生ソース artist-src/ は .gitignore 済。
  * 画像を差し替えたら: php wp-theme/preview/build-works-img.php → 本ファイルは再生成不要（自動走査）。
@@ -92,6 +93,7 @@ foreach ( $manifest['order'] as $artist_folder ) {
 			'slug'    => 'work-' . ( $index + 1 ) . '-' . $key,
 			'title'   => $title,
 			'role'    => isset( $wdef['role'] ) ? $wdef['role'] : '',
+			'url'     => isset( $wdef['url'] ) ? $wdef['url'] : '', // 任意：外部リンク（MV等）。
 			'cover'   => $gallery[0],
 			'gallery' => $gallery,
 		);

@@ -1,11 +1,10 @@
 <?php
 /**
  * Artists（03）— Works を置換する主役セクション。
- * カード一覧 → クリックでモーダル（情報＋Instagram風グリッド）。
+ * カード一覧 → クリックでモーダル（情報＋作品ごとのグループ・ギャラリー）。
  *
  * 期待する変数:
- *   $artists         array<int,array> = lindo_get_artist_data の配列
- *   $artists_layout  ''（既定=3列大カード） | 'dense'（密グリッド） | 'index'（索引リスト）
+ *   $artists  array<int,array> = lindo_get_artist_data の配列
  *
  * @package LINDO
  */
@@ -13,10 +12,8 @@
 if ( ! defined( 'LINDO_PART' ) ) {
 	exit;
 }
-$artists        = isset( $artists ) && is_array( $artists ) ? $artists : array();
-$count          = count( $artists );
-$artists_layout = isset( $artists_layout ) ? $artists_layout : '';
-$layout_class   = 'dense' === $artists_layout ? ' is-dense' : ( 'index' === $artists_layout ? ' is-index' : '' );
+$artists = isset( $artists ) && is_array( $artists ) ? $artists : array();
+$count   = count( $artists );
 ?>
 <section class="sec" id="artists">
 	<div class="wrap sec-grid">
@@ -26,7 +23,7 @@ $layout_class   = 'dense' === $artists_layout ? ' is-dense' : ( 'index' === $art
 			<p class="sub">私たちが手がけたアーティストのビジュアルワーク。名前を選ぶと、プロフィールと作品ギャラリーをご覧いただけます。</p>
 
 			<?php if ( $count ) : ?>
-				<div class="artists<?php echo esc_attr( $layout_class ); ?>">
+				<div class="artists">
 					<?php foreach ( $artists as $artist ) : ?>
 						<?php lindo_part( 'artist-card', array( 'artist' => $artist ) ); ?>
 					<?php endforeach; ?>

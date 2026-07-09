@@ -60,11 +60,18 @@ function lindo_enqueue_assets() {
 		);
 	}
 
-	// アーティストが1件以上ある時だけモーダルJSを読む。
+	// アーティストが1件以上ある時だけモーダルJS＋ライトボックスを読む。
 	if ( post_type_exists( 'artist' ) ) {
 		wp_enqueue_script(
 			'lindo-artist-modal',
 			LINDO_URI . '/assets/js/artist-modal.js',
+			array(),
+			LINDO_VERSION,
+			true
+		);
+		wp_enqueue_script(
+			'lindo-lightbox',
+			LINDO_URI . '/assets/js/lightbox.js',
 			array(),
 			LINDO_VERSION,
 			true

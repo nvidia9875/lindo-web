@@ -22,7 +22,7 @@ $contact_email     = isset( $contact_email ) ? $contact_email : 'contact@styledb
 	<div class="wrap contact-grid">
 		<div class="contact-lead rv">
 			<h2>Contact<span class="pk">.</span></h2>
-			<p class="sub">お仕事のご依頼・ご相談はこちらから。内容を確認のうえ、担当者よりご連絡いたします。</p>
+			<p class="sub">お仕事のご依頼・ご相談はこちらから。<br class="br-pc">内容を確認のうえ、担当者よりご連絡いたします。</p>
 			<p class="direct">
 				Direct —
 				<a href="mailto:<?php echo esc_attr( $contact_email ); ?>"><?php echo esc_html( $contact_email ); ?></a>

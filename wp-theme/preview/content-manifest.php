@@ -11,6 +11,8 @@
  *   - artist … 第1階層フォルダ（= 章）。`folder` が src/出力のキー、`name` が表示名。
  *   - work   … 章の中の1作品。`src` の複数フォルダ画像を結合して1ギャラリーにする（共通/共有まとめ対応）。
  *   - `key`  … works-img 内の出力サブフォルダ名 兼 スラッグ。ASCII 固定（日本語/記号の生ファイル名を避ける）。
+ *   - `url`  … （任意）その work を外部リンク（MV等）として提示する。指定時はモーダルで
+ *              サムネ（カバー）＋▶バッジのリンクタイルとして描画（ライトボックスではなく外部遷移）。
  *
  * 表記の補正: docx の明らかなタイポは公式スペルへ補正済（CANDY PANK→PINK 等）。
  *            補正内容は HANDOFF-content.md に記録。
@@ -210,31 +212,39 @@ return array(
 		'SugarNote' => array(
 			'name'  => 'SugarNote',
 			'role'  => 'Visual Creative',
-			'links' => array(
-				// 作品3「嘘だよ」MV は画像支給なし → 外部リンクとして提示（Creative Produce）。
-				array(
-					'label' => '「嘘だよ」MV',
-					'url'   => 'https://youtu.be/lRI7AdFnMDk',
-				),
-			),
 			'works' => array(
+				// アー写を「ピンク背景（スタジオ）」と「外撮影」で分けて掲載（クライアント指定）。
 				array(
-					'key'   => '1-artist-photo',
-					'title' => 'Artist Photo',
+					'key'   => '1-artist-photo-pink',
+					'title' => 'Artist Photo（ピンク背景）',
 					'role'  => 'Visual Creative',
-					'src'   => array( 'SugarNote/1', 'SugarNote/2' ),
+					'src'   => array( 'SugarNote/1' ),
+				),
+				array(
+					'key'   => '2-artist-photo-outdoor',
+					'title' => 'Artist Photo（外撮影）',
+					'role'  => 'Visual Creative',
+					'src'   => array( 'SugarNote/2' ),
+				),
+				// 「嘘だよ」MV：支給サムネ（SugarNote/3）＋ YouTube への外部リンク。
+				array(
+					'key'   => '3-usodayo-mv',
+					'title' => '「嘘だよ」MV',
+					'role'  => 'Creative Produce',
+					'src'   => array( 'SugarNote/3' ),
+					'url'   => 'https://youtu.be/lRI7AdFnMDk',
 				),
 			),
 		),
 
 		'NoNoGirls' => array(
-			'name'  => 'No No Girls',
-			'role'  => '', // docx 未支給（HANDOFF-content.md に要確認として記録）。
+			'name'  => 'No No GIRLS',
+			'role'  => 'KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN',
 			'works' => array(
 				array(
 					'key'   => 'main',
-					'title' => 'Visual', // 仮タイトル（資料未支給）。
-					'role'  => '',
+					'title' => 'GIRLS GROUP AUDITION「No No GIRLS」',
+					'role'  => 'KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN',
 					'src'   => array( 'NoNoGirls' ), // 直下フラット。
 				),
 			),

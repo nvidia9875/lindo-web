@@ -1,15 +1,11 @@
 /* =========================================================
-   LINDO — ヒーロー見出しの演出（Hero FX）。
-   モード（h1 の data-hero-fx 属性。既定 "scatter"）:
-     - scatter : カーソル近傍のタイルがランダムに飛び散る（＝オリジナルのシャッター）
-     - off     : 演出なし（通常表示）
+   LINDO — ヒーロー見出しの演出（Hero FX / scatter）。
 
    各行を小さな正方形のタイルで敷き詰め（普段は隙間なく＝通常の文字）。カーソル半径内の
-   タイルだけが transform で飛び散る。範囲外はそのまま。
+   タイルだけが transform で飛び散る（＝オリジナルのシャッター）。範囲外はそのまま。
 
-   - デスクトップ＋マウス時のみ（hover/pointer 判定）。reduced-motion / 非対応 / off は通常表示。
+   - デスクトップ＋マウス時のみ（hover/pointer 判定）。reduced-motion / 非対応は通常表示。
    - 実テキストは維持（タイルは aria-hidden の装飾）。動き＝transform のみ（合成可能）。
-   - window.LindoHeroFX.setMode(mode) でライブ切替（プレビュー比較UI用・本番でも無害）。
    ========================================================= */
 (function () {
   "use strict";
@@ -18,36 +14,13 @@
   var prefersReduced = !!(mq && mq("(prefers-reduced-motion: reduce)").matches);
   var canHover = !!(mq && mq("(hover: hover) and (pointer: fine)").matches);
 
-  var title = null;
-  var mode = "scatter";
-  var active = null; // { teardown }
-
   function rand(min, max) {
     return Math.random() * (max - min) + min;
   }
-  function lines() {
-    return title ? Array.prototype.slice.call(title.querySelectorAll("[data-line]")) : [];
-  }
 
-  /* 見出しを素の状態へ戻す（モード切替時に呼ぶ）。 */
-  function resetTitle() {
-    if (!title) return;
-    title.classList.remove("shatter-ready");
-    title.querySelectorAll(".shatter").forEach(function (n) {
-      n.parentNode && n.parentNode.removeChild(n);
-    });
-    lines().forEach(function (t) {
-      t.style.opacity = "";
-    });
-  }
-
-  /* =======================================================
-     MODE: scatter （カーソル近傍のタイルがランダムに飛び散る）
-     ======================================================= */
-  function modeScatter() {
-    if (prefersReduced || !canHover) {
-      return { teardown: function () {} }; // 静的表示
-    }
+  /* カーソル近傍のタイルがランダムに飛び散る演出を title に構築する。 */
+  function initScatter(title) {
+    var lines = Array.prototype.slice.call(title.querySelectorAll("[data-line]"));
     var lineObjs = [];
     var lastEvent = null;
     var rafPending = false;
@@ -137,52 +110,20 @@
       }
     }
 
-    lines().forEach(buildLine);
+    lines.forEach(buildLine);
     title.classList.add("shatter-ready");
     title.addEventListener("pointermove", onMove);
     title.addEventListener("pointerleave", clearAll);
-
-    return {
-      teardown: function () {
-        title.removeEventListener("pointermove", onMove);
-        title.removeEventListener("pointerleave", clearAll);
-      },
-    };
-  }
-
-  /* MODE: off （演出なし） */
-  function modeOff() {
-    return { teardown: function () {} };
-  }
-
-  var MODES = {
-    scatter: modeScatter,
-    off: modeOff,
-  };
-
-  function apply(next) {
-    if (!title) return;
-    if (active && active.teardown) active.teardown();
-    active = null;
-    resetTitle();
-    mode = MODES[next] ? next : "scatter";
-    title.setAttribute("data-hero-fx", mode);
-    active = MODES[mode]();
-  }
-
-  function readMode() {
-    var v = (title.getAttribute("data-hero-fx") || "").trim().toLowerCase();
-    mode = MODES[v] ? v : "scatter";
   }
 
   function init() {
-    title = document.querySelector("[data-hero-fx]");
+    var title = document.querySelector("[data-hero-fx]");
     if (!title) return;
-    readMode();
-    window.LindoHeroFX = { setMode: apply };
+    // 演出はデスクトップ＋マウス時のみ。reduced-motion / 非対応は実テキストのまま静的表示。
+    if (prefersReduced || !canHover) return;
 
     var start = function () {
-      apply(mode);
+      initScatter(title);
     };
     // Webフォント確定後に計測（タイル整列のため）。
     if (document.fonts && document.fonts.ready) {

@@ -16,6 +16,7 @@ if ( empty( $artist ) || empty( $artist['name'] ) ) {
 }
 $portrait = $artist['portrait'];
 $gallery  = $artist['gallery'];
+$works    = isset( $artist['works'] ) && is_array( $artist['works'] ) ? $artist['works'] : array();
 $title_id = $artist['slug'] . '-title';
 ?>
 <dialog class="artist-modal" id="<?php echo esc_attr( $artist['slug'] ); ?>" aria-labelledby="<?php echo esc_attr( $title_id ); ?>">
@@ -76,14 +77,84 @@ $title_id = $artist['slug'] . '-title';
 			</div>
 		</div>
 
-		<?php if ( ! empty( $gallery ) ) : ?>
+		<?php if ( ! empty( $works ) ) : ?>
+			<?php
+			// プレビュー（manifest 由来）：作品ごとにグループ表示。
+			// url を持つ work は MV 等の外部リンクタイル（ライトボックスではなく外部遷移）。
+			foreach ( $works as $work ) :
+				$w_gallery = isset( $work['gallery'] ) && is_array( $work['gallery'] ) ? $work['gallery'] : array();
+				$w_url     = isset( $work['url'] ) ? $work['url'] : '';
+				if ( empty( $w_gallery ) ) {
+					continue;
+				}
+				$w_title = isset( $work['title'] ) ? $work['title'] : $artist['name'];
+				?>
+				<div class="ig-grid-head">
+					<span class="t"><?php echo esc_html( $w_title ); ?></span>
+					<?php if ( $w_url ) : ?>
+						<span class="c">MV</span>
+					<?php else : ?>
+						<span class="c"><?php echo esc_html( sprintf( '%d posts', count( $w_gallery ) ) ); ?></span>
+					<?php endif; ?>
+				</div>
+				<?php if ( $w_url ) : ?>
+					<?php $cover = $w_gallery[0]; ?>
+					<div class="ig-grid ig-grid--link">
+						<a
+							class="ig-cell ig-cell--link"
+							href="<?php echo esc_url( $w_url ); ?>"
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="<?php echo esc_attr( sprintf( '%s を見る（YouTube・別タブで開く）', $w_title ) ); ?>"
+						>
+							<img
+								src="<?php echo esc_url( $cover['url'] ); ?>"
+								width="<?php echo esc_attr( $cover['w'] ); ?>"
+								height="<?php echo esc_attr( $cover['h'] ); ?>"
+								alt="<?php echo esc_attr( $cover['alt'] ? $cover['alt'] : $w_title ); ?>"
+								loading="lazy"
+								decoding="async"
+							/>
+							<span class="ig-play" aria-hidden="true">▶</span>
+							<span class="ig-link-cap"><?php echo esc_html( $w_title ); ?> <span aria-hidden="true">↗</span></span>
+						</a>
+					</div>
+				<?php else : ?>
+					<div class="ig-grid">
+						<?php foreach ( $w_gallery as $gi => $img ) : ?>
+							<button
+								type="button"
+								class="ig-cell"
+								style="--ci:<?php echo (int) $gi; ?>"
+								aria-label="<?php echo esc_attr( sprintf( '%s の写真 %d を拡大表示', $w_title, $gi + 1 ) ); ?>"
+							>
+								<img
+									src="<?php echo esc_url( $img['url'] ); ?>"
+									width="<?php echo esc_attr( $img['w'] ); ?>"
+									height="<?php echo esc_attr( $img['h'] ); ?>"
+									alt="<?php echo esc_attr( $img['alt'] ? $img['alt'] : $w_title ); ?>"
+									loading="lazy"
+									decoding="async"
+								/>
+							</button>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php elseif ( ! empty( $gallery ) ) : ?>
+			<?php // 本番WPフォールバック：フラットな1ギャラリー（Instagram風）。 ?>
 			<div class="ig-grid-head">
 				<span class="t">Gallery</span>
 				<span class="c"><?php echo esc_html( sprintf( '%d posts', count( $gallery ) ) ); ?></span>
 			</div>
 			<div class="ig-grid">
 				<?php foreach ( $gallery as $gi => $img ) : ?>
-					<div class="ig-cell" style="--ci:<?php echo (int) $gi; ?>">
+					<button
+						type="button"
+						class="ig-cell"
+						style="--ci:<?php echo (int) $gi; ?>"
+						aria-label="<?php echo esc_attr( sprintf( '%s の写真 %d を拡大表示', $artist['name'], $gi + 1 ) ); ?>"
+					>
 						<img
 							src="<?php echo esc_url( $img['url'] ); ?>"
 							width="<?php echo esc_attr( $img['w'] ); ?>"
@@ -92,7 +163,7 @@ $title_id = $artist['slug'] . '-title';
 							loading="lazy"
 							decoding="async"
 						/>
-					</div>
+					</button>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
