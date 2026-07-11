@@ -1210,11 +1210,13 @@ a.ig-cell {
   z-index: 2;
   display: grid;
   place-items: center;
-  background: rgba(253, 251, 244, 0.1);
+  background: var(--ink);
   color: var(--paper);
-  border: 1px solid rgba(253, 251, 244, 0.28);
+  border: 1px solid rgba(243, 239, 228, 0.55);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   font-family: var(--grot);
+  font-weight: 600;
   line-height: 1;
   transition: background var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);

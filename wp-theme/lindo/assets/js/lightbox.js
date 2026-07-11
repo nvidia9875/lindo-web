@@ -4,6 +4,7 @@
    アーティスト・モーダル内の写真（.artist-modal .ig-cell）をクリックすると、
    その写真を全画面で1枚ずつ拡大表示する。←/→（またはボタン）で同じ作品グループ
    （＝同一 .ig-grid）内を巡回、ESC/背景クリック/✕で閉じる。
+   タッチ端末（SP）は左右スワイプでも前後の写真へ移動できる。
 
    設計:
    - ネイティブ <dialog class="lightbox"> を1つだけ body 末尾に生成（兄弟トップレベル）。
@@ -16,6 +17,9 @@
 (function () {
   "use strict";
 
+  // スワイプ判定：横移動がこの距離以上、かつ縦移動の1.5倍以上のとき。
+  var SWIPE_MIN_PX = 48;
+
   var dialog = null;
   var imgEl = null;
   var countEl = null;
@@ -24,6 +28,10 @@
   var group = []; // [{ src, alt }]
   var idx = 0;
   var lastCell = null;
+  var touchStartX = 0;
+  var touchStartY = 0;
+  var touchOngoing = false;
+  var justSwiped = false;
 
   function build() {
     dialog = document.createElement("dialog");
@@ -56,11 +64,45 @@
     });
 
     // 画像・操作ボタン以外（背景/余白）クリックで閉じる。
+    // スワイプ直後に合成される click では閉じない。
     dialog.addEventListener("click", function (e) {
+      if (justSwiped) {
+        justSwiped = false;
+        return;
+      }
       if (e.target === imgEl) return;
       if (e.target.closest(".lb-btn")) return;
       close();
     });
+
+    // タッチ端末（SP）：左右スワイプで前後の写真へ。
+    // preventDefault しない（passive）のでスクロール等の既定動作は阻害しない。
+    dialog.addEventListener(
+      "touchstart",
+      function (e) {
+        justSwiped = false;
+        touchOngoing = e.touches.length === 1; // ピンチ等の複数指は対象外。
+        if (!touchOngoing) return;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
+    dialog.addEventListener(
+      "touchend",
+      function (e) {
+        if (!touchOngoing) return;
+        touchOngoing = false;
+        var t = e.changedTouches[0];
+        var dx = t.clientX - touchStartX;
+        var dy = t.clientY - touchStartY;
+        if (Math.abs(dx) < SWIPE_MIN_PX) return;
+        if (Math.abs(dx) < Math.abs(dy) * 1.5) return; // 縦寄りの動きは無視。
+        justSwiped = true;
+        step(dx < 0 ? 1 : -1); // 左へ払う＝次、右へ払う＝前。
+      },
+      { passive: true }
+    );
 
     dialog.addEventListener("keydown", function (e) {
       if (e.key === "ArrowLeft") {
