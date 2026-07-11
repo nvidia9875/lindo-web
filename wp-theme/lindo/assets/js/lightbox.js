@@ -17,8 +17,15 @@
 (function () {
   "use strict";
 
-  // スワイプ判定：横移動がこの距離以上、かつ縦移動の1.5倍以上のとき。
+  // スワイプ確定：横移動がこの距離以上で前後の写真へ。
   var SWIPE_MIN_PX = 48;
+  // ドラッグ開始のあそび：これ未満の指の movement では軸を判定しない。
+  var DRAG_SLOP_PX = 6;
+
+  var prefersReduced = !!(
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   var dialog = null;
   var imgEl = null;
@@ -32,6 +39,8 @@
   var touchStartY = 0;
   var touchOngoing = false;
   var justSwiped = false;
+  var dragAxis = ""; // "h"（横ドラッグ中）| "v"（縦＝無視）| ""（未判定）
+  var animating = false; // スライドアニメ中は新規ジェスチャを受けない
 
   function build() {
     dialog = document.createElement("dialog");
@@ -75,16 +84,38 @@
       close();
     });
 
-    // タッチ端末（SP）：左右スワイプで前後の写真へ。
+    // タッチ端末（SP）：画像を指でつかんで動かすスワイプで前後の写真へ。
+    // 指の移動に画像が追従（transform のみ）→ 離した位置で「送る／戻す」を決める。
     // preventDefault しない（passive）のでスクロール等の既定動作は阻害しない。
     dialog.addEventListener(
       "touchstart",
       function (e) {
         justSwiped = false;
-        touchOngoing = e.touches.length === 1; // ピンチ等の複数指は対象外。
+        dragAxis = "";
+        touchOngoing =
+          !animating &&
+          e.touches.length === 1 && // ピンチ等の複数指は対象外。
+          !e.target.closest(".lb-btn"); // ボタン上はタップ（click）に任せる。
         if (!touchOngoing) return;
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
+    dialog.addEventListener(
+      "touchmove",
+      function (e) {
+        if (!touchOngoing) return;
+        var t = e.touches[0];
+        var dx = t.clientX - touchStartX;
+        var dy = t.clientY - touchStartY;
+        if (!dragAxis) {
+          if (Math.abs(dx) < DRAG_SLOP_PX && Math.abs(dy) < DRAG_SLOP_PX) return;
+          dragAxis = Math.abs(dx) > Math.abs(dy) ? "h" : "v";
+        }
+        if (dragAxis !== "h" || group.length < 2 || prefersReduced) return;
+        imgEl.classList.remove("is-anim");
+        imgEl.style.transform = "translateX(" + dx.toFixed(1) + "px)";
       },
       { passive: true }
     );
@@ -93,13 +124,35 @@
       function (e) {
         if (!touchOngoing) return;
         touchOngoing = false;
+        var horizontal = dragAxis === "h";
+        dragAxis = "";
         var t = e.changedTouches[0];
         var dx = t.clientX - touchStartX;
-        var dy = t.clientY - touchStartY;
-        if (Math.abs(dx) < SWIPE_MIN_PX) return;
-        if (Math.abs(dx) < Math.abs(dy) * 1.5) return; // 縦寄りの動きは無視。
-        justSwiped = true;
-        step(dx < 0 ? 1 : -1); // 左へ払う＝次、右へ払う＝前。
+        if (!horizontal || group.length < 2) return;
+        if (prefersReduced) {
+          // reduced-motion：追従なし・従来どおり即切替。
+          if (Math.abs(dx) >= SWIPE_MIN_PX) {
+            justSwiped = true;
+            step(dx < 0 ? 1 : -1);
+          }
+          return;
+        }
+        justSwiped = true; // ドラッグ後の合成 click で閉じない。
+        if (Math.abs(dx) < SWIPE_MIN_PX) {
+          settle(); // 距離不足：中央へ戻す。
+        } else {
+          slideTo(dx < 0 ? 1 : -1); // 左へ払う＝次、右へ払う＝前。
+        }
+      },
+      { passive: true }
+    );
+    dialog.addEventListener(
+      "touchcancel",
+      function () {
+        if (!touchOngoing) return;
+        touchOngoing = false;
+        dragAxis = "";
+        settle();
       },
       { passive: true }
     );
@@ -143,6 +196,51 @@
     render();
   }
 
+  /* transitionend（transition無効環境向けに timeout の保険つき）で fn を1回だけ実行。 */
+  function afterSlide(fn) {
+    var done = false;
+    var run = function () {
+      if (done) return;
+      done = true;
+      imgEl.removeEventListener("transitionend", run);
+      fn();
+    };
+    imgEl.addEventListener("transitionend", run);
+    window.setTimeout(run, 400);
+  }
+
+  /* ドラッグ距離不足・中断：画像を中央へ滑らかに戻す。 */
+  function settle() {
+    imgEl.classList.add("is-anim");
+    imgEl.style.transform = "";
+    afterSlide(function () {
+      imgEl.classList.remove("is-anim");
+    });
+  }
+
+  /* スワイプ確定：現画像を画面外へ送り出し→次画像を反対側から滑り込ませる。 */
+  function slideTo(dir) {
+    animating = true;
+    var w = window.innerWidth;
+    imgEl.classList.add("is-anim");
+    imgEl.style.transform = "translateX(" + (dir === 1 ? -w : w) + "px)";
+    imgEl.style.opacity = "0";
+    afterSlide(function () {
+      step(dir);
+      imgEl.classList.remove("is-anim");
+      imgEl.style.transform = "translateX(" + (dir === 1 ? w : -w) + "px)";
+      // 反対側へ瞬間移動させてから合成レイヤーを確定（reflow）し、中央へ。
+      void imgEl.offsetWidth;
+      imgEl.classList.add("is-anim");
+      imgEl.style.transform = "";
+      imgEl.style.opacity = "";
+      afterSlide(function () {
+        imgEl.classList.remove("is-anim");
+        animating = false;
+      });
+    });
+  }
+
   function open(cell) {
     var grid = cell.closest(".ig-grid");
     if (!grid) return;
@@ -166,6 +264,11 @@
     lastCell = cell;
 
     if (!dialog) build();
+    // 前回のドラッグ/スライドの名残りを掃除してから表示。
+    imgEl.classList.remove("is-anim");
+    imgEl.style.transform = "";
+    imgEl.style.opacity = "";
+    animating = false;
     render();
 
     if (typeof dialog.showModal === "function") {
