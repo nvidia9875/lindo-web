@@ -10,7 +10,10 @@ The project evolved: it started as a multi-concept demo, the client picked **No4
 
 1. **Demo gallery** (`index.html` + `concepts/01-08.html`) — 8 homepage concepts shown as live previews so the client could pick a direction. Legacy/review-only; `noindex`. Concepts 07 (Kinetic, GSAP/three.js) and 08 (Process, scroll-pinned) self-host their libs in `assets/vendor/`.
 2. **WORKS static generator** (`works/` + `scripts/build-works.mjs`) — the original required deliverable (作品一覧→詳細, SEO/OGP/JSON-LD). **Superseded** by the Artists section in the WP theme but kept in the repo; not published in production.
-3. **WordPress theme** (`wp-theme/lindo/`) — **the live production direction.** No4 Swiss Minimal. An **Artists** custom post type replaces Works as the hero section. Target host is Lolipop WordPress. This is where active work happens.
+3. **WordPress theme** (`wp-theme/lindo/`) — No4 Swiss Minimal, with an **Artists** custom post type replacing Works. **Superseded as of 2026-07-15: WordPress was dropped.** It never ran in WordPress at all. Kept only as a fallback and because `template-parts/` (the presentational half) is what the live site actually renders.
+4. **microCMS → static** (`wp-theme/preview/` + `.github/workflows/deploy.yml`) — **the live production direction.** Content lives in microCMS; GitHub Actions runs `preview/render.php` and deploys to GitHub Pages. **This is where active work happens.** See `HANDOVER.md`.
+
+**Why WordPress was dropped** (do not re-propose it without reading this): (a) production WP could not render the per-work grouping the client already approved — `inc/artist-data.php` never sets `works`, so `artist-modal.php:80-143` is dead code under WP and everything falls back to one flat gallery; (b) `build-works-img.php` shells out to macOS-only `sips`, so the client could not add a photo without a developer's Mac — that was the actual problem to solve; (c) the container/presentational split meant only ~100 lines of data-fetching had to change, so leaving WP was cheap. The client is also a WordPress non-user.
 
 Root `assets/` (tokens.css, reveal.js, 07-kinetic.js, 08-process.js, vendor/) belongs to tracks 1–2. The WP theme has its **own separate asset tree** at `wp-theme/lindo/assets/` (lindo.css, main.js, loader.js, hero-fx.js, artist-modal.js, lightbox.js, admin-gallery.js). Editing the wrong tree is an easy mistake — confirm which track you're touching.
 
@@ -23,12 +26,23 @@ python3 -m http.server 8080         # http://localhost:8080/ (gallery), /works/ 
 # Track 2 — regenerate WORKS after editing works/works.json
 node scripts/build-works.mjs        # writes works/index.html, works/<slug>/index.html, sitemap.xml
 
-# Track 3 — preview the WP theme WITHOUT WordPress, then serve it
+# Track 4 (LIVE) — build the real site. Data source is chosen by env, see below.
 cd wp-theme
+set -a; . ../.env.local; set +a    # holds MICROCMS_API_KEY. gitignored — never commit it
 php preview/render.php > preview/index.html
 php -S 127.0.0.1:8745 -t .          # http://127.0.0.1:8745/preview/index.html
 
-# Track 3 — rebuild real-artist preview images after editing content-manifest.php or swapping artist-src/
+# render.php picks its data source from the environment:
+#   MICROCMS_API_KEY → microCMS (production path)
+#   MICROCMS_FIXTURE → a local JSON file; skips the API. Use it to exercise error paths
+#                      (e.g. the duplicate-image warning) that stay silent on good data
+#   neither          → scans works-img/ locally (LEGACY, kept as an escape hatch)
+# In production the same switch runs in CI; the key comes from the repo's Actions secret.
+# preview/index.html is BUILT BY CI — do not hand-commit it.
+
+# Track 3 (LEGACY) — rebuild works-img/ from artist-src/. Only for the local fallback path.
+# Superseded by microCMS: it needs macOS `sips`, which is exactly why the client couldn't
+# add photos herself. Images uploaded to microCMS are resized on delivery instead.
 php wp-theme/preview/build-works-img.php   # artist-src/ → works-img/ (WebP, longest-edge 1280px, q70). Needs cwebp (`brew install webp`)
 
 # Lint any PHP file (do this after editing theme PHP)

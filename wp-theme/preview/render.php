@@ -19,9 +19,10 @@ require LINDO_DIR . '/inc/template.php';
 
 // データ源の切替（移行期間中の両立）。
 //   MICROCMS_API_KEY あり → microCMS（新・本命）
-//   なし               → works-img/ をローカル走査（旧・従来どおり）
+//   MICROCMS_FIXTURE あり → ローカルJSON（開発用。APIを叩かず異常系を再現する）
+//   どちらも無し          → works-img/ をローカル走査（旧・従来どおり）
 // 全アーティストの microCMS 投入が終わったら real-data.php ごと廃止する。
-$artists = getenv( 'MICROCMS_API_KEY' )
+$artists = ( getenv( 'MICROCMS_API_KEY' ) || getenv( 'MICROCMS_FIXTURE' ) )
 	? require __DIR__ . '/microcms-data.php'
 	: require __DIR__ . '/real-data.php';
 

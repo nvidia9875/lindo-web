@@ -20,6 +20,19 @@
 define( 'LINDO_MC_MAX_EDGE', 1280 );
 
 /**
+ * コンテンツの不備を警告する（ビルドは止めない）。
+ *
+ * stdout は生成中の HTML なので、混ぜると doctype より前に文字が出てページが壊れる。
+ * 必ず stderr へ。GitHub Actions では ::warning:: が注釈として拾われる。
+ *
+ * @param string $message 警告文。
+ */
+function lindo_mc_warn( $message ) {
+	$prefix = getenv( 'GITHUB_ACTIONS' ) ? '::warning::' : '[警告] ';
+	fwrite( STDERR, $prefix . $message . PHP_EOL );
+}
+
+/**
  * microCMS の画像URLを、配信用URLに変換する。
  *
  * 【重要】素朴に `?w=1280` を付けてはいけない。imgix の `w` は「幅をその値にする」指定であり、
@@ -106,6 +119,20 @@ function lindo_mc_img( array $img, $alt ) {
  * @return array<int,array>
  */
 function lindo_mc_fetch_artists() {
+	// 開発用の抜け道: APIを叩かずローカルのJSONで動かす。
+	// 異常系（重複検知など。正常時は沈黙するので壊れても気づけない）の確認に使う。
+	$fixture = (string) getenv( 'MICROCMS_FIXTURE' );
+	if ( '' !== $fixture ) {
+		if ( ! is_readable( $fixture ) ) {
+			throw new RuntimeException( 'MICROCMS_FIXTURE のファイルが読めません: ' . $fixture );
+		}
+		$json = json_decode( (string) file_get_contents( $fixture ), true );
+		if ( ! is_array( $json ) || ! isset( $json['contents'] ) ) {
+			throw new RuntimeException( 'MICROCMS_FIXTURE の JSON に contents がありません。' );
+		}
+		return $json['contents'];
+	}
+
 	$key = (string) getenv( 'MICROCMS_API_KEY' );
 	if ( '' === $key ) {
 		throw new RuntimeException( 'MICROCMS_API_KEY が未設定です。 .env.local を読み込んでから実行してください（例: set -a; . ./.env.local; set +a）。' );
@@ -224,10 +251,28 @@ foreach ( $contents as $c ) {
 		$alt   = trim( $name . ' ' . $title );
 
 		$gallery = array();
+		$seen    = array();
 		foreach ( $gallery_raw as $img ) {
-			if ( is_array( $img ) && isset( $img['url'] ) ) {
-				$gallery[] = lindo_mc_img( $img, $alt );
+			if ( ! is_array( $img ) || ! isset( $img['url'] ) ) {
+				continue;
 			}
+			// 同じ画像を2度入れてしまう事故の検知。実際に発生した（SugarNote のピンク背景で
+			// 05.webp が2回入り11枚のはずが12枚になっていた）。管理画面で複数選択＋ドラッグを
+			// する以上、必ず再発する。重複は常に間違いなので気づけるようにする。
+			// ※ stdout は HTML なので、絶対に stderr へ出すこと。
+			if ( isset( $seen[ $img['url'] ] ) ) {
+				lindo_mc_warn(
+					sprintf(
+						'画像の重複: %s / %s に同じ画像が2回入っています（%s）。管理画面で片方を削除してください。',
+						$name,
+						'' !== $title ? $title : '(無題の作品)',
+						basename( (string) strtok( (string) $img['url'], '?' ) )
+					)
+				);
+				continue; // 重複は落として1枚だけ採用する。
+			}
+			$seen[ $img['url'] ] = true;
+			$gallery[]           = lindo_mc_img( $img, $alt );
 		}
 		if ( empty( $gallery ) ) {
 			continue;
