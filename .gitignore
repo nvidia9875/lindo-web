@@ -11,3 +11,8 @@ aperture-*.png
 # Real artist source — large + private client images. Do NOT commit/publish.
 ホームページ用*.zip
 wp-theme/preview/artist-src/
+
+# Secrets. microCMS の APIキー等をローカルで渡すためのファイル。絶対にコミットしない。
+# 本番（GitHub Actions）は Secrets から環境変数で渡すので、このファイルは開発機のみ。
+.env.local
+.env

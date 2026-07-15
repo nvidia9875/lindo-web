@@ -17,7 +17,13 @@ define( 'LINDO_VERSION', 'preview' );
 require __DIR__ . '/wp-shim.php';
 require LINDO_DIR . '/inc/template.php';
 
-$artists = require __DIR__ . '/real-data.php';
+// データ源の切替（移行期間中の両立）。
+//   MICROCMS_API_KEY あり → microCMS（新・本命）
+//   なし               → works-img/ をローカル走査（旧・従来どおり）
+// 全アーティストの microCMS 投入が終わったら real-data.php ごと廃止する。
+$artists = getenv( 'MICROCMS_API_KEY' )
+	? require __DIR__ . '/microcms-data.php'
+	: require __DIR__ . '/real-data.php';
 
 // 本番は Customizer（inc/contact.php・inc/partners.php）から取るが、
 // プレビューは WordPress 無しで動くため既定値をここに持つ。
