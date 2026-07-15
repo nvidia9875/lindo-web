@@ -51,7 +51,7 @@ There is no test suite, linter config, or package.json. Verification is manual: 
 ## Non-obvious constraints (apply to every track)
 
 - **CSS `clamp()`/`calc()` require spaces around `+` and `-`** (e.g. `calc(var(--x) + 10px)`). Without them the whole declaration is silently invalidated. This has bitten this codebase before.
-- **CSP is `script-src 'self'`** (see `_headers` for Netlify/Cloudflare, `vercel.json` for Vercel). No CDN scripts — all JS, including GSAP/three.js, is self-hosted. Keep it that way.
+- **CSP is `script-src 'self'`** — declared in `_headers` (Netlify/Cloudflare Pages format) and `vercel.json` (Vercel). **Caveat: it is NOT actually enforced in production today.** The live host is GitHub Pages, which cannot set response headers, so both files are inert there; they only take effect on a host that reads them (Cloudflare Pages honors `_headers`). Keep all JS self-hosted regardless — no CDN scripts, including GSAP/three.js. That is what keeps the policy adoptable the moment a real host serves it, and re-adding a CDN script would silently break the CSP on the day it starts being enforced.
 - **Animations use `transform`/`opacity` only**, always honor `prefers-reduced-motion`, and heavy motion (concepts 07/08, hero-fx scatter) degrades to a static layout on mobile / reduced-motion / no-WebGL.
 - `concepts/` and the gallery `index.html` are `noindex`. Going live means promoting the chosen concept to the production `index` and lifting the noindex / robots disallow.
 
