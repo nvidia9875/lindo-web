@@ -23,6 +23,17 @@ GitHub Pages    … https://nvidia9875.github.io/lindo-web/
 
 ---
 
+## ★いつやるか: 残り8組を投入する「前」
+
+**今やるのが一番安い。まだ SugarNote 1組しか入っていないため。**
+
+```
+今やる   → 先方アカウントで作成 → そこに9組を入れる       … 入力は1回
+後でやる → 自分のアカウントに9組入れる → 引き継ぎで再投入 … 入力が2回、または移行スクリプトが必要
+```
+
+235枚の手入力を2回やるのは現実的でない。**器を先に移すこと。**
+
 ## 1. 先方アカウントで microCMS サービスを作る
 
 1. 先方（伊藤さん / 株式会社LINDO）のアカウントで新規サービスを作成
@@ -127,11 +138,46 @@ php -S 127.0.0.1:8745 -t .    # → http://127.0.0.1:8745/preview/index.html
 
 ---
 
+---
+
+## 所有権（要決定）
+
+| | 現在 | 方針 |
+|---|---|---|
+| microCMS | サカイさん（サービスID `lindo`） | **→ 先方**（この手順） |
+| Cloudflare | 未作成 | **先方名義を推奨。** ドメインが乗るので、サカイさん個人だと離任時に全部止まる |
+| GitHubリポジトリ | `nvidia9875`（個人） | 制作者保持が普通。将来別業者が触るなら要移管 |
+| ドメイン | ムームードメイン（GMOペパボ） | 名義を要確認 |
+
+---
+
+## ⚠️ ドメイン移管時の注意（調査済み・2026-07-16）
+
+新サイトを `nvidia9875.github.io` のままにはしないので、いずれ styledbylindo.com を移す。
+**フォーム（Cloudflare Workers）もこれが前提。** ただし**失敗すると先方の業務が止まる**ので慎重に。
+
+| 現状 | 値 |
+|---|---|
+| ネームサーバー | `dns01/02.muumuu-domain.com`（ムームードメイン） |
+| A | `103.169.142.0`（ロリポップ）。**現行サイトが生きている**（`<title>LINDO Co.,Ltd.`） |
+| **MX** | **`50 mx01.lolipop.jp`** ← **`contact@styledbylindo.com` はここで受けている。消すとメールが止まる** |
+| TXT | Canva認証 / Google Site Verification ← これも引き継ぐこと |
+
+ネームサーバーを Cloudflare に向ける前に、**MX・TXTを含む既存レコードを完全に移すこと。**
+
+---
+
 ## まだ残っている課題
 
-- **お問い合わせフォーム** … 静的サイトなので CF7 は使えない。現状のフォームは**押しても何も送信されないダミー**。公開前に代替（Formspark 等）が必須
-- **Business Partner / セクションの文言** … まだPHP直書きで、管理画面から編集できない。microCMS の**オブジェクト形式API**を1本足せば対応可能
+- **お問い合わせフォーム** … 静的サイトなので CF7 は使えない。現状のフォームは**押しても何も送信されないダミー**。公開前に必須。
+  方針は **Cloudflare Workers**（検証済み宛先への送信は全プラン無料・送信上限にもカウントされない）。
+  ただし **Email Routing が前提＝ドメインをCloudflareに載せる必要がある**（上記）。
+  CSPが `form-action 'self'` なので `workers.dev` の別ドメインではなく**同一オリジン**で動かすこと。
+  暫定案として Formspark（$25買い切り・ドメイン移管不要）もある
+- **Business Partner / セクションの文言** … まだPHP直書きで編集できない。microCMS の**オブジェクト形式API**を1本足せば対応可能。
+  ※ `inc/partners.php` の Customizer 対応は**WordPressの機能なので現構成では無効**
 - **Cloudflare Pages への移行** … GitHub Pages はレスポンスヘッダを設定できず、`_headers` のCSPが**現状効いていない**。移せば有効化される
-- **旧方式の撤去** … 全アーティストの投入後、`real-data.php` / `content-manifest.php` / `build-works-img.php` / `works-img/` と、使わなくなったWordPressテーマ一式を削除できる
+- **旧方式の撤去** … 全アーティストの投入後、`real-data.php` / `content-manifest.php` / `build-works-img.php` / `works-img/` と、使わなくなったWordPressテーマ一式を削除できる。
+  ※ `template-parts/` と `assets/` は**現役**（静的サイトが描画に使っている）。消さないこと
 
 詳細は `TODO.md` / `MICROCMS-SCHEMA.md`。
