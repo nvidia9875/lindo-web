@@ -34,7 +34,14 @@
           }
         });
       },
-      { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+      // threshold は 0 のまま（＝1pxでも入ったら発火）。発火位置は rootMargin で作る。
+      // 【重要】threshold に比率を入れてはいけない。.rv はセクションのラッパーにも付いており、
+      // ビューポートより高い要素は交差比率が「実効ルート高 ÷ 要素高」を超えられないため、
+      // 比率を要求すると背の高いセクションが永久に発火しない。実例: Works のラッパーは
+      // SP1カラムで約4949px あり、threshold 0.14 では vh>=753px が必要だった
+      // → iPhone の URLバー展開時(約660-735px)では表示されず、画面に触れて
+      //   URLバーが畳まれた瞬間に初めて出る、という不具合になっていた。
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" }
     );
 
     items.forEach(function (el) {

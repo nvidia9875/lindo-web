@@ -20,7 +20,7 @@ if ( ! defined( 'LINDO_PART' ) ) {
 			<span class="ln"><span class="ln-text" data-line>CREATIVE<span class="pk">.</span></span></span>
 		</h1>
 		<div class="hero-row">
-			<p>アーティストの世界観を、ひとつのビジュアルへ。コンセプト設計からスタイリング、デザインまでを一貫して。</p>
+			<p>アーティストの世界観をひとつのビジュアルへ。<br>コンセプト設計からスタイリング、デザインまでを一貫して。</p>
 			<p class="tags">Creative / Branding<br>Design / Styling</p>
 		</div>
 	</div>
