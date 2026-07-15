@@ -1,0 +1,87 @@
+# プレビューサイトのビルド & GitHub Pages への配信。
+#
+# これまでは `php preview/render.php > preview/index.html` を手元で実行して
+# 生成物をコミットしていた。それをCIに移す＝「生成物を人がコミットする」運用をやめる。
+#
+# データ源は render.php 側の判定に従う（同じ仕組みをCIでもそのまま使う）:
+#   Secret MICROCMS_API_KEY あり → microCMS から取得（現行・本命）
+#   なし                        → リポジトリ内の works-img/ をローカル走査（旧方式・退避用）
+#
+# ★microCMS が正。サイトには「CMSに入っているものだけ」が出る。投入が進むにつれて
+#   増えていく前提で、途中段階でも本番に出して構わない（合意済み）。
+#   万一 microCMS 側が壊れたら Secret を外せば旧方式に退避できる。
+name: Build & Deploy Preview
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 手動実行（切替の確認用）
+  repository_dispatch:
+    # microCMS の Webhook から叩けるようにしておく（コンテンツ公開 → 自動反映）。
+    types: [microcms-update]
+
+# 同時実行を1本に絞る。連続publishで古いビルドが後勝ちするのを防ぐ。
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: curl, json
+          coverage: none
+
+      - name: Build preview/index.html
+        env:
+          MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
+          MICROCMS_SERVICE_ID: ${{ vars.MICROCMS_SERVICE_ID }}
+        working-directory: wp-theme
+        # render.php は失敗時に例外を投げる（空ページを作らない）。
+        # ここで落ちれば配信されないので、事故ったサイトが本番に出ることはない。
+        run: |
+          if [ -n "$MICROCMS_API_KEY" ]; then
+            echo "データ源: microCMS"
+          else
+            echo "データ源: ローカル works-img/（Secret 未登録）"
+          fi
+          php preview/render.php > preview/index.html
+
+      - name: Sanity check
+        working-directory: wp-theme
+        # 生成物が壊れていないか最低限の検査。PHPの警告が doctype より前に
+        # 混入するとブラウザが互換モードに落ちるので、先頭を必ず確認する。
+        run: |
+          head -c 15 preview/index.html | grep -q '<!doctype html>' \
+            || { echo "::error::index.html が doctype で始まっていない（PHPの警告混入の疑い）"; head -c 300 preview/index.html; exit 1; }
+          COUNT=$(grep -c 'data-modal-target' preview/index.html || true)
+          echo "アーティスト: ${COUNT}組"
+          [ "$COUNT" -ge 1 ] || { echo "::error::アーティストが0組。データ取得に失敗している"; exit 1; }
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # 現行の Pages（ブランチのルートを配信）と同じ内容にする。
+          # ルートの index.html が wp-theme/preview/index.html へリダイレクトする構成。
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
