@@ -23,6 +23,8 @@ define( 'LINDO_URI', get_template_directory_uri() );
  * - artist-cpt.php   : Artist カスタム投稿タイプ＋分類
  * - artist-meta.php  : Artist メタ（サブ名 / 役職 / プロフィール / SNS / グリッド画像）
  * - artist-data.php  : 表示用データ整形ヘルパー（プレゼンテーション契約）
+ * - company.php      : 代表者情報（Customizer）
+ * - partners.php     : 主要取引先リスト（Customizer）
  * - contact.php      : Contact Form 7 連携＋Customizer設定
  */
 $lindo_modules = array(
@@ -33,6 +35,7 @@ $lindo_modules = array(
 	'/inc/artist-meta.php',
 	'/inc/artist-data.php',
 	'/inc/company.php',
+	'/inc/partners.php',
 	'/inc/contact.php',
 );
 

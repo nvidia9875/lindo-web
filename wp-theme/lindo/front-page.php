@@ -17,6 +17,7 @@ lindo_part(
 	array(
 		'artists'           => lindo_get_all_artists(),
 		'representative'    => lindo_get_representative(),
+		'partners'          => lindo_get_partners(),
 		'contact_form_html' => lindo_get_contact_form_html(),
 		'contact_email'     => lindo_get_contact_email(),
 	)

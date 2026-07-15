@@ -19,6 +19,23 @@ require LINDO_DIR . '/inc/template.php';
 
 $artists = require __DIR__ . '/real-data.php';
 
+// 本番は Customizer（inc/contact.php・inc/partners.php）から取るが、
+// プレビューは WordPress 無しで動くため既定値をここに持つ。
+// ※ inc/partners.php の lindo_default_partners() と並びを合わせること。
+$contact_email = 'contact@styledbylindo.com';
+$partners      = array(
+	'avex',
+	'universal music',
+	'sony music',
+	'HYBE JAPAN',
+	'LDH JAPAN',
+	'BMSG',
+	'吉本興業',
+	'TWIN PLANET',
+	'ホリプロ',
+	'VANTAN',
+);
+
 // フォールバックフォームを部品から取得（本番と同じマークアップ）。
 ob_start();
 lindo_part( 'contact-form-fallback' );
@@ -57,13 +74,22 @@ lindo_part(
 				'2024年、アーティストのビジュアル作りに特化した撮影の企画／制作をトータルプロデュースする株式会社LINDOを設立。',
 			),
 		),
+		'partners'          => $partners,
 		'contact_form_html' => $contact_form_html,
-		'contact_email'     => 'contact@styledbylindo.com',
+		'contact_email'     => $contact_email,
 	)
 );
 ?>
 </main>
-<?php lindo_part( 'site-footer', array( 'lindo_year' => gmdate( 'Y' ) ) ); ?>
+<?php
+lindo_part(
+	'site-footer',
+	array(
+		'lindo_year'    => gmdate( 'Y' ),
+		'contact_email' => $contact_email,
+	)
+);
+?>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/loader.js' ); ?>" defer></script>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/hero-fx.js' ); ?>" defer></script>
 <script src="<?php echo esc_url( LINDO_URI . '/assets/js/main.js' ); ?>" defer></script>

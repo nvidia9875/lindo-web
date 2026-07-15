@@ -6,6 +6,7 @@
  * 期待する変数:
  *   $artists            array<int,array>
  *   $representative     array{name,title,profile[]}
+ *   $partners           array<int,string>
  *   $contact_form_html  string（信頼済み）
  *   $contact_email      string
  *
@@ -17,6 +18,7 @@ if ( ! defined( 'LINDO_PART' ) ) {
 }
 $artists           = isset( $artists ) ? $artists : array();
 $representative    = isset( $representative ) ? $representative : array();
+$partners          = isset( $partners ) ? $partners : array();
 $contact_form_html = isset( $contact_form_html ) ? $contact_form_html : '';
 $contact_email     = isset( $contact_email ) ? $contact_email : 'contact@styledbylindo.com';
 
@@ -24,7 +26,7 @@ lindo_part( 'section-hero' );
 lindo_part( 'section-about', array( 'representative' => $representative ) );
 lindo_part( 'section-service' );
 lindo_part( 'section-artists', array( 'artists' => $artists ) );
-lindo_part( 'section-partners' );
+lindo_part( 'section-partners', array( 'partners' => $partners ) );
 lindo_part(
 	'section-contact',
 	array(
