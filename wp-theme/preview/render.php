@@ -19,7 +19,13 @@
  */
 
 define( 'LINDO_DIR', dirname( __DIR__ ) . '/lindo' );
-define( 'LINDO_URI', '../lindo' ); // index.html は preview/ 配下に置く前提。
+// 生成した index.html から見たアセットの位置。dist/ に index.html と assets/ を
+// 並べて置く（scripts/build-site.sh）ので相対で './assets/...' になる。
+//
+// 絶対パス（'/assets'）にしてはいけない。GitHub Pages のプロジェクトページは
+// /lindo-web/ 配下に出るため、/assets/... はドメイン直下を指して404になる。
+// 相対にしておけば、プロジェクトページでも独自ドメイン直下でも同じHTMLが動く。
+define( 'LINDO_URI', '.' );
 define( 'LINDO_VERSION', 'preview' );
 
 require __DIR__ . '/wp-shim.php';
@@ -37,10 +43,19 @@ $artists = ( getenv( 'MICROCMS_API_KEY' ) || getenv( 'MICROCMS_FIXTURE' ) )
 // サイト文言。artists の取得（＝キーの検証）が通ったあとに読む。
 $site = require __DIR__ . '/site-data.php';
 
-// フォールバックフォームを部品から取得（本番と同じマークアップ）。
+// お問い合わせの中身（Contact セクションの右カラム）。
+//
+// ★フォームを復活させるときは、この1行を 'contact-form-fallback' に戻すだけ。
+//   部品もCSSも消していない。戻す際の手順は
+//   template-parts/contact-form-fallback.php の冒頭コメントにある。
+//
+// 現在 'contact-mail'（メール導線）にしている理由: フォームの送信実装が未着手で、
+// 見た目だけのフォームは押しても何も起きず問い合わせを取りこぼすため。
+define( 'LINDO_CONTACT_PART', 'contact-mail' );
+
 ob_start();
-lindo_part( 'contact-form-fallback' );
-$contact_form_html = (string) ob_get_clean();
+lindo_part( LINDO_CONTACT_PART, array( 'contact' => $site['contact'] ) );
+$contact_body_html = (string) ob_get_clean();
 
 ob_start();
 ?>
@@ -55,6 +70,16 @@ ob_start();
 	<meta name="theme-color" content="#eae5d7" />
 	<title><?php echo esc_html( $site['title'] ); ?></title>
 	<meta name="description" content="<?php echo esc_attr( $site['description'] ); ?>" />
+	<?php
+	// 1ページ構成なので canonical は常にトップ。GitHub Pages のプロジェクトURLと
+	// 独自ドメインの2つでアクセスできてしまうため、正規のURLを明示する。
+	$site_url = isset( $site['siteUrl'] ) ? rtrim( (string) $site['siteUrl'], '/' ) : '';
+	if ( '' !== $site_url ) :
+		?>
+		<link rel="canonical" href="<?php echo esc_url( $site_url . '/' ); ?>" />
+		<meta property="og:url" content="<?php echo esc_url( $site_url . '/' ); ?>" />
+	<?php endif; ?>
+	<link rel="icon" href="<?php echo esc_url( LINDO_URI . '/favicon.svg' ); ?>" type="image/svg+xml" />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="<?php echo esc_attr( $site['title'] ); ?>" />
 	<meta property="og:description" content="<?php echo esc_attr( $site['description'] ); ?>" />
@@ -93,7 +118,7 @@ lindo_part(
 	array(
 		'artists'           => $artists,
 		'site'              => $site,
-		'contact_form_html' => $contact_form_html,
+		'contact_body_html' => $contact_body_html,
 	)
 );
 ?>

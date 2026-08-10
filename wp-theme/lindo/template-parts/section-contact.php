@@ -1,13 +1,13 @@
 <?php
 /**
  * Contact — 問い合わせ。
- * フォーム本体は $contact_form_html を流し込む
- *   - 本番: Contact Form 7 の do_shortcode 出力
- *   - 未設定/プレビュー: 静的フォールバックフォーム（contact.php が生成）
+ * 右カラムの中身は $contact_body_html を流し込む
+ *   - 現行（静的サイト）: メール導線（contact-mail）。フォームの送信実装が未着手のため
+ *   - WordPress: Contact Form 7 の do_shortcode 出力
  *
  * 期待する変数:
- *   $contact            array{label,lead,email}
- *   $contact_form_html  フォームHTML（信頼済みソース）
+ *   $contact           array{label,lead,email}
+ *   $contact_body_html 右カラムのHTML（信頼済みソース）
  *
  * 見出し末尾のピンクの「.」は装飾なのでCMSには入力させず、ここで付ける。
  *
@@ -18,7 +18,7 @@ if ( ! defined( 'LINDO_PART' ) ) {
 	exit;
 }
 $contact           = isset( $contact ) && is_array( $contact ) ? $contact : array();
-$contact_form_html = isset( $contact_form_html ) ? $contact_form_html : '';
+$contact_body_html = isset( $contact_body_html ) ? $contact_body_html : '';
 $contact_email     = isset( $contact['email'] ) ? (string) $contact['email'] : '';
 ?>
 <section class="contact" id="contact">
@@ -35,8 +35,8 @@ $contact_email     = isset( $contact['email'] ) ? (string) $contact['email'] : '
 		</div>
 		<div class="contact-form-wrap rv d1">
 			<?php
-			// 信頼済みのフォームHTML（CF7出力 or テーマ生成フォールバック）。
-			echo $contact_form_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// 信頼済みのHTML（メール導線 or CF7出力）。
+			echo $contact_body_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</div>
 	</div>

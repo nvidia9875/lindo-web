@@ -1,16 +1,20 @@
-# プレビューサイトのビルド & GitHub Pages への配信。
+# 公開サイトのビルド & GitHub Pages への配信。
 #
-# これまでは `php preview/render.php > preview/index.html` を手元で実行して
-# 生成物をコミットしていた。それをCIに移す＝「生成物を人がコミットする」運用をやめる。
+# 生成物は人がコミットしない。ここで組み立てて、そのまま配信する。
 #
-# データ源は render.php 側の判定に従う（同じ仕組みをCIでもそのまま使う）:
+# 【配信するものは dist/ に明示的に集める】
+# 以前は path: . でリポジトリ全体を配信していたため、内部ドキュメント
+# （MTG-HANDOVER.md / TODO.md / CLAUDE.md）や旧デモ（concepts/ works/）まで
+# 公開されていた。DNSレコード表や検証トークンが載っているので、
+# scripts/build-site.sh で「出すものだけ」を選ぶ方式に変えてある。
+#
+# データ源は render.php 側の判定に従う:
 #   Secret MICROCMS_API_KEY あり → microCMS から取得（現行・本命）
-#   なし                        → リポジトリ内の works-img/ をローカル走査（旧方式・退避用）
+#   なし                        → リポジトリ内の works-img/ をローカル走査（退避用）
 #
 # ★microCMS が正。サイトには「CMSに入っているものだけ」が出る。投入が進むにつれて
 #   増えていく前提で、途中段階でも本番に出して構わない（合意済み）。
-#   万一 microCMS 側が壊れたら Secret を外せば旧方式に退避できる。
-name: Build & Deploy Preview
+name: Build & Deploy Site
 
 on:
   push:
@@ -43,38 +47,26 @@ jobs:
           extensions: curl, json
           coverage: none
 
-      - name: Build preview/index.html
+      - name: Build dist/
         env:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           MICROCMS_SERVICE_ID: ${{ vars.MICROCMS_SERVICE_ID }}
-        working-directory: wp-theme
-        # render.php は失敗時に例外を投げる（空ページを作らない）。
-        # ここで落ちれば配信されないので、事故ったサイトが本番に出ることはない。
+        # build-site.sh が生成・コピー・検査までやる（ローカルと同じ手順）。
+        # データ取得に失敗すると render.php が例外を投げてここで落ちるので、
+        # 事故ったサイトが本番に出ることはない。
         run: |
           if [ -n "$MICROCMS_API_KEY" ]; then
             echo "データ源: microCMS"
           else
             echo "データ源: ローカル works-img/（Secret 未登録）"
           fi
-          php preview/render.php > preview/index.html
-
-      - name: Sanity check
-        working-directory: wp-theme
-        # 生成物が壊れていないか最低限の検査。PHPの警告が doctype より前に
-        # 混入するとブラウザが互換モードに落ちるので、先頭を必ず確認する。
-        run: |
-          head -c 15 preview/index.html | grep -q '<!doctype html>' \
-            || { echo "::error::index.html が doctype で始まっていない（PHPの警告混入の疑い）"; head -c 300 preview/index.html; exit 1; }
-          COUNT=$(grep -c 'data-modal-target' preview/index.html || true)
-          echo "アーティスト: ${COUNT}組"
-          [ "$COUNT" -ge 1 ] || { echo "::error::アーティストが0組。データ取得に失敗している"; exit 1; }
+          ./scripts/build-site.sh
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          # 現行の Pages（ブランチのルートを配信）と同じ内容にする。
-          # ルートの index.html が wp-theme/preview/index.html へリダイレクトする構成。
-          path: .
+          # ここに入れたものだけが公開される。
+          path: dist
 
   deploy:
     needs: build

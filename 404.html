@@ -5,44 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
 <title>ページが見つかりません | LINDO</title>
-<meta name="theme-color" content="#3c3a20" />
+<meta name="theme-color" content="#fdfbf4" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/tokens.css" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<!--
+  404 は「どの階層のURLで出るか分からない」ため、CSSを外部ファイルに頼らず
+  ここに直接書いている。相対パスにすると /a/b/ で壊れ、絶対パスにすると
+  GitHub Pages のプロジェクトURL（/lindo-web/ 配下）で壊れるため。
+-->
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
+  *{ margin:0; padding:0; box-sizing:border-box }
+  :root{
+    --bg:#fdfbf4; --ink:#26240f; --muted:#7c7a64; --pink:#ef8e94;
+    --grot:"Archivo",system-ui,sans-serif;
+    --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+  }
   body{
-    font-family:var(--font-sans-jp);
-    background:var(--olive-800);
-    color:var(--on-dark);
-    min-height:100svh;
-    display:grid;
-    place-items:center;
-    text-align:center;
-    padding:2rem;
-    background-image:
-      radial-gradient(circle at 20% 0%, rgba(231,156,176,.10), transparent 42%),
-      radial-gradient(circle at 90% 100%, rgba(185,168,107,.08), transparent 40%);
+    font-family:var(--sans); background:var(--bg); color:var(--ink);
+    min-height:100svh; display:grid; place-items:center; padding:2rem;
+    -webkit-font-smoothing:antialiased;
   }
-  .code{font-family:var(--font-serif-en);font-style:italic;font-size:var(--text-hero);line-height:.9;color:var(--pink)}
-  h1{font-family:var(--font-serif-en);font-weight:500;font-size:var(--text-xl);letter-spacing:.04em;margin:1rem 0 .4rem}
-  p{color:var(--muted-dark);max-width:38ch;margin:0 auto 2rem}
-  .home{
-    display:inline-block;font-size:var(--text-sm);letter-spacing:.18em;text-transform:uppercase;
-    color:var(--olive-900);background:var(--pink);padding:.9em 1.8em;border-radius:var(--radius-pill);
-    transition:transform var(--dur) var(--ease),background var(--dur) var(--ease);text-decoration:none
+  .box{ max-width:34rem }
+  .code{
+    font-family:var(--grot); font-weight:800; line-height:0.9;
+    font-size:clamp(4.5rem,3rem + 12vw,11rem); letter-spacing:-0.04em;
+    /* 下の p{} が color:var(--muted) を当ててくるので、ここで明示する。 */
+    color:var(--ink);
   }
-  .home:hover{transform:translateY(-3px);background:var(--pink-soft)}
-  .home:focus-visible{outline:2px solid var(--pink-soft);outline-offset:3px}
+  .code span{ color:var(--pink) }
+  h1{
+    font-family:var(--grot); font-weight:500; letter-spacing:0.02em;
+    font-size:clamp(1.05rem,0.95rem + 0.5vw,1.35rem); margin-top:1.4rem;
+  }
+  p{ color:var(--muted); margin-top:0.9rem; font-size:0.95rem; line-height:1.9 }
+  a.home{
+    display:inline-block; margin-top:2.2rem; font-family:var(--grot);
+    font-weight:700; font-size:0.8rem; letter-spacing:0.16em; text-transform:uppercase;
+    background:var(--ink); color:var(--bg); border:1px solid var(--ink);
+    padding:1.05em 2.6em; text-decoration:none;
+    transition:background 360ms cubic-bezier(0.16,1,0.3,1), border-color 360ms cubic-bezier(0.16,1,0.3,1);
+  }
+  a.home:hover, a.home:focus-visible{ background:var(--pink); border-color:var(--pink) }
+  @media (prefers-reduced-motion: reduce){ a.home{ transition:none } }
 </style>
 </head>
 <body>
-  <main>
-    <p class="code">404</p>
-    <h1>Page Not Found</h1>
-    <p>お探しのページは見つかりませんでした。<br>URLが変更されたか、削除された可能性があります。</p>
-    <a class="home" href="/">トップへ戻る</a>
+  <main class="box">
+    <p class="code">404<span>.</span></p>
+    <h1>ページが見つかりません</h1>
+    <p>お探しのページは移動または削除された可能性があります。<br />お手数ですが、トップページからお進みください。</p>
+    <a class="home" href="/">Back to Home</a>
   </main>
 </body>
 </html>

@@ -16,3 +16,7 @@ wp-theme/preview/artist-src/
 # 本番（GitHub Actions）は Secrets から環境変数で渡すので、このファイルは開発機のみ。
 .env.local
 .env
+
+# 公開サイトのビルド成果物（scripts/build-site.sh が生成）。
+# CIが毎回組み立てるのでコミットしない。
+dist/

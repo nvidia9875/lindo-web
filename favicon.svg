@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LINDO">
+  <!--
+    暫定の favicon。ロゴの元データ（.ai / .svg）支給後に差し替える。
+    ロゴタイプの構造（文字 + ピンクの「.」）だけ借りた最小の記号で、
+    16px でも潰れないよう文字はパスではなく矩形で描いている。
+    色はブランドトークン: olive #3c3a20 / sand #eae5d7 / pink #ef8e94
+  -->
+  <rect width="64" height="64" fill="#3c3a20"/>
+  <rect x="16" y="14" width="9" height="36" fill="#eae5d7"/>
+  <rect x="16" y="41" width="20" height="9" fill="#eae5d7"/>
+  <rect x="40" y="41" width="9" height="9" fill="#ef8e94"/>
+</svg>

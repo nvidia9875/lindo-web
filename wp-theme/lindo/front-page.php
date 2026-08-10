@@ -26,7 +26,7 @@ lindo_part(
 	'front-sections',
 	array(
 		'artists'           => lindo_get_all_artists(),
-		'contact_form_html' => lindo_get_contact_form_html(),
+		'contact_body_html' => lindo_get_contact_form_html(),
 	)
 );
 
