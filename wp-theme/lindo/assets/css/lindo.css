@@ -1493,6 +1493,17 @@ span.wpcf7-list-item {
   margin-left: 0;
 }
 
+/* ハニーポット。人間には見せず、ボットには「存在する入力欄」に見せる。
+   display:none だと埋めないボットがいるので、視覚的にだけ隠す。 */
+.lindo-form .hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* ---- メール導線（フォームの送信実装ができるまでの中身） ----
    上の .lindo-form 一式は消していない。render.php の LINDO_CONTACT_PART を
    'contact-form-fallback' に戻せばフォームに戻る。 */

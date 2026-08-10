@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>お問い合わせありがとうございます | LINDO</title>
+<meta name="theme-color" content="#fdfbf4" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<!-- 404.html と同じ理由でCSSを内蔵している（フォームの送信元がどのURLでも壊れないように）。 -->
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box }
+  :root{
+    --bg:#fdfbf4; --ink:#26240f; --muted:#7c7a64; --pink:#ef8e94;
+    --grot:"Archivo",system-ui,sans-serif;
+    --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+  }
+  body{
+    font-family:var(--sans); background:var(--bg); color:var(--ink);
+    min-height:100svh; display:grid; place-items:center; padding:2rem;
+    -webkit-font-smoothing:antialiased;
+  }
+  .box{ max-width:34rem }
+  .mark{
+    font-family:var(--grot); font-weight:800; line-height:0.9; color:var(--ink);
+    font-size:clamp(2.6rem,1.8rem + 5vw,5rem); letter-spacing:-0.03em;
+  }
+  .mark span{ color:var(--pink) }
+  h1{
+    font-family:var(--grot); font-weight:500; letter-spacing:0.02em;
+    font-size:clamp(1.05rem,0.95rem + 0.5vw,1.35rem); margin-top:1.4rem;
+  }
+  p{ color:var(--muted); margin-top:0.9rem; font-size:0.95rem; line-height:1.9 }
+  a.home{
+    display:inline-block; margin-top:2.2rem; font-family:var(--grot);
+    font-weight:700; font-size:0.8rem; letter-spacing:0.16em; text-transform:uppercase;
+    background:var(--ink); color:var(--bg); border:1px solid var(--ink);
+    padding:1.05em 2.6em; text-decoration:none;
+    transition:background 360ms cubic-bezier(0.16,1,0.3,1), border-color 360ms cubic-bezier(0.16,1,0.3,1);
+  }
+  a.home:hover, a.home:focus-visible{ background:var(--pink); border-color:var(--pink) }
+  @media (prefers-reduced-motion: reduce){ a.home{ transition:none } }
+</style>
+</head>
+<body>
+  <main class="box">
+    <p class="mark">Thank you<span>.</span></p>
+    <h1>お問い合わせありがとうございます</h1>
+    <p>内容を確認のうえ、担当者よりご連絡いたします。<br />しばらくお待ちください。</p>
+    <a class="home" href="/">Back to Home</a>
+  </main>
+</body>
+</html>

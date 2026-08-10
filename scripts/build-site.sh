@@ -36,7 +36,7 @@ for js in loader hero-fx main artist-modal lightbox; do
 done
 
 # ── 3. ルートに置くもの ───────────────────────────
-cp "$ROOT/404.html" "$ROOT/robots.txt" "$DIST/"
+cp "$ROOT/404.html" "$ROOT/thanks.html" "$ROOT/robots.txt" "$DIST/"
 
 # sitemap.xml は生成する。1ページ構成なのでトップ1件だけ。
 # URL は生成済みHTMLの canonical から取る（site-defaults.php の siteUrl が

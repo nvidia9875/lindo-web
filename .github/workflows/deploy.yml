@@ -51,6 +51,10 @@ jobs:
         env:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           MICROCMS_SERVICE_ID: ${{ vars.MICROCMS_SERVICE_ID }}
+          # お問い合わせフォーム（Web3Forms）。設定するとフォームが出る。
+          # 未設定ならメール導線が出る＝「押しても届かないフォーム」にはならない。
+          # キーは生成HTMLに出るので秘密ではない。Secret ではなく Variable でよい。
+          WEB3FORMS_ACCESS_KEY: ${{ vars.WEB3FORMS_ACCESS_KEY }}
         # build-site.sh が生成・コピー・検査までやる（ローカルと同じ手順）。
         # データ取得に失敗すると render.php が例外を投げてここで落ちるので、
         # 事故ったサイトが本番に出ることはない。

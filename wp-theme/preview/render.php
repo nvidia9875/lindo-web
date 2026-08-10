@@ -43,18 +43,40 @@ $artists = ( getenv( 'MICROCMS_API_KEY' ) || getenv( 'MICROCMS_FIXTURE' ) )
 // サイト文言。artists の取得（＝キーの検証）が通ったあとに読む。
 $site = require __DIR__ . '/site-data.php';
 
+// 公開先URL。canonical / og:url / フォームの送信後遷移先の基準。末尾スラッシュ無し。
+$site_url = isset( $site['siteUrl'] ) ? rtrim( (string) $site['siteUrl'], '/' ) : '';
+
 // お問い合わせの中身（Contact セクションの右カラム）。
 //
-// ★フォームを復活させるときは、この1行を 'contact-form-fallback' に戻すだけ。
-//   部品もCSSも消していない。戻す際の手順は
-//   template-parts/contact-form-fallback.php の冒頭コメントにある。
+// **アクセスキーの有無で自動的に切り替わる。**
+//   WEB3FORMS_ACCESS_KEY あり → フォーム（実際に送信される）
+//   なし                     → メール導線
 //
-// 現在 'contact-mail'（メール導線）にしている理由: フォームの送信実装が未着手で、
-// 見た目だけのフォームは押しても何も起きず問い合わせを取りこぼすため。
-define( 'LINDO_CONTACT_PART', 'contact-mail' );
+// こうしてあるのは「見た目だけのフォーム」を構造的に作れなくするため。
+// 押しても何も起きないフォームは、問い合わせを丸ごと取りこぼす。
+//
+// 有効化・無効化はコードを触らずに環境変数だけでできる:
+//   gh variable set WEB3FORMS_ACCESS_KEY --repo nvidia9875/lindo-web --body "<キー>"
+//   gh variable delete WEB3FORMS_ACCESS_KEY --repo nvidia9875/lindo-web   ← メール導線に戻る
+//
+// ※ アクセスキーは生成HTMLに出るので秘密ではない（Web3Forms の仕様上そういうもの）。
+//   Secret ではなく Variable でよい。悪用されたら管理画面で再発行する。
+$lindo_form_key = trim( (string) getenv( 'WEB3FORMS_ACCESS_KEY' ) );
 
 ob_start();
-lindo_part( LINDO_CONTACT_PART, array( 'contact' => $site['contact'] ) );
+if ( '' !== $lindo_form_key ) {
+	lindo_part(
+		'contact-form',
+		array(
+			'contact'       => $site['contact'],
+			'form_key'      => $lindo_form_key,
+			// 送信後の遷移先。Web3Forms は絶対URLを要求する。
+			'form_redirect' => '' !== $site_url ? $site_url . '/thanks.html' : '',
+		)
+	);
+} else {
+	lindo_part( 'contact-mail', array( 'contact' => $site['contact'] ) );
+}
 $contact_body_html = (string) ob_get_clean();
 
 ob_start();
@@ -73,7 +95,6 @@ ob_start();
 	<?php
 	// 1ページ構成なので canonical は常にトップ。GitHub Pages のプロジェクトURLと
 	// 独自ドメインの2つでアクセスできてしまうため、正規のURLを明示する。
-	$site_url = isset( $site['siteUrl'] ) ? rtrim( (string) $site['siteUrl'], '/' ) : '';
 	if ( '' !== $site_url ) :
 		?>
 		<link rel="canonical" href="<?php echo esc_url( $site_url . '/' ); ?>" />
