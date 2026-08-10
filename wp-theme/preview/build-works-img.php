@@ -25,9 +25,12 @@
  */
 
 $manifest = require __DIR__ . '/content-manifest.php';
+// cap は 0 以下で「無制限」。先方が選別済みの素材を、こちらで間引かないための逃げ道。
 $cap      = isset( $manifest['cap'] ) ? (int) $manifest['cap'] : 15;
 
-$src_root = __DIR__ . '/artist-src/ホームページ用';
+// 支給フォルダ名はマニフェスト側で持つ（支給のたびに変わるため）。
+$src_base = isset( $manifest['base'] ) ? (string) $manifest['base'] : 'ホームページ用';
+$src_root = __DIR__ . '/artist-src/' . $src_base;
 $out_root = __DIR__ . '/works-img';
 $dry      = (bool) getenv( 'DRY' );
 
@@ -68,9 +71,12 @@ function lindo_list_images( $dir ) {
 	return array_values( $out );
 }
 
-/** 0..n-1 から cap 個を等間隔抽出（先頭と末尾を必ず含む）。n<=cap なら全件。 */
+/**
+ * 0..n-1 から cap 個を等間隔抽出（先頭と末尾を必ず含む）。n<=cap なら全件。
+ * cap <= 0 は「無制限」＝全件返す（先方が選別済みの素材を間引かないため）。
+ */
 function lindo_pick_even( $n, $cap ) {
-	if ( $n <= $cap ) {
+	if ( $cap <= 0 || $n <= $cap ) {
 		return range( 0, $n - 1 );
 	}
 	$idx = array();

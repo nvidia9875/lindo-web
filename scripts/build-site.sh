@@ -76,8 +76,9 @@ touch "$DIST/.nojekyll"
 # Secret を外して退避モードで動かしたときだけ works-img/ が要る。
 if grep -q 'works-img/' "$DIST/index.html"; then
 	echo "データ源: ローカル works-img/（退避モード）→ 画像を同梱する"
-	mkdir -p "$DIST/wp-theme/preview"
-	cp -R "$ROOT/wp-theme/preview/works-img" "$DIST/wp-theme/preview/works-img"
+	# 生成HTMLは index.html からの相対で works-img/... を参照する（real-data.php の
+	# LINDO_REAL_BASE_URL）。index.html は dist/ 直下なので、ここも dist/ 直下に置く。
+	cp -R "$ROOT/wp-theme/preview/works-img" "$DIST/works-img"
 fi
 
 # ── 5. 検査 ───────────────────────────────────────
