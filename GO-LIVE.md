@@ -16,7 +16,9 @@
 
 ---
 
-## 0. 実測した現状（2026-08-10）
+## 0. 実測した現状（2026-08-10・**着手前**）
+
+> この表は作業を始める前のスナップショット。🔴 のうちコード側は下記「完了した分」で解消済み。
 
 | 項目 | 状態 |
 |---|---|
@@ -51,9 +53,13 @@
 | 2-5 | 暫定 favicon | `ef3ad6f` |
 | 3準備 | `site` API のマージ処理を検証（上書き・空欄・noindex・繰り返し・空行除去） | — |
 | 3準備 | `MICROCMS-SITE-INPUT.md`（入力シート）を既定値から自動生成 | — |
+| 3準備 | **`microcms-schema/` にインポート用スキーマJSONを用意**（`artists` は実エクスポート、`site` は手組み32フィールド）。コードが読むIDと過不足なく一致することを自動照合済み | — |
 | — | `MTG-2026-08-10.md`（当日の進行表）を作成 | — |
 
-**残っているのは push のみ**（要承認）。push すると CI が走り、本番に反映される。
+**push・CI・本番反映まで完了。** 内部ドキュメントが 404 になったことを本番で実測確認済み。
+
+**今日これ以上サカイ単独で進められる作業は無い。** 残りはすべて
+「伊藤さんのアカウント作成 → メンバー招待」が前提になる。
 
 ---
 
@@ -63,20 +69,20 @@
 
 **これをやらないと引き継ぎが成立しない。**サイト文言を先方が編集できるようにする実装一式（`site` API 対応）が、コミットもpushもされておらず**この開発機にしか存在しない**。
 
-- [ ] 1-1. PHP 構文チェック
+- [x] 1-1. PHP 構文チェック
       ```
       cd /Users/shun/Desktop/lindo
       for f in $(git status --porcelain | awk '{print $2}' | grep '\.php$'); do php -l "$f"; done
       ```
-- [ ] 1-2. ローカルでビルドして目視確認
+- [x] 1-2. ローカルでビルドして目視確認
       ```
       cd /Users/shun/Desktop/lindo/wp-theme
       set -a; . ../.env.local; set +a
       php preview/render.php > preview/index.html
       php -S 127.0.0.1:8745 -t .
       ```
-- [ ] 1-3. コミット & push（CIが自動で走る）
-- [ ] 1-4. Actions の成功と本番の表示を確認
+- [x] 1-3. コミット & push（CIが自動で走る）
+- [x] 1-4. Actions の成功と本番の表示を確認
       ```
       gh run watch --repo nvidia9875/lindo-web
       ```
@@ -110,48 +116,48 @@
 
 原因は `.github/workflows/deploy.yml` の `upload-pages-artifact` が `path: .`（リポジトリ全体）になっていること。
 
-- [ ] 2-1-1. ワークフローに `dist/` を組み立てるステップを追加し、**配信するものだけ**コピーする
+- [x] 2-1-1. ワークフローに `dist/` を組み立てるステップを追加し、**配信するものだけ**コピーする
       配信するもの: 生成した `index.html` / `wp-theme/lindo/assets/` / `404.html` / `robots.txt` / `sitemap.xml` / `_headers` / `.nojekyll`（+ 後日 `CNAME`, `favicon.ico`）
-- [ ] 2-1-2. `upload-pages-artifact` の `path` を `dist` に変更
-- [ ] 2-1-3. デプロイ後、`/MTG-HANDOVER.md` 等が 404 になることを確認
+- [x] 2-1-2. `upload-pages-artifact` の `path` を `dist` に変更
+- [x] 2-1-3. デプロイ後、`/MTG-HANDOVER.md` 等が 404 になることを確認
 
 ### 2-2. サイト本体をルートに移す
 
 独自ドメインのトップが meta refresh のリダイレクトページなのは不可（SEO・体感速度・共有時の見え方）。
 
-- [ ] 2-2-1. `render.php` の `LINDO_URI` を出力先に応じて切り替える
+- [x] 2-2-1. `render.php` の `LINDO_URI` を出力先に応じて切り替える
       （現在 `'../lindo'` 固定＝`preview/` 配下前提。ルート出力なら `wp-theme/lindo`）
       → `/Users/shun/Desktop/lindo/wp-theme/preview/render.php:23`
-- [ ] 2-2-2. ワークフローの出力先を `dist/index.html` に変更
-- [ ] 2-2-3. ルートの `/Users/shun/Desktop/lindo/index.html`（リダイレクト用）を廃止
+- [x] 2-2-2. ワークフローの出力先を `dist/index.html` に変更
+- [x] 2-2-3. ルートの `/Users/shun/Desktop/lindo/index.html`（リダイレクト用）を廃止
 
 ### 2-3. お問い合わせフォームを mailto に置き換え
 
 現状 `action="#"` で**押しても何も起きない**。このまま公開すると問い合わせを取りこぼす。
 
-- [ ] 2-3-1. `contact-form-fallback` の代わりに、メールリンクのCTAを出す部品を用意
+- [x] 2-3-1. `contact-form-fallback` の代わりに、メールリンクのCTAを出す部品を用意
       現行: `/Users/shun/Desktop/lindo/wp-theme/lindo/template-parts/contact-form-fallback.php`
       呼び出し元: `/Users/shun/Desktop/lindo/wp-theme/preview/render.php:41`
-- [ ] 2-3-2. 宛先は `$site['contact']['email']`（既定 `contact@styledbylindo.com`）を使う。**直書きしない**
+- [x] 2-3-2. 宛先は `$site['contact']['email']`（既定 `contact@styledbylindo.com`）を使う。**直書きしない**
       → `/Users/shun/Desktop/lindo/wp-theme/lindo/inc/site-defaults.php`
-- [ ] 2-3-3. `section-contact.php` の `.direct` と重複しないようレイアウトを整える
+- [x] 2-3-3. `section-contact.php` の `.direct` と重複しないようレイアウトを整える
       → `/Users/shun/Desktop/lindo/wp-theme/lindo/template-parts/section-contact.php:26-33`
-- [ ] 2-3-4. 1440 / 768 / 375 で崩れていないか確認
+- [x] 2-3-4. 1440 / 768 / 375 で崩れていないか確認
 
 ### 2-4. SEO まわり
 
-- [ ] 2-4-1. `render.php` に `canonical` と `og:url` を追加（現在**どちらも無い**）
+- [x] 2-4-1. `render.php` に `canonical` と `og:url` を追加（現在**どちらも無い**）
       → サイトURLを `site-defaults.php` に `siteUrl` として持たせ、microCMS からも編集可にする
-- [ ] 2-4-2. `sitemap.xml` を作り直す（現在は架空のWORKS 3件）
+- [x] 2-4-2. `sitemap.xml` を作り直す（現在は架空のWORKS 3件）
       → `/Users/shun/Desktop/lindo/sitemap.xml`
-- [ ] 2-4-3. `robots.txt` を実態に合わせる（`/concepts/` は配信されなくなるため）
+- [x] 2-4-3. `robots.txt` を実態に合わせる（`/concepts/` は配信されなくなるため）
       → `/Users/shun/Desktop/lindo/robots.txt`
-- [ ] 2-4-4. `404.html` のデザインが旧デモ用（Cormorant Garamond / olive背景）なので現行テーマに合わせる
+- [x] 2-4-4. `404.html` のデザインが旧デモ用（Cormorant Garamond / olive背景）なので現行テーマに合わせる
       → `/Users/shun/Desktop/lindo/404.html`
 
 ### 2-5. favicon（暫定）
 
-- [ ] 2-5-1. ロゴ未支給のため、**暫定の favicon** を置く（無いとタブが白紙 + `/favicon.ico` が 404）
+- [x] 2-5-1. ロゴ未支給のため、**暫定の favicon** を置く（無いとタブが白紙 + `/favicon.ico` が 404）
       ロゴ支給後に差し替える
 
 ---
@@ -160,15 +166,19 @@
 
 **投入前にやること。**先に8組入れると 235枚を2回入力することになる。
 
-- [ ] 3-1. 【サカイ・事前】現サービス `lindo` の `artists` スキーマを**エクスポート**（カスタムフィールド `work` 含む）
+- [x] 3-1. 【サカイ・事前】現サービス `lindo` の `artists` スキーマを**エクスポート**（カスタムフィールド `work` 含む）
 - [ ] 3-2. 【伊藤さん】LINDO名義で microCMS 新規登録 → サービス作成（**Hobby / 無料 / クレカ不要**）
       → 決めたサービスIDをメモ: `____________`
 - [ ] 3-3. 【伊藤さん】サカイをメンバー招待（3名まで無料）
-- [ ] 3-4. 【サカイ】新サービスに API「アーティスト」（**リスト形式** / `artists`）を作成 → スキーマをインポート
+- [ ] 3-4. 【サカイ】API「アーティスト」（**リスト形式** / `artists`）を作成
+      → APIスキーマ **インポート**: `/Users/shun/Desktop/lindo/microcms-schema/api-artists.json`
+      （カスタムフィールド `work` も同梱。**手打ちしない** — IDを打ち間違えると写真が0枚になるがエラーは出ない）
 - [ ] 3-5. 【サカイ】API「サイト設定」（**オブジェクト形式** / `site`）を**新規作成**
       ⚠️ **現サービスにも存在しない（404）。今日つくる必要がある**
-      - 定義: `/Users/shun/Desktop/lindo/MICROCMS-SCHEMA.md` 「2.5」の表どおり（33フィールド + カスタムフィールド `service`）
-      - 初期値: `/Users/shun/Desktop/lindo/wp-theme/lindo/inc/site-defaults.php` が**現在サイトに出ている文言そのもの**
+      - APIスキーマ **インポート**: `/Users/shun/Desktop/lindo/microcms-schema/api-site.json`（32フィールド + カスタムフィールド `service`）
+      - 失敗したら `api-site-minimal.json` → `noindex` と `ogImage` を手で追加
+        （詳細: `/Users/shun/Desktop/lindo/microcms-schema/README.md`）
+      - 初期値: `/Users/shun/Desktop/lindo/MICROCMS-SITE-INPUT.md` からコピー
       - `noindex` は **ON のまま**（公開日に OFF）
       - **公開する**
 - [ ] 3-6. 【両】SugarNote を新サービスへ投入 → **公開**（伊藤さんに操作を体得してもらう）
@@ -184,8 +194,10 @@
       gh workflow run deploy.yml --repo nvidia9875/lindo-web
       gh run watch --repo nvidia9875/lindo-web
       ```
-- [ ] 3-10. **`site` API の疎通を検証** ← 実APIに対して一度も動かしていない
-      文言が microCMS 側の値に置き換わるか、空欄が既定値のまま残るかを確認
+- [ ] 3-10. **`site` API の疎通を確認**
+      マージ処理（上書き / 空欄は既定値 / 未送信は既定値 / `noindex` / 繰り返しの空行除去）は
+      ローカルで検証済み。ここで見るのは**実APIとつながるか**だけ:
+      文言が microCMS 側の値に変わり、空欄の項目が既定値のまま残っていればOK
 - [ ] 3-11. 【サカイ】旧サービス `lindo` の APIキーを失効（**新環境の動作確認後**）
       ※ 旧サービス自体は8組の投入完了まで残しておく
 

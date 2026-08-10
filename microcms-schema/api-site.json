@@ -1,0 +1,375 @@
+{
+    "apiFields": [
+        {
+            "fieldId": "siteTitle",
+            "name": "ページタイトル",
+            "kind": "text",
+            "description": "ブラウザのタブと検索結果に出る見出し。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "siteDescription",
+            "name": "ページの説明",
+            "kind": "textArea",
+            "description": "検索結果とSNS共有に出る説明文。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "noindex",
+            "name": "検索エンジンに載せない",
+            "kind": "boolean",
+            "description": "ONの間はGoogleに出ません。サイトを公開するときにOFFにしてください。",
+            "required": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "ogImage",
+            "name": "SNS共有画像",
+            "kind": "media",
+            "description": "SNSでシェアされたときの画像。推奨サイズ 1200×630。空でも構いません。",
+            "required": false,
+            "imageSizeValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "loaderSub",
+            "name": "ローダーの小文字",
+            "kind": "text",
+            "description": "サイトを開いた瞬間に出るロゴの下の文字。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroLabel",
+            "name": "ヒーロー：社名表記",
+            "kind": "text",
+            "description": "一番上の左端。例: LINDO Co., Ltd.",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroLabelStrong",
+            "name": "ヒーロー：社名の後ろ（太字）",
+            "kind": "text",
+            "description": "例: Visual Creative。空にすると「—」ごと消えます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroMeta",
+            "name": "ヒーロー：右上",
+            "kind": "textArea",
+            "description": "1行1項目。例: Tokyo, JP / Creative Studio",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroLine1",
+            "name": "大見出し1行目",
+            "kind": "text",
+            "description": "例: VISUAL",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroLine2",
+            "name": "大見出し2行目",
+            "kind": "text",
+            "description": "例: CREATIVE。末尾のピンクの「.」は自動で付くので入力しないでください。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroLead",
+            "name": "ヒーロー：リード文",
+            "kind": "textArea",
+            "description": "大見出しの下の文章。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "heroTags",
+            "name": "ヒーロー：右下タグ",
+            "kind": "textArea",
+            "description": "1行1項目。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "aboutLabel",
+            "name": "Aboutの見出し語",
+            "kind": "text",
+            "description": "ナビゲーションの表示名も兼ねます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "aboutHeading",
+            "name": "Aboutの大見出し",
+            "kind": "textArea",
+            "description": "★この欄だけ改行の意味が違います。改行＝「ここで折り返してよい」という指定で、画面幅によっては折り返りません。日本語が変な位置で切れないようにするためです。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "aboutBody",
+            "name": "Aboutの本文",
+            "kind": "textArea",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "repName",
+            "name": "代表者名",
+            "kind": "text",
+            "description": "空にすると代表者ブロックごと消えます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "repTitle",
+            "name": "代表者の肩書",
+            "kind": "text",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "repProfile",
+            "name": "代表者プロフィール",
+            "kind": "textArea",
+            "description": "空行を1つ挟むと段落が分かれます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "serviceLabel",
+            "name": "What We Doの見出し語",
+            "kind": "text",
+            "description": "ナビゲーションの表示名も兼ねます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "services",
+            "name": "事業内容",
+            "kind": "repeater",
+            "description": "連番（01,02…）は自動で振られます。入力しないでください。並べ替えはドラッグでできます。",
+            "required": false,
+            "repeaterCountLimitValidation": null,
+            "customFieldIds": [
+                "service"
+            ]
+        },
+        {
+            "fieldId": "worksLabel",
+            "name": "Worksの見出し語",
+            "kind": "text",
+            "description": "ナビゲーションの表示名も兼ねます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "worksLead",
+            "name": "Worksのリード文",
+            "kind": "textArea",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "partnersLabel",
+            "name": "Business Partnerの見出し語",
+            "kind": "text",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "partners",
+            "name": "取引先",
+            "kind": "textArea",
+            "description": "1行1社。空にするとセクションごと消えます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "contactLabel",
+            "name": "Contactの見出し語",
+            "kind": "text",
+            "description": "ナビゲーションの表示名も兼ねます。末尾のピンクの「.」は自動です。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "contactLead",
+            "name": "Contactのリード文",
+            "kind": "textArea",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "contactEmail",
+            "name": "問い合わせ用メール",
+            "kind": "text",
+            "description": "Contact とフッターの両方に反映されます。1か所直せば済みます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "companyName",
+            "name": "会社名（フッター）",
+            "kind": "text",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "companyShortName",
+            "name": "会社名（コピーライト用）",
+            "kind": "text",
+            "description": "例: 株式会社LINDO",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "companyAddress",
+            "name": "住所",
+            "kind": "textArea",
+            "description": null,
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "initialValue": null
+        },
+        {
+            "fieldId": "companyTel",
+            "name": "電話番号",
+            "kind": "text",
+            "description": "表示する形（03-5308-5822）で入力してください。タップで発信できるリンクは自動で作られます。",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        },
+        {
+            "fieldId": "companyNote",
+            "name": "コピーライト右の文言",
+            "kind": "text",
+            "description": "例: Visual Creative Studio",
+            "required": false,
+            "textSizeLimitValidation": null,
+            "patternMatchValidation": null,
+            "isUnique": false,
+            "initialValue": null
+        }
+    ],
+    "customFields": [
+        {
+            "fieldId": "service",
+            "name": "事業内容",
+            "fieldOrderByColumn": [
+                [
+                    "title",
+                    "description"
+                ]
+            ],
+            "fields": [
+                {
+                    "fieldId": "title",
+                    "name": "見出し",
+                    "kind": "text",
+                    "description": "空にするとその行は表示されません（連番がズレないように捨てられます）。",
+                    "required": false,
+                    "textSizeLimitValidation": null,
+                    "patternMatchValidation": null,
+                    "isUnique": false,
+                    "initialValue": null
+                },
+                {
+                    "fieldId": "description",
+                    "name": "説明",
+                    "kind": "textArea",
+                    "description": null,
+                    "required": false,
+                    "textSizeLimitValidation": null,
+                    "patternMatchValidation": null,
+                    "initialValue": null
+                }
+            ]
+        }
+    ]
+}
