@@ -3,9 +3,12 @@
  * サイトフッター（会社情報）。
  *
  * 期待する変数:
- *   $lindo_year     string
- *   $contact_email  string（Customizer「LINDO — Contact」由来。直書きしないこと＝
- *                   設定を変えたときフッターだけ古いアドレスが残るため）
+ *   $lindo_year  string
+ *   $company     array{name,shortName,address,tel,note}
+ *   $contact     array{email}
+ *
+ * 会社情報・メールは直書きしないこと。CMS で直したときにフッターだけ
+ * 古い値が残る、が必ず起きるため。
  *
  * @package LINDO
  */
@@ -15,16 +18,23 @@ if ( ! defined( 'LINDO_PART' ) ) {
 }
 
 $lindo_year    = isset( $lindo_year ) ? $lindo_year : '2026';
-$contact_email = isset( $contact_email ) && '' !== $contact_email ? $contact_email : 'contact@styledbylindo.com';
+$company       = isset( $company ) && is_array( $company ) ? $company : array();
+$contact       = isset( $contact ) && is_array( $contact ) ? $contact : array();
+$contact_email = isset( $contact['email'] ) ? (string) $contact['email'] : '';
+$company_tel   = isset( $company['tel'] ) ? (string) $company['tel'] : '';
 ?>
 <footer class="ft">
 	<div class="wrap ft-in">
 		<div class="b">LIND<span>O</span></div>
-		<div class="a">株式会社LINDO（LINDO Co.,Ltd.）<br>〒151-0066 東京都渋谷区西原2-34-9</div>
+		<div class="a"><?php echo lindo_lines( isset( $company['name'] ) ? $company['name'] : '' ); ?><br><?php echo lindo_lines( isset( $company['address'] ) ? $company['address'] : '' ); ?></div>
 		<div class="c">
-			<a href="tel:0353085822">tel. 03-5308-5822</a>
-			<a href="mailto:<?php echo esc_attr( $contact_email ); ?>"><?php echo esc_html( $contact_email ); ?></a>
+			<?php if ( '' !== $company_tel ) : ?>
+				<a href="<?php echo esc_url( lindo_tel_href( $company_tel ) ); ?>">tel. <?php echo esc_html( $company_tel ); ?></a>
+			<?php endif; ?>
+			<?php if ( '' !== $contact_email ) : ?>
+				<a href="mailto:<?php echo esc_attr( $contact_email ); ?>"><?php echo esc_html( $contact_email ); ?></a>
+			<?php endif; ?>
 		</div>
-		<div class="cp">© <?php echo esc_html( $lindo_year ); ?> 株式会社LINDO ・ Visual Creative Studio</div>
+		<div class="cp">© <?php echo esc_html( $lindo_year ); ?> <?php echo esc_html( isset( $company['shortName'] ) ? $company['shortName'] : '' ); ?> ・ <?php echo esc_html( isset( $company['note'] ) ? $company['note'] : '' ); ?></div>
 	</div>
 </footer>

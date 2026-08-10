@@ -1,11 +1,19 @@
 <?php
 /**
- * スタンドアロン・プレビュー描画。
+ * スタンドアロン描画（本番の生成物はこれ）。
  *
  * 本番テーマの template-parts をそのまま使い、front-page 相当のHTMLを
- * WordPress 無しで生成する（デザイン確認・スクショ検証用）。
+ * WordPress 無しで生成する。
  *
  * 実行: php preview/render.php > preview/index.html
+ *
+ * データ源は2本立て:
+ *   作品（artists）  … microcms-data.php / real-data.php
+ *   文言（site）     … site-data.php（無ければ inc/site-defaults.php）
+ *
+ * 【重要】このファイルに文言を直書きしないこと。直書きすると先方が自分で直せず、
+ * 「ヒーローの一行を変えたい」だけで開発者への依頼が発生する。文言は必ず
+ * inc/site-defaults.php ＋ microCMS の site API を経由させる。
  *
  * @package LINDO\Preview
  */
@@ -26,22 +34,8 @@ $artists = ( getenv( 'MICROCMS_API_KEY' ) || getenv( 'MICROCMS_FIXTURE' ) )
 	? require __DIR__ . '/microcms-data.php'
 	: require __DIR__ . '/real-data.php';
 
-// 本番は Customizer（inc/contact.php・inc/partners.php）から取るが、
-// プレビューは WordPress 無しで動くため既定値をここに持つ。
-// ※ inc/partners.php の lindo_default_partners() と並びを合わせること。
-$contact_email = 'contact@styledbylindo.com';
-$partners      = array(
-	'avex',
-	'universal music',
-	'sony music',
-	'HYBE JAPAN',
-	'LDH JAPAN',
-	'BMSG',
-	'吉本興業',
-	'TWIN PLANET',
-	'ホリプロ',
-	'VANTAN',
-);
+// サイト文言。artists の取得（＝キーの検証）が通ったあとに読む。
+$site = require __DIR__ . '/site-data.php';
 
 // フォールバックフォームを部品から取得（本番と同じマークアップ）。
 ob_start();
@@ -55,35 +49,51 @@ ob_start();
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta name="robots" content="noindex,nofollow" />
+	<?php if ( ! empty( $site['noindex'] ) ) : ?>
+		<meta name="robots" content="noindex,nofollow" />
+	<?php endif; ?>
 	<meta name="theme-color" content="#eae5d7" />
-	<title>LINDO — Preview（No4 / Artists + Contact）</title>
+	<title><?php echo esc_html( $site['title'] ); ?></title>
+	<meta name="description" content="<?php echo esc_attr( $site['description'] ); ?>" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="<?php echo esc_attr( $site['title'] ); ?>" />
+	<meta property="og:description" content="<?php echo esc_attr( $site['description'] ); ?>" />
+	<?php if ( ! empty( $site['ogImage'] ) ) : ?>
+		<meta property="og:image" content="<?php echo esc_url( $site['ogImage'] ); ?>" />
+		<meta name="twitter:card" content="summary_large_image" />
+	<?php else : ?>
+		<meta name="twitter:card" content="summary" />
+	<?php endif; ?>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo esc_url( LINDO_URI . '/assets/css/lindo.css' ); ?>" />
 </head>
 <body>
-<?php lindo_part( 'site-loader' ); ?>
-<?php lindo_part( 'site-header', array( 'lindo_nav_base' => '' ) ); ?>
+<?php lindo_part( 'site-loader', array( 'loader_sub' => $site['loaderSub'] ) ); ?>
+<?php
+lindo_part(
+	'site-header',
+	array(
+		'lindo_nav_base' => '',
+		// ナビの表示名は各セクションの見出しと同じ値を使う（別々に持たない）。
+		'nav_labels'     => array(
+			'about'   => $site['about']['label'],
+			'service' => $site['service']['label'],
+			'works'   => $site['works']['label'],
+			'contact' => $site['contact']['label'],
+		),
+	)
+);
+?>
 <main id="main">
 <?php
 lindo_part(
 	'front-sections',
 	array(
 		'artists'           => $artists,
-		'representative'    => array(
-			'name'    => 'MAI ITO',
-			'title'   => '代表取締役 / CEO',
-			'profile' => array(
-				'文化女子大学卒業後、株式会社LDH apparelにて衣装デザイナー兼ディレクターを担当。2019年にフリーランスへ転向。',
-				'韓国事務所主催のオーディションプログラムにてスタイルディレクターとして1年間渡韓。帰国後、韓国・日本のアーティストのスタイルディレクション及びビジュアルプロデュースを手がける。',
-				'2024年、アーティストのビジュアル作りに特化した撮影の企画／制作をトータルプロデュースする株式会社LINDOを設立。',
-			),
-		),
-		'partners'          => $partners,
+		'site'              => $site,
 		'contact_form_html' => $contact_form_html,
-		'contact_email'     => $contact_email,
 	)
 );
 ?>
@@ -92,8 +102,9 @@ lindo_part(
 lindo_part(
 	'site-footer',
 	array(
-		'lindo_year'    => gmdate( 'Y' ),
-		'contact_email' => $contact_email,
+		'lindo_year' => gmdate( 'Y' ),
+		'company'    => $site['company'],
+		'contact'    => $site['contact'],
 	)
 );
 ?>

@@ -16,21 +16,10 @@
  * @package LINDO\Preview
  */
 
+require_once __DIR__ . '/microcms-client.php';
+
 /** 長辺の上限。build-works-img.php（旧方式）の 1280px と揃える。 */
 define( 'LINDO_MC_MAX_EDGE', 1280 );
-
-/**
- * コンテンツの不備を警告する（ビルドは止めない）。
- *
- * stdout は生成中の HTML なので、混ぜると doctype より前に文字が出てページが壊れる。
- * 必ず stderr へ。GitHub Actions では ::warning:: が注釈として拾われる。
- *
- * @param string $message 警告文。
- */
-function lindo_mc_warn( $message ) {
-	$prefix = getenv( 'GITHUB_ACTIONS' ) ? '::warning::' : '[警告] ';
-	fwrite( STDERR, $prefix . $message . PHP_EOL );
-}
 
 /**
  * microCMS の画像URLを、配信用URLに変換する。
@@ -133,48 +122,16 @@ function lindo_mc_fetch_artists() {
 		return $json['contents'];
 	}
 
-	$key = (string) getenv( 'MICROCMS_API_KEY' );
-	if ( '' === $key ) {
-		throw new RuntimeException( 'MICROCMS_API_KEY が未設定です。 .env.local を読み込んでから実行してください（例: set -a; . ./.env.local; set +a）。' );
-	}
-	$service = (string) getenv( 'MICROCMS_SERVICE_ID' );
-	if ( '' === $service ) {
-		$service = 'lindo';
-	}
-
 	// limit の既定は 10。アーティストは9組だが将来増えるので余裕を持たせる。
 	// orders=order で表示順（数字フィールド）に並べる。
-	$url = sprintf(
-		'https://%s.microcms.io/api/v1/artists?%s',
-		rawurlencode( $service ),
-		http_build_query(
-			array(
-				'limit'  => 100,
-				'orders' => 'order',
-			)
-		)
-	);
-
-	$ch = curl_init( $url );
-	curl_setopt_array(
-		$ch,
+	list( $status, $body ) = lindo_mc_request(
+		'artists',
 		array(
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => 30,
-			CURLOPT_HTTPHEADER     => array( 'X-MICROCMS-API-KEY: ' . $key ),
+			'limit'  => 100,
+			'orders' => 'order',
 		)
 	);
-	$body   = curl_exec( $ch );
-	$status = (int) curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-	$err    = curl_error( $ch );
-	// curl_close() は呼ばない。PHP 8.0 以降は何もせず、8.5 で非推奨警告を出す。
-	// 警告は <!doctype html> より前に出力されてしまい、ブラウザが互換モードに落ちる。
-	unset( $ch );
 
-	if ( false === $body ) {
-		// $err にキーは含まれないが、念のためURLもキーも出さない。
-		throw new RuntimeException( 'microCMS への接続に失敗しました: ' . $err );
-	}
 	if ( 200 !== $status ) {
 		throw new RuntimeException( 'microCMS が HTTP ' . $status . ' を返しました。APIキー／サービスID／エンドポイント名を確認してください。' );
 	}
@@ -191,20 +148,16 @@ function lindo_mc_fetch_artists() {
 }
 
 /**
- * 空行区切りのテキスト → 段落配列。real-data.php / company.php と同じ規則。
+ * 空行区切りのテキスト → 段落配列。
+ *
+ * 分割規則はサイト全体で1本にする（inc/template.php）。ここで独自に持つと、
+ * プロフィールだけ改行の扱いが違う、が起きる。
  *
  * @param string $raw テキスト。
  * @return array<int,string>
  */
 function lindo_mc_paragraphs( $raw ) {
-	$out = array();
-	foreach ( preg_split( "/\n\s*\n/", trim( (string) $raw ) ) as $para ) {
-		$para = trim( $para );
-		if ( '' !== $para ) {
-			$out[] = $para;
-		}
-	}
-	return $out;
+	return lindo_split_paras( $raw );
 }
 
 /**

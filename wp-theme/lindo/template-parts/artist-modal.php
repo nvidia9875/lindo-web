@@ -52,7 +52,8 @@ $title_id = $artist['slug'] . '-title';
 				<?php if ( ! empty( $artist['profile'] ) ) : ?>
 					<div class="bio">
 						<?php foreach ( $artist['profile'] as $para ) : ?>
-							<p><?php echo esc_html( $para ); ?></p>
+							<?php // 段落内の改行も反映する（管理画面で打った通りに出す）。 ?>
+							<p><?php echo lindo_lines( $para ); ?></p>
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>

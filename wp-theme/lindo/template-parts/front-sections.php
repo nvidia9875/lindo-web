@@ -5,10 +5,8 @@
  *
  * 期待する変数:
  *   $artists            array<int,array>
- *   $representative     array{name,title,profile[]}
- *   $partners           array<int,string>
+ *   $site               array（inc/site-defaults.php の形。CMS 由来の文言一式）
  *   $contact_form_html  string（信頼済み）
- *   $contact_email      string
  *
  * @package LINDO
  */
@@ -17,20 +15,31 @@ if ( ! defined( 'LINDO_PART' ) ) {
 	exit;
 }
 $artists           = isset( $artists ) ? $artists : array();
-$representative    = isset( $representative ) ? $representative : array();
-$partners          = isset( $partners ) ? $partners : array();
 $contact_form_html = isset( $contact_form_html ) ? $contact_form_html : '';
-$contact_email     = isset( $contact_email ) ? $contact_email : 'contact@styledbylindo.com';
+// $site が渡らなかった場合も既定の文言で描画する（空白のページを出さない）。
+$site = isset( $site ) && is_array( $site ) ? $site : require LINDO_DIR . '/inc/site-defaults.php';
 
-lindo_part( 'section-hero' );
-lindo_part( 'section-about', array( 'representative' => $representative ) );
-lindo_part( 'section-service' );
-lindo_part( 'section-artists', array( 'artists' => $artists ) );
-lindo_part( 'section-partners', array( 'partners' => $partners ) );
+lindo_part( 'section-hero', array( 'hero' => $site['hero'] ) );
+lindo_part(
+	'section-about',
+	array(
+		'about' => $site['about'],
+		'rep'   => $site['rep'],
+	)
+);
+lindo_part( 'section-service', array( 'service' => $site['service'] ) );
+lindo_part(
+	'section-artists',
+	array(
+		'artists' => $artists,
+		'works'   => $site['works'],
+	)
+);
+lindo_part( 'section-partners', array( 'partners' => $site['partners'] ) );
 lindo_part(
 	'section-contact',
 	array(
+		'contact'           => $site['contact'],
 		'contact_form_html' => $contact_form_html,
-		'contact_email'     => $contact_email,
 	)
 );

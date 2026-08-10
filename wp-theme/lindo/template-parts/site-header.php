@@ -8,6 +8,11 @@
  *                    同一ページ内スクロール）。サブページからは home_url('/') を渡し、
  *                    トップへ遷移してから該当箇所へ。
  *   $lindo_brand     ブランド表記（既定 'LIND<b>O</b>'）
+ *   $nav_labels      array{about,service,works,contact} ナビの表示名
+ *
+ * ナビの表示名は各セクションの見出しと同じ値を使う（CMS 側の項目も共通）。
+ * 別々に持つと「Works だけ改名してナビが Works のまま」が必ず起きるため。
+ * リンク先アンカー（#about 等）は構造なので固定。
  *
  * @package LINDO
  */
@@ -18,16 +23,30 @@ if ( ! defined( 'LINDO_PART' ) ) {
 
 $lindo_nav_base = isset( $lindo_nav_base ) ? $lindo_nav_base : '';
 $lindo_brand    = isset( $lindo_brand ) ? $lindo_brand : 'LIND<b>O</b>';
+$nav_labels     = isset( $nav_labels ) && is_array( $nav_labels ) ? $nav_labels : array();
 
 // フロント上ではロゴ＝最上部へ、サブページ上ではトップURLへ。
 $lindo_logo_href = '' !== $lindo_nav_base ? $lindo_nav_base : '#main';
 
-$lindo_nav = array(
+$lindo_nav_defaults = array(
 	'#about'   => 'About',
 	'#service' => 'What We Do',
 	'#artists' => 'Works',
 	'#contact' => 'Contact',
 );
+$lindo_nav_keys     = array(
+	'#about'   => 'about',
+	'#service' => 'service',
+	'#artists' => 'works',
+	'#contact' => 'contact',
+);
+
+$lindo_nav = array();
+foreach ( $lindo_nav_defaults as $anchor => $default_label ) {
+	$key                  = $lindo_nav_keys[ $anchor ];
+	$label                = isset( $nav_labels[ $key ] ) ? trim( (string) $nav_labels[ $key ] ) : '';
+	$lindo_nav[ $anchor ] = '' !== $label ? $label : $default_label;
+}
 ?>
 <a class="skip" href="#main">本文へスキップ</a>
 <div class="scroll-progress" aria-hidden="true"></div>
