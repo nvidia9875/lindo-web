@@ -1,6 +1,6 @@
 /* =========================================================
    LINDO — テーマ本体スタイル（No4 Swiss Minimal 踏襲・拡張）
-   硬質グリッド × 特大 Archivo タイポ × ピンク1色アクセント。
+   硬質グリッド × 特大ディドン体（ロゴ由来）× ピンク1色アクセント。
    注意: clamp()/calc() の +/- は前後に必ず半角スペース。
    ========================================================= */
 
@@ -18,13 +18,16 @@
   --line: #424426;
   --hairline: rgba(66, 68, 38, 0.18);
 
-  /* 組版は2層に分ける。
-     --didone … ロゴと同じディドン体。見出し・名前だけに使う「声」の層。
+  /* 組版は3書体に絞る。
+     --didone … ロゴと同じディドン体。見出しと名前だけに使う。
                 欧文が Bodoni Moda、和文は Zen Old Mincho にフォールバックする
-                （1つの宣言で混植を成立させる）。
-     --grot … 構造の層。ナビ・ラベル・連番・ボタンなど。スイス的な骨格を保つ。
-     和文本文は Zen Kaku Gothic New のまま（小さい字はゴシックの方が読める）。 */
-  --grot: "Archivo", system-ui, sans-serif;
+                （1宣言で混植が成立する）。
+     --grot … ラベル・ナビ・連番・ボタン。**Zen Kaku Gothic New の欧文グリフ**を使う。
+              以前は Archivo を当てていたが、1画面にディドン・明朝・グロテスクが
+              同居して散らかって見えたため外した。変数名は参照箇所が多いので据え置き。
+     --sans … 和文本文。小さい字はゴシックの方が読める。
+     ＝ 見出しはロゴに揃え、それ以外は1書体に集約する。 */
+  --grot: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   --didone: "Bodoni Moda", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
   --sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
 
