@@ -303,9 +303,6 @@ h2,
 .logo {
   display: inline-flex;
   align-items: center;
-  /* マグネティック追従（main.js が transform を設定）を滑らかに戻す */
-  transition: transform var(--dur) var(--ease);
-  will-change: transform;
 }
 
 /* ── ブランドロゴ（SVG）────────────────────────────────

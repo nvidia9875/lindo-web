@@ -84,46 +84,14 @@
     });
   }
 
-  /* ---- 4) ロゴのマグネティック追従（カーソルへわずかに引き寄せ）----
-     transform のみ＝合成可能。hover デバイス時のみ・reduced-motion は無効。
-     hover 時の色替えは CSS（.logo:hover .brand-logo）側。 */
-  function initLogoMagnet() {
-    if (prefersReduced) return;
-    if (
-      !window.matchMedia ||
-      !window.matchMedia("(hover: hover) and (pointer: fine)").matches
-    ) {
-      return;
-    }
-    var logo = document.querySelector(".logo");
-    if (!logo) return;
-
-    var PULL = 0.32; // 追従の強さ（控えめ）
-    var raf = null;
-
-    var apply = function (e) {
-      raf = null;
-      var rect = logo.getBoundingClientRect();
-      var dx = e.clientX - (rect.left + rect.width / 2);
-      var dy = e.clientY - (rect.top + rect.height / 2);
-      logo.style.transform =
-        "translate(" + (dx * PULL).toFixed(1) + "px," + (dy * PULL).toFixed(1) + "px)";
-    };
-
-    logo.addEventListener("pointermove", function (e) {
-      if (!raf) raf = requestAnimationFrame(function () { apply(e); });
-    });
-    logo.addEventListener("pointerleave", function () {
-      if (raf) cancelAnimationFrame(raf), (raf = null);
-      logo.style.transform = "";
-    });
-  }
+  /* ロゴのマグネティック追従（カーソルへ引き寄せ）は撤去した。
+     ロゴがスクリプト体で、わずかな移動でも字が揺れて見えて落ち着かないため。
+     hover は CSS の色替え（.logo:hover .brand-logo）だけにしてある。 */
 
   function init() {
     initReveal();
     initHeader();
     initNav();
-    initLogoMagnet();
   }
 
   if (document.readyState === "loading") {
