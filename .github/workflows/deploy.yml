@@ -51,6 +51,13 @@ jobs:
         env:
           MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
           MICROCMS_SERVICE_ID: ${{ vars.MICROCMS_SERVICE_ID }}
+          # データ源の切替スイッチ。`local` にすると microCMS を見ずに
+          # リポジトリ内の works-img/ でビルドする。
+          #
+          # microCMS への全組投入が終わるまでの暫定表示に使う。Secret を削除して
+          # 切り替える手もあるが、鍵を捨てると戻すのにmicroCMS側で再発行が要る。
+          # 変数1つで往復できる形にしておく。
+          DATA_SOURCE: ${{ vars.DATA_SOURCE }}
           # お問い合わせフォーム（Web3Forms）。設定するとフォームが出る。
           # 未設定ならメール導線が出る＝「押しても届かないフォーム」にはならない。
           # キーは生成HTMLに出るので秘密ではない。Secret ではなく Variable でよい。
@@ -59,7 +66,11 @@ jobs:
         # データ取得に失敗すると render.php が例外を投げてここで落ちるので、
         # 事故ったサイトが本番に出ることはない。
         run: |
-          if [ -n "$MICROCMS_API_KEY" ]; then
+          if [ "$DATA_SOURCE" = "local" ]; then
+            # 鍵は消さずに、このビルドでだけ見えなくする。
+            unset MICROCMS_API_KEY
+            echo "データ源: ローカル works-img/（DATA_SOURCE=local）"
+          elif [ -n "$MICROCMS_API_KEY" ]; then
             echo "データ源: microCMS"
           else
             echo "データ源: ローカル works-img/（Secret 未登録）"
