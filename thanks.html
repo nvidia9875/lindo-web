@@ -9,13 +9,14 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700&family=Bodoni+Moda:opsz,wght@6..96,500&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet" />
 <!-- 404.html と同じ理由でCSSを内蔵している（フォームの送信元がどのURLでも壊れないように）。 -->
 <style>
   *{ margin:0; padding:0; box-sizing:border-box }
   :root{
-    --bg:#fdfbf4; --ink:#26240f; --muted:#7c7a64; --pink:#ef8e94;
+    --bg:#fdfbf4; --ink:#424426; --muted:#7c7a64; --pink:#d98d93;
     --grot:"Archivo",system-ui,sans-serif;
+    --didone:"Bodoni Moda","Zen Old Mincho",serif;
     --sans:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
   }
   body{
@@ -25,7 +26,7 @@
   }
   .box{ max-width:34rem }
   .mark{
-    font-family:var(--grot); font-weight:800; line-height:0.9; color:var(--ink);
+    font-family:var(--didone); font-weight:500; line-height:0.9; color:var(--ink);
     font-size:clamp(2.6rem,1.8rem + 5vw,5rem); letter-spacing:-0.03em;
   }
   .mark span{ color:var(--pink) }

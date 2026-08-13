@@ -25,7 +25,7 @@ $company_tel   = isset( $company['tel'] ) ? (string) $company['tel'] : '';
 ?>
 <footer class="ft">
 	<div class="wrap ft-in">
-		<div class="b">LIND<span>O</span></div>
+		<div class="b"><svg class="brand-logo" role="img" aria-label="LINDO"><use href="#lindo-wordmark"></use></svg></div>
 		<div class="a"><?php echo lindo_lines( isset( $company['name'] ) ? $company['name'] : '' ); ?><br><?php echo lindo_lines( isset( $company['address'] ) ? $company['address'] : '' ); ?></div>
 		<div class="c">
 			<?php if ( '' !== $company_tel ) : ?>

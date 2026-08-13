@@ -52,7 +52,9 @@ foreach ( $lindo_nav_defaults as $anchor => $default_label ) {
 <div class="scroll-progress" aria-hidden="true"></div>
 <header class="hd" data-header>
 	<div class="wrap hd-in">
-		<a class="logo" href="<?php echo esc_url( $lindo_logo_href ); ?>" aria-label="LINDO"><?php echo wp_kses( $lindo_brand, array( 'b' => array() ) ); ?></a>
+		<a class="logo" href="<?php echo esc_url( $lindo_logo_href ); ?>" aria-label="LINDO">
+			<svg class="brand-logo" aria-hidden="true" focusable="false"><use href="#lindo-wordmark"></use></svg>
+		</a>
 		<nav class="nav" data-nav aria-label="メインナビゲーション">
 			<?php foreach ( $lindo_nav as $anchor => $label ) : ?>
 				<a href="<?php echo esc_url( $lindo_nav_base . $anchor ); ?>"><?php echo esc_html( $label ); ?></a>

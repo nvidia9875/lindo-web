@@ -86,7 +86,7 @@
 
   /* ---- 4) ロゴのマグネティック追従（カーソルへわずかに引き寄せ）----
      transform のみ＝合成可能。hover デバイス時のみ・reduced-motion は無効。
-     "O" の hover 強調は CSS（.logo:hover b）側。 */
+     hover 時の色替えは CSS（.logo:hover .brand-logo）側。 */
   function initLogoMagnet() {
     if (prefersReduced) return;
     if (

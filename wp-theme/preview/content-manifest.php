@@ -289,10 +289,16 @@ return array(
 					'role'  => 'Visual Creative',
 					'src'   => array( '10_SugarNote/1', '10_SugarNote/2' ),
 				),
+				array(
+					// docx に記載は無いが、先方に確認して「サムネイルでよい」と回答済み
+					// （2026-08-13）。前回同様、外部リンクのタイルとして描画する。
+					'key'   => '2-usodayo-mv',
+					'title' => '「嘘だよ」MV',
+					'role'  => 'Creative Produce',
+					'src'   => array( '10_SugarNote/3' ),
+					'url'   => 'https://youtu.be/lRI7AdFnMDk',
+				),
 			),
-			// docx に記載が無い。前回支給時は「嘘だよ」MV のサムネイルだった（1枚）。
-			// 同じ扱いでよいか確認できるまで出さない。
-			'pending' => array( '10_SugarNote/3' ),
 		),
 	),
 );

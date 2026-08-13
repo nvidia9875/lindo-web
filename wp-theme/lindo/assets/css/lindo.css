@@ -5,17 +5,27 @@
    ========================================================= */
 
 :root {
+  /* 色はロゴのブランドガイドライン（LINDO_LOGOIDEAver.4）の指定値。
+     olive #424426 (CMYK 74.64.100.40) / pink #d98d93 (CMYK 0.56.27.0)
+     地色のサンドはガイドラインに規定が無いためサイト側の選択。 */
   --bg: #fdfbf4;
   --paper: #f3efe4;
-  --ink: #26240f;
-  --olive: #3c3a20;
+  --ink: #424426;
+  --olive: #424426;
   --muted: #7c7a64;
-  --pink: #ef8e94;
-  --pink-soft: #f9d2d3;
-  --line: #26240f;
-  --hairline: rgba(38, 36, 15, 0.16);
+  --pink: #d98d93;
+  --pink-soft: #f0d5d7;
+  --line: #424426;
+  --hairline: rgba(66, 68, 38, 0.18);
 
+  /* 組版は2層に分ける。
+     --didone … ロゴと同じディドン体。見出し・名前だけに使う「声」の層。
+                欧文が Bodoni Moda、和文は Zen Old Mincho にフォールバックする
+                （1つの宣言で混植を成立させる）。
+     --grot … 構造の層。ナビ・ラベル・連番・ボタンなど。スイス的な骨格を保つ。
+     和文本文は Zen Kaku Gothic New のまま（小さい字はゴシックの方が読める）。 */
   --grot: "Archivo", system-ui, sans-serif;
+  --didone: "Bodoni Moda", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
   --sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -82,17 +92,15 @@ html.is-loading {
 }
 .loader-mark {
   display: block;
-  font-family: var(--grot);
-  font-weight: 800;
-  font-size: clamp(2.8rem, 1.5rem + 7vw, 6.5rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(2.4rem, 1.2rem + 6vw, 5.4rem);
   line-height: 1;
+  color: var(--pink);
   opacity: 0;
   transform: translateY(20px);
   animation: loaderRise 0.9s var(--ease) 0.15s forwards;
 }
-.loader-mark b {
-  color: var(--pink);
+.loader-mark .brand-logo {
+  margin-inline: auto;
 }
 .loader-sub {
   display: block;
@@ -293,24 +301,32 @@ h2,
   height: var(--header-h);
 }
 .logo {
-  display: inline-block;
-  font-family: var(--grot);
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
   /* マグネティック追従（main.js が transform を設定）を滑らかに戻す */
   transition: transform var(--dur) var(--ease);
   will-change: transform;
 }
-.logo b {
-  display: inline-block;
-  color: var(--pink);
-  transition: transform var(--dur) var(--ease);
+
+/* ── ブランドロゴ（SVG）────────────────────────────────
+   支給された .ai からベクターのまま取り出したワードマーク。
+   定義は template-parts/site-logo-defs.php に1回だけ置き、<use> で参照する。
+   fill は currentColor なので、置く場所の color がそのまま色になる。
+   幅は指定せず「高さ × 縦横比」で決める（比率 639.17:197.78 ≒ 3.232）。 */
+.brand-logo {
+  display: block;
+  height: 1em;
+  width: calc(1em * 3.232);
+  color: inherit;
 }
-/* ロゴ hover：アクセントの "O" を強調（合成可能・transform のみ） */
-.logo:hover b,
-.logo:focus-visible b {
-  transform: scale(1.18) rotate(8deg);
+.logo .brand-logo {
+  font-size: 1.55rem;
+  color: var(--ink);
+  transition: color var(--dur) var(--ease);
+}
+.logo:hover .brand-logo,
+.logo:focus-visible .brand-logo {
+  color: var(--pink);
 }
 .nav {
   display: flex;
@@ -423,8 +439,8 @@ h2,
   color: var(--muted);
 }
 .hero h1 {
-  font-family: var(--grot);
-  font-weight: 800;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(3rem, 1rem + 11vw, 11rem);
   line-height: 0.86;
   letter-spacing: -0.03em;
@@ -558,11 +574,11 @@ h2,
   padding: 2.6rem 0 2.6rem 1.5rem;
 }
 .sec-body h2 {
-  font-family: var(--grot);
-  font-weight: 700;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(1.6rem, 1rem + 2.4vw, 2.8rem);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
+  line-height: 1.25;
+  letter-spacing: 0;
   /* 文節（<wbr>）でだけ折り返す。収まらない場合の保険に anywhere */
   word-break: keep-all;
   overflow-wrap: anywhere;
@@ -612,8 +628,8 @@ h2,
   gap: 0.5rem 1.3rem;
 }
 .rep-name {
-  font-family: var(--grot);
-  font-weight: 800;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(1.4rem, 1rem + 1.4vw, 2rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
@@ -781,11 +797,11 @@ h2,
   padding: 1rem 1.1rem 1.2rem;
 }
 .artist-meta .nm {
-  font-family: var(--grot);
-  font-weight: 800;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 .artist-meta .nm small {
   display: block;
@@ -937,11 +953,11 @@ h2,
   color: var(--pink);
 }
 .modal-info h3 {
-  font-family: var(--grot);
-  font-weight: 800;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(2rem, 1.2rem + 3vw, 3.6rem);
-  line-height: 0.92;
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  letter-spacing: 0;
 }
 .modal-info h3 small {
   display: block;
@@ -1355,8 +1371,8 @@ a.ig-cell {
   grid-column: 1 / 6;
 }
 .contact-lead h2 {
-  font-family: var(--grot);
-  font-weight: 800;
+  font-family: var(--didone);
+  font-weight: 500;
   font-size: clamp(2.2rem, 1.2rem + 4.4vw, 5rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
@@ -1579,12 +1595,8 @@ span.wpcf7-list-item {
 }
 .ft .b {
   grid-column: 1 / 5;
-  font-weight: 800;
   font-size: 1.4rem;
-  letter-spacing: -0.02em;
-}
-.ft .b span {
-  color: var(--pink);
+  color: var(--ink);
 }
 .ft .a {
   grid-column: 5 / 9;

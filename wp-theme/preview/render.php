@@ -89,7 +89,7 @@ ob_start();
 	<?php if ( ! empty( $site['noindex'] ) ) : ?>
 		<meta name="robots" content="noindex,nofollow" />
 	<?php endif; ?>
-	<meta name="theme-color" content="#eae5d7" />
+	<meta name="theme-color" content="#fdfbf4" />
 	<title><?php echo esc_html( $site['title'] ); ?></title>
 	<meta name="description" content="<?php echo esc_attr( $site['description'] ); ?>" />
 	<?php
@@ -112,10 +112,11 @@ ob_start();
 	<?php endif; ?>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@400;600&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo esc_url( LINDO_URI . '/assets/css/lindo.css' ); ?>" />
 </head>
 <body>
+<?php lindo_part( 'site-logo-defs' ); ?>
 <?php lindo_part( 'site-loader', array( 'loader_sub' => $site['loaderSub'] ) ); ?>
 <?php
 lindo_part(

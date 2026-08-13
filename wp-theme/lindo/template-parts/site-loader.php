@@ -19,7 +19,7 @@ $loader_sub = isset( $loader_sub ) ? (string) $loader_sub : '';
 ?>
 <div class="loader" data-loader aria-hidden="true">
 	<div class="loader-inner">
-		<span class="loader-mark">LIND<b>O</b></span>
+		<span class="loader-mark"><svg class="brand-logo" role="img" aria-label="LINDO"><use href="#lindo-wordmark"></use></svg></span>
 		<span class="loader-sub"><?php echo esc_html( $loader_sub ); ?></span>
 	</div>
 	<span class="loader-count"><span data-loader-num>0</span><span class="pk">%</span></span>
