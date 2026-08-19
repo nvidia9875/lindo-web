@@ -112,7 +112,7 @@ ob_start();
 	<?php endif; ?>
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@400;600&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@400;600&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo esc_url( LINDO_URI . '/assets/css/lindo.css' ); ?>" />
 </head>
 <body>

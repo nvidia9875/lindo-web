@@ -29,6 +29,11 @@
      ＝ 見出しはロゴに揃え、それ以外は1書体に集約する。 */
   --grot: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
   --didone: "Bodoni Moda", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
+  /* ヒーローの大見出し専用。ここだけ元のグロテスク（Archivo 800）に戻してある。
+     カーソルで文字が散る演出が乗る場所で、線の太い字の方が塊として崩れるのが
+     気持ちよく、ディドン体だとヘアラインが散って弱く見えるため。
+     読み込むのは 800 の1ウェイトだけ。 */
+  --grot-display: "Archivo", system-ui, sans-serif;
   --sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -439,8 +444,8 @@ h2,
   color: var(--muted);
 }
 .hero h1 {
-  font-family: var(--didone);
-  font-weight: 500;
+  font-family: var(--grot-display);
+  font-weight: 800;
   font-size: clamp(3rem, 1rem + 11vw, 11rem);
   line-height: 0.86;
   letter-spacing: -0.03em;
