@@ -162,25 +162,31 @@ return array(
 					'src'   => array( '04_BMSG/02' ),
 				),
 				array(
-					'key'   => '3-forked-road',
-					'title' => 'BMSG TRAINEE｜RUI TAIKI KANON Digital EP「Forked Road」',
-					'role'  => 'Jacket Direction / Design',
+					// 2026-08-19 の更新 docx で判明した作品。
+					'key'   => '3-grand-champ',
+					'title' => 'BMSG ARTIST｜Digital EP「GRAND CHAMP」「GRAND CHAMP Live From BMSG FES\'25」',
+					'role'  => 'Creative Direction',
 					'src'   => array( '04_BMSG/03' ),
 				),
+				array(
+					// 同上。旧 docx では 03 に記載されていたが、実際は 04 だった。
+					'key'   => '4-forked-road',
+					'title' => 'BMSG TRAINEE｜RUI TAIKI KANON Digital EP「Forked Road」',
+					'role'  => 'Jacket Direction / Design',
+					'src'   => array( '04_BMSG/04' ),
+				),
 			),
-			// docx に記載が無い。作品名・担当が分かるまで出さない。
-			'pending' => array( '04_BMSG/04' ),
 		),
 
 		'05_NoNoGirls' => array(
-			'name'  => 'No No GIRLS',
-			// docx が同梱されていないため、前回支給時の表記を踏襲。要確認。
-			'role'  => 'KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN',
+			// 2026-08-19 の docx で正式表記が判明（表記も NoNoGirls に統一）。
+			'name'  => 'NoNoGirls',
+			'role'  => 'Key Visual Design / Branding Design',
 			'works' => array(
 				array(
 					'key'   => 'main',
-					'title' => 'GIRLS GROUP AUDITION「No No GIRLS」',
-					'role'  => 'KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN',
+					'title' => 'GIRLS GROUP AUDITION 2024「NoNoGirls」',
+					'role'  => 'Key Visual Design / Branding Design',
 					'src'   => array( '05_NoNoGirls' ),
 				),
 			),
@@ -290,8 +296,7 @@ return array(
 					'src'   => array( '10_SugarNote/1', '10_SugarNote/2' ),
 				),
 				array(
-					// docx に記載は無いが、先方に確認して「サムネイルでよい」と回答済み
-					// （2026-08-13）。前回同様、外部リンクのタイルとして描画する。
+					// 2026-08-19 の docx に YouTube リンク付きで正式記載された。
 					'key'   => '2-usodayo-mv',
 					'title' => '「嘘だよ」MV',
 					'role'  => 'Creative Produce',

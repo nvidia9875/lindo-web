@@ -8,6 +8,9 @@
  * 連番（01,02…）は表示順から自動で振る。CMS に入力させると、行を並べ替えたときに
  * 番号だけ取り残されて必ずズレる。
  *
+ * このセクションだけスクロールの出現アニメーション（.rv）を付けていない。
+ * 事業内容は一覧として一度に読ませたい箇所で、順に浮き上がると視線が散るため。
+ *
  * @package LINDO
  */
 
@@ -19,8 +22,8 @@ $items   = isset( $service['items'] ) && is_array( $service['items'] ) ? $servic
 ?>
 <section class="sec" id="service">
 	<div class="wrap sec-grid">
-		<div class="sec-no rv">02<small><?php echo esc_html( isset( $service['label'] ) ? $service['label'] : '' ); ?></small></div>
-		<div class="sec-body rv d1">
+		<div class="sec-no">02<small><?php echo esc_html( isset( $service['label'] ) ? $service['label'] : '' ); ?></small></div>
+		<div class="sec-body">
 			<h2><?php echo esc_html( isset( $service['label'] ) ? $service['label'] : '' ); ?></h2>
 			<div class="svc">
 				<?php foreach ( $items as $i => $svc ) : ?>

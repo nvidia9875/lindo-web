@@ -1,6 +1,6 @@
 /* =========================================================
    LINDO — テーマ本体スタイル（No4 Swiss Minimal 踏襲・拡張）
-   硬質グリッド × 特大ディドン体（ロゴ由来）× ピンク1色アクセント。
+   硬質グリッド × 特大 Archivo タイポ × ピンク1色アクセント。
    注意: clamp()/calc() の +/- は前後に必ず半角スペース。
    ========================================================= */
 
@@ -18,22 +18,12 @@
   --line: #424426;
   --hairline: rgba(66, 68, 38, 0.18);
 
-  /* 組版は3書体に絞る。
-     --didone … ロゴと同じディドン体。見出しと名前だけに使う。
-                欧文が Bodoni Moda、和文は Zen Old Mincho にフォールバックする
-                （1宣言で混植が成立する）。
-     --grot … ラベル・ナビ・連番・ボタン。**Zen Kaku Gothic New の欧文グリフ**を使う。
-              以前は Archivo を当てていたが、1画面にディドン・明朝・グロテスクが
-              同居して散らかって見えたため外した。変数名は参照箇所が多いので据え置き。
-     --sans … 和文本文。小さい字はゴシックの方が読める。
-     ＝ 見出しはロゴに揃え、それ以外は1書体に集約する。 */
-  --grot: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
-  --didone: "Bodoni Moda", "Zen Old Mincho", "Hiragino Mincho ProN", serif;
-  /* ヒーローの大見出し専用。ここだけ元のグロテスク（Archivo 800）に戻してある。
-     カーソルで文字が散る演出が乗る場所で、線の太い字の方が塊として崩れるのが
-     気持ちよく、ディドン体だとヘアラインが散って弱く見えるため。
-     読み込むのは 800 の1ウェイトだけ。 */
-  --grot-display: "Archivo", system-ui, sans-serif;
+  /* 組版は2書体。ロゴ導入前の構成に戻してある。
+     見出しから小さいラベルまで欧文は Archivo、和文は Zen Kaku Gothic New。
+     一時期ロゴに合わせてディドン体（Bodoni Moda）と明朝（Zen Old Mincho）を
+     見出しに入れたが、ヒーローのゴシックと各見出しのセリフが同居して
+     ちぐはぐに見えたため撤去した。ロゴは SVG なので書体に依存しない。 */
+  --grot: "Archivo", system-ui, sans-serif;
   --sans: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -444,7 +434,7 @@ h2,
   color: var(--muted);
 }
 .hero h1 {
-  font-family: var(--grot-display);
+  font-family: var(--grot);
   font-weight: 800;
   font-size: clamp(3rem, 1rem + 11vw, 11rem);
   line-height: 0.86;
@@ -579,11 +569,11 @@ h2,
   padding: 2.6rem 0 2.6rem 1.5rem;
 }
 .sec-body h2 {
-  font-family: var(--didone);
-  font-weight: 500;
+  font-family: var(--grot);
+  font-weight: 700;
   font-size: clamp(1.6rem, 1rem + 2.4vw, 2.8rem);
-  line-height: 1.25;
-  letter-spacing: 0;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   /* 文節（<wbr>）でだけ折り返す。収まらない場合の保険に anywhere */
   word-break: keep-all;
   overflow-wrap: anywhere;
@@ -802,11 +792,11 @@ h2,
   padding: 1rem 1.1rem 1.2rem;
 }
 .artist-meta .nm {
-  font-family: var(--didone);
-  font-weight: 500;
+  font-family: var(--grot);
+  font-weight: 800;
   font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
-  line-height: 1.2;
-  letter-spacing: 0;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 .artist-meta .nm small {
   display: block;
@@ -958,11 +948,11 @@ h2,
   color: var(--pink);
 }
 .modal-info h3 {
-  font-family: var(--didone);
-  font-weight: 500;
+  font-family: var(--grot);
+  font-weight: 800;
   font-size: clamp(2rem, 1.2rem + 3vw, 3.6rem);
-  line-height: 1.02;
-  letter-spacing: 0;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
 }
 .modal-info h3 small {
   display: block;
@@ -1376,8 +1366,8 @@ a.ig-cell {
   grid-column: 1 / 6;
 }
 .contact-lead h2 {
-  font-family: var(--didone);
-  font-weight: 500;
+  font-family: var(--grot);
+  font-weight: 800;
   font-size: clamp(2.2rem, 1.2rem + 4.4vw, 5rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
