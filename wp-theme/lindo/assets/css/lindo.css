@@ -747,17 +747,23 @@ h2,
   transform: scale(1.06);
   filter: saturate(1) contrast(1.04);
 }
+/* 連番は写真の上に乗るので、どんな写真でも読める必要がある。
+   以前は mix-blend-mode: difference で反転させていたが、これは中間色の背景では
+   反転結果が背景と同化して**完全に消える**（実際に暗い写真と紫の写真で読めなかった）。
+   地色のタイルに乗せる方式に変更。写真の明るさに一切依存しない。 */
 .artist-card .idx {
   position: absolute;
-  top: 0.9rem;
-  left: 0.9rem;
+  top: 0;
+  left: 0;
   z-index: 2;
   font-family: var(--grot);
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
-  color: var(--paper);
-  mix-blend-mode: difference;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--bg);
+  padding: 0.5em 0.7em;
 }
 .artist-card .open-flag {
   position: absolute;
