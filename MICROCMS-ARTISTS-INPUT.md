@@ -2,8 +2,8 @@
 
 microCMS の「アーティスト」に入れる内容の一覧。**この表のとおりに入れれば完成**します。
 
-2026-08-10 に先方から再支給された「ホームページ載せる用」一式（選別済み・連番付き）と、
-同梱の docx（作品名・担当）から**機械生成**しています。写し間違いは起きません。
+`content-manifest.php` と実素材から**機械生成**しているので、作品名・担当・枚数の
+写し間違いは起きません。内容は先方支給の docx（2026-08-19 版）に準拠。
 
 ## 画像はどこから上げるか
 
@@ -11,16 +11,17 @@ microCMS の「アーティスト」に入れる内容の一覧。**この表の
 /Users/shun/Desktop/lindo/wp-theme/preview/works-img/<画像フォルダ>/
 ```
 
-- **1フォルダ = 1作品**。中身を**全選択してそのままアップロード**すれば順番も正しく入ります
-- 複数フォルダにまたがる作品（「1.2.3共有」等）は**結合済み・連番振り直し済み**
-- **加工不要**。1280px WebP に最適化済みで、配信時も同じサイズ（再エンコードが起きない）
+- **1フォルダ = 1作品**。中身を**全選択してそのままアップロード**すれば順番も正しく入る
+- 複数フォルダにまたがる作品（docx の「◯.◯共通」）は**結合済み・連番振り直し済み**
+- **加工不要**。1280px WebP に最適化済みで、配信時も再エンコードが起きない
 
 ## 入力の手順
 
 1. コンテンツ「アーティスト」→ **追加**
 2. 下表の **アーティスト名 / 担当 / 表示順** を入力
 3. 「作品」の **追加** を押して、作品を1つずつ足す（作品名・担当・写真）
-4. **「公開」を押す** ← 押さないとサイトに出ません
+4. 外部リンク欄がある作品は URL を入れる → サイト上で ▶付きのリンクタイルになる
+5. **「公開」を押す** ← 押さないとサイトに出ない
 
 ---
 
@@ -85,22 +86,21 @@ microCMS の「アーティスト」に入れる内容の一覧。**この表の
 | 表示順 | `4` |
 | プロフィール | （空欄。原稿が届いたら入力） |
 
-**作品 3件 / 写真 28枚**
+**作品 4件 / 写真 29枚**
 
 | # | 作品名 | 担当 | 画像フォルダ | 枚数 | 外部リンク |
 |---|---|---|---|---:|---|
 | 1 | BMSG ARTIST｜New Year Photo | Style Direction / Prop Design | `04_BMSG/1-new-year-photo` | 23 | — |
 | 2 | BMSG ARTIST｜BMSG FES2025 Package | Creative Direction | `04_BMSG/2-fes2025` | 3 | — |
-| 3 | BMSG TRAINEE｜RUI TAIKI KANON Digital EP「Forked Road」 | Jacket Direction / Design | `04_BMSG/3-forked-road` | 2 | — |
+| 3 | BMSG ARTIST｜Digital EP「GRAND CHAMP」「GRAND CHAMP Live From BMSG FES'25」 | Creative Direction | `04_BMSG/3-grand-champ` | 2 | — |
+| 4 | BMSG TRAINEE｜RUI TAIKI KANON Digital EP「Forked Road」 | Jacket Direction / Design | `04_BMSG/4-forked-road` | 1 | — |
 
-> ⚠️ **保留中の素材あり**（下記「確認待ち」参照）: `04_BMSG/04`
-
-## 表示順 5 — No No GIRLS
+## 表示順 5 — NoNoGirls
 
 | | |
 |---|---|
-| アーティスト名 | `No No GIRLS` |
-| 担当 | `KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN` |
+| アーティスト名 | `NoNoGirls` |
+| 担当 | `Key Visual Design / Branding Design` |
 | 表示順 | `5` |
 | プロフィール | （空欄。原稿が届いたら入力） |
 
@@ -108,7 +108,7 @@ microCMS の「アーティスト」に入れる内容の一覧。**この表の
 
 | # | 作品名 | 担当 | 画像フォルダ | 枚数 | 外部リンク |
 |---|---|---|---|---:|---|
-| 1 | GIRLS GROUP AUDITION「No No GIRLS」 | KEY VISUAL DIRECTION / DESIGN, BRANDING DESIGN | `05_NoNoGirls/main` | 4 | — |
+| 1 | GIRLS GROUP AUDITION 2024「NoNoGirls」 | Key Visual Design / Branding Design | `05_NoNoGirls/main` | 4 | — |
 
 ## 表示順 6 — NMB48
 
@@ -185,26 +185,17 @@ microCMS の「アーティスト」に入れる内容の一覧。**この表の
 | 表示順 | `10` |
 | プロフィール | （空欄。原稿が届いたら入力） |
 
-**作品 1件 / 写真 18枚**
+**作品 2件 / 写真 19枚**
 
 | # | 作品名 | 担当 | 画像フォルダ | 枚数 | 外部リンク |
 |---|---|---|---|---:|---|
 | 1 | Artist photo | Visual Creative | `10_SugarNote/1-artist-photo` | 18 | — |
-
-> ⚠️ **保留中の素材あり**（下記「確認待ち」参照）: `10_SugarNote/3`
+| 2 | 「嘘だよ」MV | Creative Produce | `10_SugarNote/2-usodayo-mv` | 1 | `https://youtu.be/lRI7AdFnMDk` |
 
 ---
 
 ## 合計
 
 - アーティスト **10組**
-- 作品 **25件**
-- 写真 **330枚**
-
-## ⚠️ 確認待ち（投入しない）
-
-| アーティスト | 素材 | 状況 |
-|---|---|---|
-| BMSG | `04_BMSG/04` | docx に作品名・担当の記載なし |
-| SugarNote | `10_SugarNote/3` | docx に作品名・担当の記載なし |
-
+- 作品 **27件**
+- 写真 **332枚**
