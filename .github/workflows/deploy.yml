@@ -21,8 +21,20 @@ on:
     branches: [main]
   workflow_dispatch: # 手動実行（切替の確認用）
   repository_dispatch:
-    # microCMS の Webhook から叩けるようにしておく（コンテンツ公開 → 自動反映）。
+    # microCMS の Webhook から叩ける口（コンテンツ公開 → 即反映）。
+    # ただし Fine-grained PAT の権限が保存できず未使用。口だけ残してある。
     types: [microcms-update]
+  schedule:
+    # 定期ビルド。**これが実質の自動反映**。
+    #
+    # microCMS の Webhook は GitHub の dispatch API を叩くのに Authorization
+    # ヘッダーが要る（microCMS のカスタム通知は X- 始まりのヘッダーしか送れないため、
+    # 専用の「GitHub Actions」通知を使う必要がある）。そこに PAT を登録したが、
+    # トークン側に権限が保存されない事象が解消できなかった。
+    #
+    # 先方が「公開」を押してから最大10分で反映される。Webhook が直れば即時になるので、
+    # そのときはこの schedule を消してよい。
+    - cron: '*/10 * * * *'
 
 # 同時実行を1本に絞る。連続publishで古いビルドが後勝ちするのを防ぐ。
 concurrency:
