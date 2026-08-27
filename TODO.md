@@ -1,5 +1,9 @@
 # LINDO サイト TODO
 
+> ⚠️ **この文書は制作中の作業メモで、内容は古い。**
+> 最新は 技術面 → `HANDOVER-DEV.md` / 先方向け運用 → `HANDOVER-LINDO.md`。
+> ここは経緯の記録としてのみ残してある。
+
 最終更新: 2026-07-16
 
 - 本番: https://nvidia9875.github.io/lindo-web/ （microCMS → GitHub Actions → GitHub Pages）
