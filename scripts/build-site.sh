@@ -69,6 +69,8 @@ touch "$DIST/.nojekyll"
 
 # favicon はロゴ支給前の暫定。存在すれば入れる。
 [ -f "$ROOT/favicon.svg" ] && cp "$ROOT/favicon.svg" "$DIST/"
+# SNS共有カードの既定画像。microCMS 側が未設定でもこれが使われる。
+[ -f "$ROOT/ogp.png" ] && cp "$ROOT/ogp.png" "$DIST/"
 [ -f "$ROOT/favicon.ico" ] && cp "$ROOT/favicon.ico" "$DIST/"
 
 # ── 4. 旧方式（ローカル画像）で生成した場合のみ画像を同梱 ──

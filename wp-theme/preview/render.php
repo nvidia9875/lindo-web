@@ -104,8 +104,21 @@ ob_start();
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="<?php echo esc_attr( $site['title'] ); ?>" />
 	<meta property="og:description" content="<?php echo esc_attr( $site['description'] ); ?>" />
-	<?php if ( ! empty( $site['ogImage'] ) ) : ?>
-		<meta property="og:image" content="<?php echo esc_url( $site['ogImage'] ); ?>" />
+	<meta property="og:site_name" content="<?php echo esc_attr( $site['company']['name'] ); ?>" />
+	<meta property="og:locale" content="ja_JP" />
+	<?php
+	// og:image は microCMS「サイト設定」の SNS共有画像が最優先。未設定でも
+	// リポジトリ同梱の ogp.png（1200x630）に必ず落ちるので、共有カードが
+	// 画像なしになることは無い。og:image は絶対URLでないと無視される。
+	$og_image = ! empty( $site['ogImage'] )
+		? (string) $site['ogImage']
+		: ( '' !== $site_url ? $site_url . '/ogp.png' : '' );
+	if ( '' !== $og_image ) :
+		?>
+		<meta property="og:image" content="<?php echo esc_url( $og_image ); ?>" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="<?php echo esc_attr( $site['title'] ); ?>" />
 		<meta name="twitter:card" content="summary_large_image" />
 	<?php else : ?>
 		<meta name="twitter:card" content="summary" />
