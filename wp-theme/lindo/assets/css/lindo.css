@@ -945,6 +945,13 @@ h2,
   flex-direction: column;
   gap: 1.1rem;
 }
+/* 紹介文・タグ・リンクが全て空だと、肩書きと名前の2行だけが上端に貼りつき、
+   ポートレート（4/5）の高さ分（1440pxで約440px）が下に空く。空のときだけ
+   中央に置いて「意図した余白」に見せる。microCMS に原稿が入れば :has() が
+   外れ、従来どおり上揃えに戻る。 */
+.modal-info:not(:has(.bio, .modal-tags, .modal-links)) {
+  justify-content: center;
+}
 .modal-info .eyebrow {
   font-family: var(--grot);
   font-weight: 700;
