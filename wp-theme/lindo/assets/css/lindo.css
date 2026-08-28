@@ -217,6 +217,18 @@ button {
   padding: 0.7em 1.2em;
 }
 
+/* 見た目には出さず、読み上げと文書構造にだけ残す。
+   要素ごと消すと節から見出しが無くなり、構造が読めなくなるため。 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 :focus-visible {
   outline: 2px solid var(--pink);
   outline-offset: 3px;
@@ -849,20 +861,21 @@ h2,
 /* ============ talents（04 Artists / 公式サイトへのリンク）============ */
 /* 03 Works の .artists とは意図的に別の見た目にしている。
    03 は「押すとモーダルが開く」＝サイト内、04 は「押すと外部サイトへ出る」。
-   同じ枠線グリッドにすると押した結果が予想できない。こちらは枠線を持たせず、
-   余白で区切る + 横位置の写真（集合写真）に合わせた 3:2 で差をつける。 */
+   同じ枠線グリッドにすると押した結果が予想できない。
+   こちらは罫線も枠も持たせず、写真・名前・導線の3つだけで構成する。 */
 .talents {
-  margin-top: 2.2rem;
+  /* 見出し（h2）を出していないぶん、写真の上端を左の「04」に揃える。
+     他のセクションは h2 が番号と揃うので、ここも同じ線に乗る。 */
+  margin-top: 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(1.4rem, 1rem + 2vw, 2.6rem);
-  /* 1組だけのときに引き伸ばさない。左詰めのまま余白を残す方が編集的に見える。 */
+  gap: clamp(1.6rem, 1rem + 2.4vw, 3rem);
+  /* 1組だけのときに引き伸ばさない。左詰めで余白を残す方が編集的に見える。 */
   justify-content: start;
 }
 .talent-card {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
   text-decoration: none;
   color: inherit;
 }
@@ -887,71 +900,91 @@ h2,
 }
 a.talent-card:hover .ph img,
 a.talent-card:focus-visible .ph img {
-  transform: scale(1.05);
+  transform: scale(1.04);
   filter: saturate(1) contrast(1.04);
 }
-.talent-card .open-flag {
-  position: absolute;
-  right: 0.9rem;
-  bottom: 0.9rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-family: var(--grot);
-  font-weight: 700;
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--pink-soft);
-  padding: 0.45em 0.7em;
-  transform: translateY(6px);
-  opacity: 0;
-  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
-}
-a.talent-card:hover .open-flag,
-a.talent-card:focus-visible .open-flag {
-  transform: none;
-  opacity: 1;
-}
-/* タッチ端末は hover が無いので、出したままにする（開くことが伝わらないため）。 */
-@media (hover: none) {
-  .talent-card .open-flag {
-    transform: none;
-    opacity: 1;
-  }
-}
+
+/* 名前の行。罫線は引かない。名前（大）と導線（小）を同じベースラインに並べ、
+   1行そのものが下線代わりの区切りになる。 */
 .talent-meta {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  /* 名前の下に引かれる線。写真と名前が1組であることを示す。 */
-  border-top: 1px solid var(--line);
-  padding-top: 0.8rem;
-  transition: border-color var(--dur) var(--ease);
-}
-a.talent-card:hover .talent-meta,
-a.talent-card:focus-visible .talent-meta {
-  border-color: var(--pink);
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 .talent-meta .nm {
+  position: relative;
+  /* 先方が長い名前を登録しても「OFFICIAL SITE ↗」を押し出さない。
+     flex の初期値 min-width:auto だと縮まずに溢れる。 */
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-family: var(--grot);
   font-weight: 800;
-  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.55rem);
+  font-size: clamp(1.2rem, 1rem + 0.8vw, 1.7rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
 }
-.talent-meta .sb {
+/* ホバーの下線は名前の幅ぶんだけ左から伸ばす。border ではなく擬似要素の
+   transform で動かす（レイアウトを触らない＝コンポジタだけで完結する）。 */
+.talent-meta .nm::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.22em;
+  height: 1px;
+  background: var(--pink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur) var(--ease);
+}
+a.talent-card:hover .nm::after,
+a.talent-card:focus-visible .nm::after {
+  transform: scaleX(1);
+}
+.talent-meta .go {
+  flex: none;
+  font-family: var(--grot);
+  font-weight: 600;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color var(--dur) var(--ease);
+}
+.talent-meta .go span {
+  display: inline-block;
+  transition: transform var(--dur) var(--ease);
+}
+a.talent-card:hover .go,
+a.talent-card:focus-visible .go {
+  color: var(--pink);
+}
+a.talent-card:hover .go span,
+a.talent-card:focus-visible .go span {
+  transform: translate(0.18em, -0.18em);
+}
+.talent-sub {
   font-family: var(--sans);
   font-weight: 500;
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   color: var(--muted);
+  margin-top: 0.4rem;
 }
 @media (max-width: 620px) {
   .talents {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .talent-card .ph img,
+  .talent-meta .nm::after,
+  .talent-meta .go,
+  .talent-meta .go span {
+    transition: none;
   }
 }
 

@@ -32,7 +32,8 @@ $lead  = isset( $talents['lead'] ) ? (string) $talents['lead'] : '';
 	<div class="wrap sec-grid">
 		<div class="sec-no rv">04<small><?php echo esc_html( $label ); ?></small></div>
 		<div class="sec-body rv d1">
-			<h2><?php echo esc_html( $label ); ?></h2>
+			<?php // 左の「04 Artists」と同じ語なので視覚的には出さない。読み上げ・文書構造のためだけに置く。 ?>
+			<h2 class="sr-only"><?php echo esc_html( $label ); ?></h2>
 			<?php if ( '' !== $lead ) : ?>
 				<p class="sub"><?php echo lindo_lines( $lead ); ?></p>
 			<?php endif; ?>
@@ -71,16 +72,16 @@ $lead  = isset( $talents['lead'] ) ? (string) $talents['lead'] : '';
 									decoding="async"
 								/>
 							<?php endif; ?>
-							<?php if ( '' !== $url ) : ?>
-								<span class="open-flag">Official <span aria-hidden="true">↗</span></span>
-							<?php endif; ?>
 						</span>
 						<span class="talent-meta">
 							<span class="nm"><?php echo esc_html( $name ); ?></span>
-							<?php if ( ! empty( $t['name_sub'] ) ) : ?>
-								<span class="sb"><?php echo esc_html( $t['name_sub'] ); ?></span>
+							<?php if ( '' !== $url ) : ?>
+								<span class="go">Official Site <span aria-hidden="true">↗</span></span>
 							<?php endif; ?>
 						</span>
+						<?php if ( ! empty( $t['name_sub'] ) ) : ?>
+							<span class="talent-sub"><?php echo esc_html( $t['name_sub'] ); ?></span>
+						<?php endif; ?>
 					</<?php echo $tag; ?>>
 				<?php endforeach; ?>
 			</div>
