@@ -1,6 +1,6 @@
 <?php
 /**
- * Partner（04）— 主要取引先。
+ * Partner（05）— 主要取引先。
  *
  * 期待する変数:
  *   $partners  array{label, items: array<int,string>}
@@ -22,7 +22,7 @@ if ( empty( $items ) ) {
 ?>
 <section class="sec">
 	<div class="wrap sec-grid">
-		<div class="sec-no rv">04<small><?php echo esc_html( isset( $partners['label'] ) ? $partners['label'] : '' ); ?></small></div>
+		<div class="sec-no rv">05<small><?php echo esc_html( isset( $partners['label'] ) ? $partners['label'] : '' ); ?></small></div>
 		<div class="sec-body rv d1">
 			<h2><?php echo esc_html( isset( $partners['label'] ) ? $partners['label'] : '' ); ?></h2>
 			<div class="cl">

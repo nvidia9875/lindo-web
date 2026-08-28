@@ -9,6 +9,7 @@
  *
  * データ源は2本立て:
  *   作品（artists）  … microcms-data.php / real-data.php
+ *   Artists（04）    … talents-data.php（無ければ talents-seed.php）
  *   文言（site）     … site-data.php（無ければ inc/site-defaults.php）
  *
  * 【重要】このファイルに文言を直書きしないこと。直書きすると先方が自分で直せず、
@@ -39,6 +40,10 @@ require LINDO_DIR . '/inc/template.php';
 $artists = ( getenv( 'MICROCMS_API_KEY' ) || getenv( 'MICROCMS_FIXTURE' ) )
 	? require __DIR__ . '/microcms-data.php'
 	: require __DIR__ . '/real-data.php';
+
+// 04 Artists（公式サイトへのリンク一覧）。03 Works とは別のAPI（talents）。
+// API が未作成なら初期値で描画されるので、ここで落ちることはない。
+$talents = require __DIR__ . '/talents-data.php';
 
 // サイト文言。artists の取得（＝キーの検証）が通ったあとに読む。
 $site = require __DIR__ . '/site-data.php';
@@ -152,6 +157,7 @@ lindo_part(
 	'front-sections',
 	array(
 		'artists'           => $artists,
+		'talents'           => $talents,
 		'site'              => $site,
 		'contact_body_html' => $contact_body_html,
 	)

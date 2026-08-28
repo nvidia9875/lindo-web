@@ -97,7 +97,22 @@ return array(
 		'empty' => '準備中です。まもなく公開します。',
 	),
 
-	// ── 04 Business Partner ──────────────────────
+	// ── 04 Artists ───────────────────────────────
+	// 「関わっているアーティスト」の一覧。写真をクリックすると公式サイトへ飛ぶ。
+	//
+	// 【03 Works との違い】
+	//   03 Works    … LINDO が手がけた**作品**。モーダルでギャラリーを見せる。
+	//   04 Artists  … アーティスト**そのもの**の紹介。外部の公式サイトへ送り出す。
+	// microCMS では 03 が `artists`、04 が `talents` という別APIになっている。
+	// （`artists` は 03 が先に取ってしまったので、04 の中身は `talents` に入っている）
+	'talents'     => array(
+		'label' => 'Artists',
+		'lead'  => '',
+		// 一覧の中身は microCMS の `talents` API から取る（preview/talents-data.php）。
+		// API がまだ無いときだけ、下の初期値が使われる。
+	),
+
+	// ── 05 Business Partner ──────────────────────
 	'partners'    => array(
 		'label' => 'Business Partner',
 		// 1行1社。

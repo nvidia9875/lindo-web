@@ -9,7 +9,8 @@
 
 | ファイル | 用途 |
 |---|---|
-| `api-artists.json` | **アーティスト**（リスト形式・エンドポイント `artists`）。現サービス `lindo` からの実エクスポート |
+| `api-artists.json` | **03 Works の作品データ**（リスト形式・エンドポイント `artists`）。現サービス `lindo` からの実エクスポート |
+| `api-talents.json` | **04 Artists の一覧**（リスト形式・エンドポイント `talents`）。写真＋公式サイトURL |
 | `api-site.json` | **サイト設定**（オブジェクト形式・エンドポイント `site`）。32フィールド + カスタムフィールド `service` |
 | `api-site-minimal.json` | 上の予備。`noindex` と `ogImage` を抜いた30フィールド版（下記） |
 
@@ -26,7 +27,41 @@
 
 カスタムフィールド `work`（`title` / `role` / `gallery` / `url`）も同じJSONに含まれている。
 
-### 2. サイト設定
+### 2. Artists（04）
+
+サイトの **04 Artists**（写真をクリックすると公式サイトへ飛ぶ一覧）用。
+
+1. API を作成
+   - 形式: **リスト形式**
+   - API名: `Artists（04・公式サイトリンク）`
+   - エンドポイント: **`talents`**
+2. APIスキーマ → **インポート** → `api-talents.json`
+3. 初期データを入れる（1組・SugarNote）
+
+   ```bash
+   cd /Users/shun/Desktop/lindo
+   set -a; . ./.env.local; set +a
+   php scripts/push-talents.php          # 確認のみ
+   php scripts/push-talents.php --write  # 実行
+   ```
+
+   写真のアップロードまで自動。**下書き**で入るので、管理画面で「公開」を押す。
+
+> **なぜエンドポイントが `artists` ではなく `talents` なのか**
+> `artists` は **03 Works の作品データ**が先に使っている。microCMS はエンドポイント名を
+> 重複させられないため、04 のデータは `talents` に入れている。管理画面には
+> 日本語のAPI名で並ぶので、先方が取り違えることはない。
+>
+> | 管理画面の表示 | エンドポイント | サイトのどこ |
+> |---|---|---|
+> | アーティスト | `artists` | **03 Works**（作品ギャラリー。押すとモーダル） |
+> | Artists（04・公式サイトリンク） | `talents` | **04 Artists**（押すと公式サイトへ） |
+
+**API を作らなくてもサイトは壊れない。** その場合はリポジトリ同梱の初期値
+（`wp-theme/preview/talents-seed.php` の SugarNote）が表示される。API を作った
+時点で、そちらが常に優先される。
+
+### 3. サイト設定
 
 1. 新サービスで API を作成
    - 形式: **オブジェクト形式**（1件だけのAPI。リストではない）

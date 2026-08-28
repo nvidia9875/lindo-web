@@ -83,6 +83,14 @@ if grep -q 'works-img/' "$DIST/index.html"; then
 	cp -R "$ROOT/wp-theme/preview/works-img" "$DIST/works-img"
 fi
 
+# 04 Artists の写真。microCMS に talents API がまだ無いあいだは初期値
+# （preview/talents-seed.php）が使われ、画像はリポジトリ同梱のものを参照する。
+# API を作って写真を入れ替えたら microCMS 配信に切り替わり、ここは通らなくなる。
+if grep -q 'talents-img/' "$DIST/index.html"; then
+	echo "04 Artists: 初期値の写真を同梱する（microCMS の talents API 未作成）"
+	cp -R "$ROOT/wp-theme/preview/talents-img" "$DIST/talents-img"
+fi
+
 # ── 5. 検査 ───────────────────────────────────────
 # PHPの警告が doctype より前に混ざるとブラウザが互換モードに落ちる。
 head -c 15 "$DIST/index.html" | grep -q '<!doctype html>' \
