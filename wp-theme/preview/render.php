@@ -132,6 +132,17 @@ ob_start();
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="<?php echo esc_url( LINDO_URI . '/assets/css/lindo.css' ); ?>" />
+	<?php
+	// 構造化データ（Organization）。社名「株式会社LINDO」とこのドメインを
+	// 検索側に結び付ける。見た目には影響しない。
+	lindo_part(
+		'site-jsonld',
+		array(
+			'site'     => $site,
+			'site_url' => $site_url,
+		)
+	);
+	?>
 </head>
 <body>
 <?php lindo_part( 'site-logo-defs' ); ?>
