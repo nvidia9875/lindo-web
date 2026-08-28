@@ -96,6 +96,15 @@ fi
 head -c 15 "$DIST/index.html" | grep -q '<!doctype html>' \
 	|| { echo "::error::index.html が doctype で始まっていない（PHPの警告混入の疑い）"; head -c 300 "$DIST/index.html"; exit 1; }
 
+# 検索エンジン向けの noindex が混ざっていないか。
+# 公開済みサイトに noindex が乗ると、検索結果から**無言で**消える。CMSのスイッチ
+# 1つで起きるうえ、見た目は何も変わらないので誰も気づけない。ここで必ず声を出す。
+if grep -q 'name="robots" content="noindex' "$DIST/index.html"; then
+	echo "::warning::このビルドには noindex が入っている＝検索結果から消える。意図的でなければ microCMS「サイト設定」→「検索エンジンに載せない」を OFF にして再ビルドすること"
+else
+	echo "noindex: なし（検索エンジンに載る状態）"
+fi
+
 COUNT=$(grep -c 'data-modal-target' "$DIST/index.html" || true)
 echo "アーティスト: ${COUNT}組"
 [ "$COUNT" -ge 1 ] || { echo "::error::アーティストが0組。データ取得に失敗している"; exit 1; }

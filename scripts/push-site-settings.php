@@ -32,8 +32,10 @@ if ( '' === (string) $key ) {
 $body = array(
 	'siteTitle'        => $defaults['title'],
 	'siteDescription'  => $defaults['description'],
-	// 公開日まで検索エンジンに出さない。
-	'noindex'          => (bool) $defaults['noindex'],
+	// noindex は**送らない**。ここは初期投入用のスクリプトであり、
+	// 公開後は「検索エンジンに載せない」は運用中のスイッチになっている。
+	// 初期値（false）で上書きすると、実行するたびに設定が巻き戻る。
+	// 変更は microCMS の管理画面から行うこと。
 	'loaderSub'        => $defaults['loaderSub'],
 	'heroLabel'        => $defaults['hero']['label'],
 	'heroLabelStrong'  => $defaults['hero']['labelStrong'],
