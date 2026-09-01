@@ -60,9 +60,13 @@ html.is-locked {
 
 /* 固定ヘッダー分のオフセット（アンカー着地が隠れない） */
 #main,
+/* ナビから飛んだとき、固定ヘッダーの下に潜り込ませない。
+   ここに書き漏らすとそのセクションだけ見出しが隠れる（#talents で実際に起きた）。
+   ※ #artists は 03 Works、#talents は 04 Artists。 */
 #about,
 #service,
 #artists,
+#talents,
 #contact {
   scroll-margin-top: calc(var(--header-h) + 10px);
 }

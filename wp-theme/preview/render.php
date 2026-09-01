@@ -157,6 +157,8 @@ lindo_part(
 			'about'   => $site['about']['label'],
 			'service' => $site['service']['label'],
 			'works'   => $site['works']['label'],
+			// 04 Artists は0件だとセクションごと消えるので、出るときだけ渡す。
+			'talents' => ! empty( $talents ) ? $site['talents']['label'] : '',
 			'contact' => $site['contact']['label'],
 		),
 	)

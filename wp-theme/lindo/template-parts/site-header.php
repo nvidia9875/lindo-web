@@ -8,7 +8,9 @@
  *                    同一ページ内スクロール）。サブページからは home_url('/') を渡し、
  *                    トップへ遷移してから該当箇所へ。
  *   $lindo_brand     ブランド表記（既定 'LIND<b>O</b>'）
- *   $nav_labels      array{about,service,works,contact} ナビの表示名
+ *   $nav_labels      array{about,service,works,talents,contact} ナビの表示名。
+ *                    `talents`（04 Artists）は**渡されたときだけ**出す。中身が0件だと
+ *                    セクションごと消えるので、常に出すとリンク先の無いナビになる。
  *
  * ナビの表示名は各セクションの見出しと同じ値を使う（CMS 側の項目も共通）。
  * 別々に持つと「Works だけ改名してナビが Works のまま」が必ず起きるため。
@@ -28,23 +30,35 @@ $nav_labels     = isset( $nav_labels ) && is_array( $nav_labels ) ? $nav_labels 
 // フロント上ではロゴ＝最上部へ、サブページ上ではトップURLへ。
 $lindo_logo_href = '' !== $lindo_nav_base ? $lindo_nav_base : '#main';
 
+// アンカーはページ構造なので固定。表示名だけ CMS 由来の値で差し替える。
+// ※ #artists は 03 Works、#talents は 04 Artists。紛らわしいので注意
+//   （`artists` を 03 が先に使っているため）。
 $lindo_nav_defaults = array(
 	'#about'   => 'About',
 	'#service' => 'What We Do',
 	'#artists' => 'Works',
+	'#talents' => 'Artists',
 	'#contact' => 'Contact',
 );
 $lindo_nav_keys     = array(
 	'#about'   => 'about',
 	'#service' => 'service',
 	'#artists' => 'works',
+	'#talents' => 'talents',
 	'#contact' => 'contact',
 );
+// ラベルが渡らなければ項目ごと出さないアンカー。
+// 04 Artists は登録が0件だとセクションごと消えるため、既定値で補ってはいけない
+// （補うと、どこへも飛ばないナビだけが残る）。
+$lindo_nav_optional = array( '#talents' => true );
 
 $lindo_nav = array();
 foreach ( $lindo_nav_defaults as $anchor => $default_label ) {
-	$key                  = $lindo_nav_keys[ $anchor ];
-	$label                = isset( $nav_labels[ $key ] ) ? trim( (string) $nav_labels[ $key ] ) : '';
+	$key   = $lindo_nav_keys[ $anchor ];
+	$label = isset( $nav_labels[ $key ] ) ? trim( (string) $nav_labels[ $key ] ) : '';
+	if ( '' === $label && isset( $lindo_nav_optional[ $anchor ] ) ) {
+		continue;
+	}
 	$lindo_nav[ $anchor ] = '' !== $label ? $label : $default_label;
 }
 ?>
